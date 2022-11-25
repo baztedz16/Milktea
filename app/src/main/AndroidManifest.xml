@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.storelocator" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@color/purple_500"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/logo"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.StoreLocator"
+        android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true">
+        <activity
+            android:name=".order_details"
+            android:exported="true" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA3dmPACMEOTAXOyc4QdkckybiWuDHIwzY" />
+
+        <activity
+            android:name=".rider_frame"
+            android:exported="false" />
+        <activity
+            android:name=".activity_activation_frame"
+            android:exported="false" />
+        <activity
+            android:name=".activity_signup"
+            android:exported="false" />
+        <activity
+            android:name=".activity_login"
+            android:exported="true"
+            android:theme="@style/Theme.Design.NoActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".mainframe"
+            android:exported="true" />
+        <activity
+            android:name=".store_owner"
+            android:exported="true" />
+        <activity
+            android:name=".storeSelected"
+            android:exported="true" />
+        <activity
+            android:name=".updateProduct"
+            android:exported="true" />
+        <activity
+            android:name=".list_store"
+            android:exported="true" />
+        <activity
+            android:name=".mainframe_viewcart"
+            android:exported="true" />
+        <activity
+            android:name=".api_keys"
+            android:exported="true" />
+        <activity
+            android:name=".rider_order_get"
+            android:exported="true" />
+        <activity
+            android:name=".user_order_get"
+            android:exported="true" />
+        <activity
+            android:name=".store_owner_staff"
+            android:exported="true" />
+        <activity
+            android:name=".signupstaff"
+            android:exported="true" />
+        <activity
+            android:name=".rating_store"
+            android:exported="true" />
+        <activity
+            android:name=".admin_frame"
+            android:exported="true" />
+        <activity
+            android:name=".staff_frame"
+            android:exported="true" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+    </application>
+
+</manifest>

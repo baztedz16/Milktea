@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "371335344344",
+    "project_id": "storelocator-c908a",
+    "storage_bucket": "storelocator-c908a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:371335344344:android:af24ead8fe4af11007e7ad",
+        "android_client_info": {
+          "package_name": "com.example.storelocator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "371335344344-ailapmggh0e4ri1lfcos609gbsla7hs1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6dlqvh4Jm7GFgpwwOpXgPOn_6s-DcUIo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "371335344344-ailapmggh0e4ri1lfcos609gbsla7hs1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

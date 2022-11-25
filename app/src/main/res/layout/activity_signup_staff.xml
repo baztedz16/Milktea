@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/teal_700"
+    tools:context=".activity_signup">
+
+    <LinearLayout
+        android:layout_width="315dp"
+        android:layout_height="729dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/fullname"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/Fullname"
+            android:minHeight="48dp" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="@string/username"
+            android:minHeight="48dp" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/password"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:minHeight="48dp"
+            android:password="true" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/email"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/Email"
+            android:minHeight="48dp" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/storename"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="@string/Storename"
+            android:minHeight="48dp" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/phone"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/Phone"
+            android:minHeight="48dp" />
+
+        <Button
+            android:id="@+id/pickLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pick Location" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/address"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="Address" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/longt"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="Longtitude"
+            android:minHeight="48dp" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/lat"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="Latitude" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/signupBtn"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@color/purple_500"
+            android:text="Signup" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    app:cardCornerRadius="8dp"
+    android:layout_margin="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="0dp"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="173dp"
+            android:gravity="left">
+
+            <ImageView
+                android:id="@+id/imageShow"
+                android:layout_width="136dp"
+                android:layout_height="120dp"
+                android:layout_marginLeft="20dp" />
+
+            <TextView
+                android:id="@+id/riderStore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_toEndOf="@+id/imageShow"
+                android:text="Item Name"
+                android:textSize="30dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/orderID"
+                android:layout_width="206dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/riderStore"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="4dp"
+                android:layout_toEndOf="@+id/imageShow"
+                android:text="orderID"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/Addressds"
+                android:layout_width="203dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/riderStore"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="29dp"
+                android:layout_marginEnd="6dp"
+                android:layout_toEndOf="@+id/imageShow"
+                android:text="Address"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/Storeds"
+                android:layout_width="225dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/riderStore"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="-136dp"
+                android:layout_marginTop="81dp"
+                android:layout_marginEnd="133dp"
+                android:layout_toEndOf="@+id/imageShow"
+                android:text="Store"
+                android:textSize="12dp" />
+
+            <Button
+                android:id="@+id/getOrder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/orderID"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="54dp"
+                android:layout_marginEnd="4dp"
+                android:text="Get Order" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:layout_below="@+id/imageShow"
+                android:layout_marginTop="23dp"
+                android:background="@color/red"
+                android:text="Cancel" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

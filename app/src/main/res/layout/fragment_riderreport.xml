@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.fordelivery">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="409dp"
+        android:layout_height="729dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Orders Report" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/date1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="From"
+                android:inputType="date" />
+
+            <EditText
+                android:id="@+id/date2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="To"
+                android:inputType="date" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/salesbtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Generate" />
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barchartReport"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+
+
+            >
+
+        </com.github.mikephil.charting.charts.BarChart>
+
+        <TextView
+            android:id="@+id/rdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Report Date" />
+
+        <EditText
+            android:id="@+id/reportdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="date" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listpayables"
+            android:layout_width="match_parent"
+            android:layout_height="165dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="50dp"
+                android:text="Total" />
+
+            <TextView
+                android:id="@+id/totaltxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Status" />
+
+        <Button
+            android:id="@+id/payablesbtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit Payables" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>
+</ScrollView>
