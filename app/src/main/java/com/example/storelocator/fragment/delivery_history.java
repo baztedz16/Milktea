@@ -67,6 +67,8 @@ public class delivery_history extends Fragment {
         myAdapter = new adapter_rider_delivery(view.getContext(),list);
         recyclerView.setAdapter(myAdapter);
 
+
+
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

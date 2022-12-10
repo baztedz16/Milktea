@@ -181,7 +181,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             String view = dataSnapshot.child(storename).child("view").getValue().toString();
-                            rootNode.getReference("users").child(storename).child("view").setValue(Integer.parseInt(view)+1);
+                            rootNode.getReference("users").child(storename).child("view").setValue(String.valueOf(Integer.parseInt(view)+1));
 
                             Log.i("R","data:"+view);
 

@@ -172,7 +172,15 @@ public class rider_list_reports extends Fragment {
         payabledate= new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                String startdate = (month+1) + "/" +day+ "/" + year;
+                String val = "";
+                if(day <10){
+                    val = "0"+String.valueOf(day);
+                }else{
+                    val =String.valueOf(day);
+                }
+                String startdate = (month+1) + "/" +val+ "/" + year;
+//                String pattern = "MM-dd-yyyy";
+//                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
                 reportdate.setText(startdate);
             }
         };
@@ -360,7 +368,7 @@ public class rider_list_reports extends Fragment {
                 //Log.i("R",editTextname.getText().toString());
                 if (dataSnapshot.exists()) {
                     list.clear();
-                    Log.i("payables","4");
+                    Log.i("payables","4"+date);
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_order_rider orders = snapshot.getValue(helper_order_rider.class);
 
@@ -382,7 +390,7 @@ public class rider_list_reports extends Fragment {
                         }
                     }
                     totalpayables.setText(String.valueOf(totalpayablesdata));
-                    getpayablesdetails(reportdate.getText().toString(),rider);
+                    getpayablesdetails(date,rider);
                     myAdapter.notifyDataSetChanged();
                 }else{
                     Log.i("payables","6");
@@ -404,36 +412,40 @@ public class rider_list_reports extends Fragment {
         String staffstore = preferences.getString("Store","");
 
 
-
-        query1=reference.child("payables");
-        query1.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                //Log.i("R",editTextname.getText().toString());
-                if (dataSnapshot.exists()) {
-                    Log.i("R","4");
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        helper_payables payables = snapshot.getValue(helper_payables.class);
-                        if(payables.getRider().equals(ridername) && payables.getDate_topay().equals(refdate)){
+        try{
+            query1=reference.child("payables");
+            query1.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    //Log.i("R",editTextname.getText().toString());
+                    if (dataSnapshot.exists()) {
+                        Log.i("R","4");
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            helper_payables payables = snapshot.getValue(helper_payables.class);
+                            if(payables.getRider().equals(ridername) && payables.getDate_topay().equals(refdate)){
                                 status.setText(payables.getStatus());
 //                            Log.i("2DATA",rider+":"+snapshot.child("rider").getValue().toString());
 //                            list.add(orders);
-                        }else{
-                            status.setText("No Pyament Made. !!!");
+                            }else{
+                                status.setText("No Pyament Made. !!!");
+                            }
                         }
+                    }else{
+
+                        Log.i("R","6");
+                        status.setText("No Pyament Made. !!!");
+                        //Log.i("R",searchtext);
                     }
-                }else{
-
-                    Log.i("R","6");
-                    status.setText("No Pyament Made. !!!");
-                    //Log.i("R",searchtext);
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
     }
 }

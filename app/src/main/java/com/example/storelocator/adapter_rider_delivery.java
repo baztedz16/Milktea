@@ -53,6 +53,11 @@ public class adapter_rider_delivery extends RecyclerView.Adapter<adapter_rider_d
         String orderid = (String) holder.orderid.getText();
         Intent intent = ((rider_frame) context).getIntent();
         String rider = intent.getStringExtra("user");
+
+        if(order.getStatus().equals("5") || order.getStatus().equals("4")){
+            holder.cancel.setVisibility(View.INVISIBLE);
+
+        }
         holder.getOrder.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -71,7 +76,7 @@ public class adapter_rider_delivery extends RecyclerView.Adapter<adapter_rider_d
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         TextView storeName,orderid,address,store;
-        Button getOrder;
+        Button getOrder,cancel;
         ImageView itemImage;
         public MyViewHolder(@NonNull View itemView){
             super(itemView);
@@ -81,6 +86,7 @@ public class adapter_rider_delivery extends RecyclerView.Adapter<adapter_rider_d
             getOrder = itemView.findViewById(R.id.getOrder);
             address = itemView.findViewById(R.id.Addressds);
             store = itemView.findViewById(R.id.Storeds);
+            cancel = itemView.findViewById(R.id.cancel);
 
 
         }

@@ -58,7 +58,10 @@ public class adapter_rider_order extends RecyclerView.Adapter<adapter_rider_orde
         holder.address.setText(order.getAddress());
         holder.store.setText(order.getStore());
 
+        if(order.getStatus().equals("5") || order.getStatus().equals("4")){
+            holder.cancel.setVisibility(View.INVISIBLE);
 
+        }
         SharedPreferences preferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         String cty = preferences.getString("accountype","");
         if(order.getStatus().equals("0")) {
