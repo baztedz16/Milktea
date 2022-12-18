@@ -2,12 +2,14 @@ package com.example.storelocator;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -54,9 +56,29 @@ public class adapter_cart_items extends RecyclerView.Adapter<adapter_cart_items.
         holder.itemName.setText(product.getItmname());
         holder.itemID.setText(product.getCartid());
         holder.qty.setText(product.getQty() + "  PC/S");
+        SharedPreferences preferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String rider = preferences.getString("username","");
+        String accountype = preferences.getString("accountype","");
+        String staffstore = preferences.getString("Store","");
+
+        if(accountype.equals("User")){
+            holder.itemrating.setVisibility(View.VISIBLE);
+        }else{
+            holder.itemrating.setVisibility(View.INVISIBLE);
+        }
+        holder.itemrating.setRating((float) Double.parseDouble(product.getItemrating()));
 
         double priceTotal = Integer.parseInt(product.getQty()) * Integer.parseInt(product.getPrice());
         holder.price.setText(String.valueOf(priceTotal)  + "   PHP");
+
+        holder.itemrating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                rootNode = FirebaseDatabase.getInstance();
+                reference = rootNode.getReference("cart").child(product.cartid);
+                reference.child("itemrating").setValue(String.valueOf(holder.itemrating.getRating()));
+            }
+        });
 
     }
 
@@ -67,6 +89,7 @@ public class adapter_cart_items extends RecyclerView.Adapter<adapter_cart_items.
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         TextView itemName,itemName1,itemID,qty,price;
+        RatingBar itemrating;
         public MyViewHolder(@NonNull View itemView){
             super(itemView);
             itemName = itemView.findViewById(R.id.itemNameList);
@@ -74,6 +97,7 @@ public class adapter_cart_items extends RecyclerView.Adapter<adapter_cart_items.
             itemID = itemView.findViewById(R.id.itemid);
             qty = itemView.findViewById(R.id.qty);
             price  = itemView.findViewById(R.id.price);
+            itemrating = itemView.findViewById(R.id.itemrating);
         }
     }
 }

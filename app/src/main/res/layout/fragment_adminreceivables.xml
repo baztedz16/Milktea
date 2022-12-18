@@ -19,7 +19,13 @@
             android:id="@+id/textView15"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="List Of Orders" />
+            android:text="Transaction Type" />
+
+        <Spinner
+            android:id="@+id/optionlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/accountview"

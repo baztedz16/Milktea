@@ -32,6 +32,7 @@ import com.example.storelocator.adapter_rider_delivery;
 import com.example.storelocator.adapter_rider_payables;
 import com.example.storelocator.helper_order_rider;
 import com.example.storelocator.helper_payables;
+import com.example.storelocator.helper_receivables;
 import com.example.storelocator.helper_user;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -93,6 +94,10 @@ public class rider_list_reports extends Fragment {
         status = view.findViewById(R.id.status);
         payablesbtn = view.findViewById(R.id.payablesbtn);
 
+        SharedPreferences preferences = this.getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String accountype = preferences.getString("accountype","");
+        String ridername = preferences.getString("username","");
+        String storename = preferences.getString("Store","");
 
         listpayables.setHasFixedSize(true);
         listpayables.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -184,9 +189,11 @@ public class rider_list_reports extends Fragment {
                 reportdate.setText(startdate);
             }
         };
-        SharedPreferences preferences = this.getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
-        String accountype = preferences.getString("accountype","");
-        String ridername = preferences.getString("username","");
+
+
+        if(accountype.equals("STAFF")){
+            payablesbtn.setText("SUBMIT RECIEVABLES");
+        }
         reportdate.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -214,7 +221,13 @@ public class rider_list_reports extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 Log.i("musthappen","4");
-                listpayables(reportdate.getText().toString());
+
+                if(accountype.equals("STAFF")){
+                    listrecivables(reportdate.getText().toString());
+                }else{
+                    listpayables(reportdate.getText().toString());
+                }
+
 
             }
 
@@ -231,28 +244,55 @@ public class rider_list_reports extends Fragment {
                 AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                 if(!status.getText().equals("Under review") && !status.getText().equals("Approved")){
                     final EditText edittext = new EditText(getContext());
-                    alert.setMessage("Enter Your Reference Number!");
-                    alert.setTitle("Payment Process");
 
-                    alert.setView(edittext);
+                    if(accountype.equals("STAFF")){
+                        alert.setMessage("Enter Note!");
+                        alert.setTitle("Receivables Process");
+                        alert.setView(edittext);
 
-                    alert.setPositiveButton("Yes Option", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            //What ever you want to do with the value
-                            Editable YouEditTextValue = edittext.getText();
+                        alert.setPositiveButton("Yes Option", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                //What ever you want to do with the value
+                                Editable YouEditTextValue = edittext.getText();
 
-                            rootNode = FirebaseDatabase.getInstance();
-                            reference = rootNode.getReference("payables").child(ridername+reportdate.getText().toString().replace("/",""));
-                            //reference.setValue("sample");
-                            reference.child("date_topay").setValue(reportdate.getText().toString());
-                            reference.child("reference_no").setValue(edittext.getText().toString());
-                            reference.child("status").setValue("Under review");
-                            reference.child("rider").setValue(ridername);
-                            reference.child("amount").setValue(totalpayables.getText().toString());
+                                rootNode = FirebaseDatabase.getInstance();
+                                reference = rootNode.getReference("storereceivables").child(storename+reportdate.getText().toString().replace("/",""));
+                                //reference.setValue("sample");
+                                reference.child("date_topay").setValue(reportdate.getText().toString());
+                                reference.child("reference_no").setValue(edittext.getText().toString());
+                                reference.child("status").setValue("Under review");
+                                reference.child("rider").setValue(storename);
+                                reference.child("amount").setValue(totalpayables.getText().toString());
 //                    //OR
 //                    String YouEditTextValue = edittext.getText().toString();
-                        }
-                    });
+                            }
+                        });
+                    }else{
+                        alert.setMessage("Enter Your Reference Number!");
+                        alert.setTitle("Payables Process");
+                        alert.setView(edittext);
+
+                        alert.setPositiveButton("Yes Option", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                //What ever you want to do with the value
+                                Editable YouEditTextValue = edittext.getText();
+
+                                rootNode = FirebaseDatabase.getInstance();
+                                reference = rootNode.getReference("payables").child(ridername+reportdate.getText().toString().replace("/",""));
+                                //reference.setValue("sample");
+                                reference.child("date_topay").setValue(reportdate.getText().toString());
+                                reference.child("reference_no").setValue(edittext.getText().toString());
+                                reference.child("status").setValue("Under review");
+                                reference.child("rider").setValue(ridername);
+                                reference.child("amount").setValue(totalpayables.getText().toString());
+//                    //OR
+//                    String YouEditTextValue = edittext.getText().toString();
+                            }
+                        });
+                    }
+
+
+
 
                     alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
@@ -277,6 +317,7 @@ public class rider_list_reports extends Fragment {
         SharedPreferences preferences = this.getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         String accountype = preferences.getString("accountype","");
         String ridername = preferences.getString("username","");
+        String store = preferences.getString("Store","");
         query1=reference.child("orders").orderByChild("status").equalTo("5");
 
         query1.addValueEventListener(new ValueEventListener() {
@@ -291,19 +332,32 @@ public class rider_list_reports extends Fragment {
                         helper_order_rider orders = snapshot.getValue(helper_order_rider.class);
                         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
                         Date dateformdb,startdate,enddate;
-
+                        Double valueNew = 0.0;
 
                         try {
                             dateformdb = format.parse(orders.getDate_order());
                             startdate = format.parse(date1);
                             enddate = format.parse(date2);
                             if(dateformdb.after(startdate) && dateformdb.before(enddate)){
-                                if(map.containsKey(orders.getDate_order()) && orders.getRider().equals(ridername)){
-                                    Double valueNew = Double.parseDouble(map.get(orders.getDate_order()))+ Double.parseDouble( orders.getOrder_total());
-                                    map.put(orders.getDate_order(),String.valueOf(valueNew));
+                                if(accountype.equals("Rider")){
+                                    if(map.containsKey(orders.getDate_order()) && orders.getRider().equals(ridername) ){
+                                        valueNew = Double.parseDouble(map.get(orders.getDate_order()))+ Double.parseDouble( orders.getOrder_total());
+                                        map.put(orders.getDate_order(),String.valueOf(valueNew));
+                                    }else{
+                                        map.put(orders.getDate_order(),orders.getOrder_total());
+                                    }
                                 }else{
-                                    map.put(orders.getDate_order(),orders.getOrder_total());
+                                    if(map.containsKey(orders.getDate_order()) && orders.getStore().equals(store) ){
+                                        valueNew = Double.parseDouble(map.get(orders.getDate_order()))+ Double.parseDouble( orders.getOrder_total());
+                                        map.put(orders.getDate_order(),String.valueOf(valueNew));
+                                    }else{
+                                        if(orders.getStore().equals(store)){
+                                            map.put(orders.getDate_order(),orders.getOrder_total());
+                                        }
+
+                                    }
                                 }
+
                                 //Log.i("Get",orders.getOrder_id()+" @"+orders.getDate_order());
                             }else{
                                 //Log.i("Pass",orders.getOrder_id()+" @"+orders.getDate_order());
@@ -348,7 +402,7 @@ public class rider_list_reports extends Fragment {
             }
         });
     }
-    public void listpayables(String date){
+    public void listrecivables(String date){
 
         SharedPreferences preferences = this.getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         String rider = preferences.getString("username","");
@@ -377,8 +431,64 @@ public class rider_list_reports extends Fragment {
                                 if(orders.getStore().equals(staffstore) ){
                                     list.add(orders);
                                     Log.i("R","1");
+                                    totalpayablesdata = totalpayablesdata+Double.parseDouble(orders.getOrder_total().toString());
                                 }
                             }
+                        }else{
+                            if(orders.getRider().equals(rider) && orders.getDate_order().equals(date)){
+
+                                Log.i("2DATA",rider+":"+snapshot.child("rider").getValue().toString());
+                                Log.i("2DATA",rider+":"+snapshot.child("order_id").getValue().toString());
+                                list.add(orders);
+                                totalpayablesdata = totalpayablesdata+Double.parseDouble(orders.getOrder_total().toString());
+                            }
+                        }
+                    }
+                    totalpayables.setText(String.valueOf(totalpayablesdata));
+                    getrecievables(date);
+                    myAdapter.notifyDataSetChanged();
+                }else{
+                    Log.i("payables","6");
+                    //Log.i("R",searchtext);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void listpayables(String date){
+
+        SharedPreferences preferences = this.getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String rider = preferences.getString("username","");
+        String accountype = preferences.getString("accountype","");
+        String staffstore = preferences.getString("Store","");
+
+        if(accountype.equals("Rider")){
+            query1=reference.child("orders").orderByChild("status").equalTo("5");
+        }else{
+            query1=reference.child("orders");
+        }
+
+        query1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                double totalpayablesdata = 0.0;
+                //Log.i("R",editTextname.getText().toString());
+                if (dataSnapshot.exists()) {
+                    list.clear();
+                    Log.i("payables","4"+date);
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        helper_order_rider orders = snapshot.getValue(helper_order_rider.class);
+
+                        if(accountype.equals("STAFF") && orders.getDate_order().equals(date)){
+                                if(orders.getStore().equals(staffstore) ){
+                                    list.add(orders);
+                                    Log.i("R","1");
+                                    totalpayablesdata = totalpayablesdata+Double.parseDouble(orders.getOrder_total().toString());
+                                }
                         }else{
                             if(orders.getRider().equals(rider) && orders.getDate_order().equals(date)){
 
@@ -404,6 +514,50 @@ public class rider_list_reports extends Fragment {
             }
         });
     }
+    public void getrecievables(String refdate){
+
+        SharedPreferences preferences = this.getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String rider = preferences.getString("username","");
+        String accountype = preferences.getString("accountype","");
+        String staffstore = preferences.getString("Store","");
+
+
+        try{
+            query1=reference.child("storereceivables");
+            query1.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    //Log.i("R",editTextname.getText().toString());
+                    if (dataSnapshot.exists()) {
+                        Log.i("R","4");
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            helper_receivables payables = snapshot.getValue(helper_receivables.class);
+                            if(payables.getRider().equals(staffstore) && payables.getDate_topay().equals(refdate)){
+                                status.setText(payables.getStatus());
+//                            Log.i("2DATA",rider+":"+snapshot.child("rider").getValue().toString());
+//                            list.add(orders);
+                            }else{
+                                status.setText("Not Yet Collected");
+                            }
+                        }
+                    }else{
+
+                        Log.i("R","6");
+                        status.setText("Not Yet Collected ");
+                        //Log.i("R",searchtext);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+    }
     public void getpayablesdetails(String refdate,String ridername){
 
         SharedPreferences preferences = this.getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
@@ -422,13 +576,18 @@ public class rider_list_reports extends Fragment {
                         Log.i("R","4");
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             helper_payables payables = snapshot.getValue(helper_payables.class);
-                            if(payables.getRider().equals(ridername) && payables.getDate_topay().equals(refdate)){
-                                status.setText(payables.getStatus());
+                            try {
+                                if(payables.getRider().equals(ridername) && payables.getDate_topay().equals(refdate)){
+                                    status.setText(payables.getStatus());
 //                            Log.i("2DATA",rider+":"+snapshot.child("rider").getValue().toString());
 //                            list.add(orders);
-                            }else{
-                                status.setText("No Pyament Made. !!!");
+                                }else{
+                                    status.setText("Not Yet Collected");
+                                }
+                            }catch (Exception e){
+                                Log.i("R",e.toString());
                             }
+
                         }
                     }else{
 

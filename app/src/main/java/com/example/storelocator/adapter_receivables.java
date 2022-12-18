@@ -58,7 +58,7 @@ public class adapter_receivables extends RecyclerView.Adapter<adapter_receivable
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                alert.setMessage("Your About to acceot the Payment!");
+                alert.setMessage("Your About to accept the Payment!");
                 alert.setTitle("Payment Process");
 
                 alert.setPositiveButton("Yes Option", new DialogInterface.OnClickListener() {

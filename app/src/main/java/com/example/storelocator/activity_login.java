@@ -121,12 +121,14 @@ public class activity_login extends AppCompatActivity {
                                             editor = preferences.edit();
                                             editor.putString("username",enterUsername);
                                             editor.putString("accountype",userType);
+                                            editor.putString("Store","");
                                             editor.commit();
 
                                             String storeName = dataSnapshot.child(enterUsername).child("storename").getValue(String.class);
                                             Intent intent2 = new Intent(activity_login.this,rider_frame.class);
                                             intent2.putExtra("user",enterUsername);
                                             intent2.putExtra("accountype",userType);
+
                                             startActivity(intent2);
                                         }else if(userType.equals("STAFF")){
                                             SharedPreferences preferences;

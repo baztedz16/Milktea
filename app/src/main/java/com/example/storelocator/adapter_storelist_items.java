@@ -146,6 +146,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                 reference.child(id).child("price").setValue(price);
                 reference.child(id).child("qty").setValue("1");
                 reference.child(id).child("orderstatus").setValue("0");
+                reference.child(id).child("itemrating").setValue("0");
                 //rootNode.getReference("products").child(product.getItemID()).child("view").setValue(1);
                 DatabaseReference reference1 = FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
                 Query query1 = reference1.child("products").orderByChild("itemID").equalTo(product.getItemID());
@@ -181,7 +182,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             String view = dataSnapshot.child(storename).child("view").getValue().toString();
-                            rootNode.getReference("users").child(storename).child("view").setValue(String.valueOf(Integer.parseInt(view)+1));
+                                rootNode.getReference("users").child(storename).child("view").setValue(String.valueOf(Integer.parseInt(view)+1));
 
                             Log.i("R","data:"+view);
 
@@ -228,6 +229,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                 reference.child(id).child("price").setValue(price);
                 reference.child(id).child("qty").setValue("1");
                 reference.child(id).child("orderstatus").setValue("0");
+                reference.child(id).child("itemrating").setValue("0");
                 //rootNode.getReference("products").child(product.getItemID()).child("view").setValue(1);
                 DatabaseReference reference1 = FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
                 Query query1 = reference1.child("products").orderByChild("itemID").equalTo(product.getItemID());
@@ -236,7 +238,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             String view = dataSnapshot.child(product.getItemID()).child("productview").getValue().toString();
-                            rootNode.getReference("products").child(product.getItemID()).child("productview").setValue(Integer.parseInt(view)+1);
+                            rootNode.getReference("products").child(product.getItemID()).child("productview").setValue(String.valueOf(Integer.parseInt(view)+1));
 
                             Log.i("R","data:"+view);
 
@@ -263,7 +265,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             String view = dataSnapshot.child(storename).child("view").getValue().toString();
-                            rootNode.getReference("users").child(storename).child("view").setValue(Integer.parseInt(view)+1);
+                            rootNode.getReference("users").child(storename).child("view").setValue(String.valueOf(Integer.parseInt(view)+1));
 
                             Log.i("R","data:"+view);
 
@@ -310,6 +312,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                 reference.child(id).child("price").setValue(price);
                 reference.child(id).child("qty").setValue("1");
                 reference.child(id).child("orderstatus").setValue("0");
+                reference.child(id).child("itemrating").setValue("0");
                 //rootNode.getReference("products").child(product.getItemID()).child("view").setValue(1);
                 DatabaseReference reference1 = FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
                 Query query1 = reference1.child("products").orderByChild("itemID").equalTo(product.getItemID());
@@ -318,7 +321,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             String view = dataSnapshot.child(product.getItemID()).child("productview").getValue().toString();
-                            rootNode.getReference("products").child(product.getItemID()).child("productview").setValue(Integer.parseInt(view)+1);
+                            rootNode.getReference("products").child(product.getItemID()).child("productview").setValue(String.valueOf(Integer.parseInt(view)+1));
 
                             Log.i("R","data:"+view);
 
@@ -345,7 +348,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             String view = dataSnapshot.child(storename).child("view").getValue().toString();
-                            rootNode.getReference("users").child(storename).child("view").setValue(Integer.parseInt(view)+1);
+                            rootNode.getReference("users").child(storename).child("view").setValue(String.valueOf(Integer.parseInt(view)+1));
 
                             Log.i("R","data:"+view);
 
@@ -392,6 +395,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                 reference.child(id).child("price").setValue(price);
                 reference.child(id).child("qty").setValue("1");
                 reference.child(id).child("orderstatus").setValue("0");
+                reference.child(id).child("itemrating").setValue("0");
                 //rootNode.getReference("products").child(product.getItemID()).child("view").setValue(1);
                 DatabaseReference reference1 = FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
                 Query query1 = reference1.child("products").orderByChild("itemID").equalTo(product.getItemID());
@@ -400,7 +404,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             String view = dataSnapshot.child(product.getItemID()).child("productview").getValue().toString();
-                            rootNode.getReference("products").child(product.getItemID()).child("productview").setValue(Integer.parseInt(view)+1);
+                            rootNode.getReference("products").child(product.getItemID()).child("productview").setValue(String.valueOf(Integer.parseInt(view)+1));
 
                             Log.i("R","data:"+view);
 

@@ -7,6 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,6 +32,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class admin_list_receivable extends Fragment {
@@ -36,6 +40,7 @@ public class admin_list_receivable extends Fragment {
     adapter_receivables myAdapter;
     RecyclerView recyclerView;
     TextView textView15;
+    Spinner optionlist;
 
     Query query1;
     FirebaseStorage storage;
@@ -54,9 +59,38 @@ public class admin_list_receivable extends Fragment {
         list = new ArrayList<>();
         myAdapter = new adapter_receivables(view.getContext(),list);
         recyclerView.setAdapter(myAdapter);
-        defaultview();
+        optionlist = view.findViewById(R.id.optionlist);
+        //defaultview();
+        listoption();
+
+        optionlist.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(optionlist.getSelectedItem().toString().equals("Receivables")){
+                    defaultview();
+                }else{
+                    defaultview2();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         // Inflate the layout for this fragment
         return view;
+    }
+    public void listoption(){
+        final List<String> areas = new ArrayList<String>();
+        areas.clear();
+        areas.add("Receivables");
+        areas.add("Payables");
+        Spinner areaSpinner =optionlist;
+        ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, areas);
+        areasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        areaSpinner.setAdapter(areasAdapter);
+
     }
     public void defaultview(){
 
@@ -76,21 +110,38 @@ public class admin_list_receivable extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_payables user = snapshot.getValue(helper_payables.class);
                         list.add(user);
+                    }
+                    myAdapter.notifyDataSetChanged();
+                }else{
+                    Log.i("R","6");
+                    //Log.i("R",searchtext);
+                }
+            }
 
-//                        if(accountype.equals("STAFF") && (user.getStatus().equals("5") )){
-//                            if(user.getStore().equals(staffstore)){
-//                                if(user.getStore().equals(staffstore)){
-//
-//                                    Log.i("R","1");
-//                                }
-//                            }
-//                        }else{
-//                            if(user.getRider().equals(rider) ){
-//
-//                                Log.i("2DATA",rider+":"+snapshot.child("rider").getValue().toString());
-//                                list.add(user);
-//                            }
-//                        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void defaultview2(){
+
+        SharedPreferences preferences = this.getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String rider = preferences.getString("username","");
+        String accountype = preferences.getString("accountype","");
+        String staffstore = preferences.getString("Store","");
+
+        query1=reference.child("storereceivables").orderByChild("status").equalTo("Under review");
+        query1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Log.i("R",editTextname.getText().toString());
+                if (dataSnapshot.exists()) {
+                    list.clear();
+                    Log.i("R","4");
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        helper_payables user = snapshot.getValue(helper_payables.class);
+                        list.add(user);
                     }
                     myAdapter.notifyDataSetChanged();
                 }else{

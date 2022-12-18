@@ -2,17 +2,21 @@ package com.example.storelocator.fragment;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -51,6 +55,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -65,7 +70,8 @@ public class admin_list_reports extends Fragment {
     DatePickerDialog.OnDateSetListener startdate,enddate;
     BarChart barchartReport;
     PieChart pichartreport;
-    Button salesbtn;
+    Button salesbtn,genreport;
+    Spinner storelist;
     Query query1;
     FirebaseStorage storage;
     StorageReference ref;
@@ -81,13 +87,22 @@ public class admin_list_reports extends Fragment {
         pichartreport = view.findViewById(R.id.pichartreport);
         salesbtn = view.findViewById(R.id.salesbtn);
         rdate = view.findViewById(R.id.rdate);
-
+        genreport =view.findViewById(R.id.genreport);
+        storelist= view.findViewById(R.id.storelist);
         list = new ArrayList<>();
         myAdapter = new adapter_rider_delivery(view.getContext(),list);
+
         //defaultview();
         pieview();
-
-
+        liststore();
+        genreport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uriUrl = Uri.parse("http://192.168.0.190/firabse-milktea/index.php");
+                Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                startActivity(launchBrowser);
+            }
+        });
         date1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -233,6 +248,36 @@ public class admin_list_reports extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void liststore(){
+        reference.child("users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Is better to use a List, because you don't know the size
+                // of the iterator returned by dataSnapshot.getChildren() to
+                // initialize the array
+                final List<String> areas = new ArrayList<String>();
+                areas.clear();
+                areas.add("All");
+                for (DataSnapshot areaSnapshot: dataSnapshot.getChildren()) {
+                    if(areaSnapshot.child("accountype").getValue(String.class).equals("Store Owner")){
+                        String areaName = areaSnapshot.child("storename").getValue(String.class);
+                        areas.add(areaName);
+                    }
+
+                }
+
+                Spinner areaSpinner =storelist;
+                ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, areas);
+                areasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                areaSpinner.setAdapter(areasAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
