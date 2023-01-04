@@ -18,6 +18,7 @@
     <string-array name="account_type">
         <item>User</item>
         <item>Store Owner</item>
+        <item>Staff</item>
         <item>Rider</item>
     </string-array>
     <string name="title_activity_riders_frame">riders_frame</string>
