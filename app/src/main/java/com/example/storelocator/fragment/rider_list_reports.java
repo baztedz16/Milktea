@@ -263,6 +263,7 @@ public class rider_list_reports extends Fragment {
                                 reference.child("status").setValue("Under review");
                                 reference.child("rider").setValue(storename);
                                 reference.child("amount").setValue(totalpayables.getText().toString());
+                                reference.child("txntype").setValue("pay");
 //                    //OR
 //                    String YouEditTextValue = edittext.getText().toString();
                             }
@@ -285,6 +286,7 @@ public class rider_list_reports extends Fragment {
                                 reference.child("status").setValue("Under review");
                                 reference.child("rider").setValue(ridername);
                                 reference.child("amount").setValue(totalpayables.getText().toString());
+                                reference.child("txntype").setValue("rec");
 //                    //OR
 //                    String YouEditTextValue = edittext.getText().toString();
                             }

@@ -104,18 +104,20 @@ public class admin_list_receivable extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Log.i("R",editTextname.getText().toString());
+                list.clear();
                 if (dataSnapshot.exists()) {
-                    list.clear();
+
                     Log.i("R","4");
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_payables user = snapshot.getValue(helper_payables.class);
                         list.add(user);
                     }
-                    myAdapter.notifyDataSetChanged();
+
                 }else{
                     Log.i("R","6");
                     //Log.i("R",searchtext);
                 }
+                myAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -136,18 +138,20 @@ public class admin_list_receivable extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Log.i("R",editTextname.getText().toString());
+                list.clear();
                 if (dataSnapshot.exists()) {
-                    list.clear();
+
                     Log.i("R","4");
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_payables user = snapshot.getValue(helper_payables.class);
                         list.add(user);
                     }
-                    myAdapter.notifyDataSetChanged();
+
                 }else{
                     Log.i("R","6");
                     //Log.i("R",searchtext);
                 }
+                myAdapter.notifyDataSetChanged();
             }
 
             @Override

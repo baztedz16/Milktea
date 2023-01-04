@@ -6,13 +6,13 @@
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/drawable/marker.xml" value="0.196875" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/activity_activation.xml" value="0.2203125" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/activity_admin_frame.xml" value="0.25" />
-        <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/activity_login.xml" value="0.18072916666666666" />
+        <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/activity_login.xml" value="0.67" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/activity_main.xml" value="0.18072916666666666" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/activity_order_details.xml" value="0.25" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/activity_rating_store.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/activity_rider_frame.xml" value="0.18072916666666666" />
-        <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/activity_signup.xml" value="0.18072916666666666" />
-        <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/activity_signup_staff.xml" value="0.18072916666666666" />
+        <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/activity_signup.xml" value="0.33" />
+        <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/activity_signup_staff.xml" value="0.33" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/activity_staff_frame.xml" value="0.18072916666666666" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/fragment_accountlist.xml" value="0.18072916666666666" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/fragment_adminreceivables.xml" value="0.25" />
@@ -39,6 +39,7 @@
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/mainframe_viewcart.xml" value="0.18072916666666666" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/store_owner.xml" value="0.33" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/menu/menu_item.xml" value="0.18072916666666666" />
+        <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/menu/menu_item2.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator/app/src/main/res/drawable/more_vert.xml" value="0.21770833333333334" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator/app/src/main/res/layout/activity_activation.xml" value="0.21979166666666666" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator/app/src/main/res/layout/activity_api.xml" value="0.21666666666666667" />

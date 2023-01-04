@@ -57,29 +57,56 @@ public class adapter_receivables extends RecyclerView.Adapter<adapter_receivable
         holder.approved.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                alert.setMessage("Your About to accept the Payment!");
-                alert.setTitle("Payment Process");
 
-                alert.setPositiveButton("Yes Option", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
+                if(user.getTxntype().equals("rec")){
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setMessage("Your About to accept the Receivables!");
+                    alert.setTitle("Payment Process");
 
-                        rootNode = FirebaseDatabase.getInstance();
-                        reference = rootNode.getReference("payables").child(user.getRider()+user.getDate_topay().replace("/",""));
-                        //reference.setValue("sample");
-                        reference.child("status").setValue("Approved");
+                    alert.setPositiveButton("Yes Option", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+
+                            rootNode = FirebaseDatabase.getInstance();
+                            reference = rootNode.getReference("payables").child(user.getRider()+user.getDate_topay().replace("/",""));
+                            //reference.setValue("sample");
+                            reference.child("status").setValue("Approved");
 //                    //OR
 //                    String YouEditTextValue = edittext.getText().toString();
-                    }
-                });
+                        }
+                    });
 
-                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
+                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
 
-                    }
-                });
+                        }
+                    });
 
-                alert.show();
+                    alert.show();
+                }else{
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setMessage("Your About to accept the Payables!");
+                    alert.setTitle("Payment Process");
+
+                    alert.setPositiveButton("Yes Option", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+
+                            rootNode = FirebaseDatabase.getInstance();
+                            reference = rootNode.getReference("storereceivables").child(user.getRider()+user.getDate_topay().replace("/",""));
+                            //reference.setValue("sample");
+                            reference.child("status").setValue("Approved");
+//                    //OR
+//                    String YouEditTextValue = edittext.getText().toString();
+                        }
+                    });
+
+                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+
+                        }
+                    });
+
+                    alert.show();
+                }
 
 
             }

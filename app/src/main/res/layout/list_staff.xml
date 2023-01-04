@@ -33,7 +33,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/storeList2"
-        tools:listitem="@layout/list_view_staff"
+        tools:listitem="@layout/list_account"
         android:layout_width="373dp"
         android:layout_height="436dp"
         android:layout_marginStart="6dp"

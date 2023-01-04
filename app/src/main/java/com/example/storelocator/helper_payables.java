@@ -1,14 +1,15 @@
 package com.example.storelocator;
 
 public class helper_payables {
-    String date_topay,reference_no,status,rider,amount;
+    String date_topay,reference_no,status,rider,amount,txntype;
 
-    public helper_payables(String date_topay,String reference_no,String status,String rider,String amount){
+    public helper_payables(String date_topay,String reference_no,String status,String rider,String amount,String txntype){
         this.date_topay = date_topay;
         this.reference_no = reference_no;
         this.status = status;
         this.rider = rider;
         this.amount = amount;
+        this.txntype=txntype;
     }
     public  helper_payables(){
 
@@ -52,5 +53,13 @@ public class helper_payables {
 
     public void setAmount(String amount) {
         this.amount = amount;
+    }
+
+    public String getTxntype() {
+        return txntype;
+    }
+
+    public void setTxntype(String txntype) {
+        this.txntype = txntype;
     }
 }

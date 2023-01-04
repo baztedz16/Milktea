@@ -59,6 +59,7 @@ public class store_owner extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.store_owner);
+
         userid = findViewById(R.id.userid);
         store = findViewById(R.id.store);
         address = findViewById(R.id.address);
