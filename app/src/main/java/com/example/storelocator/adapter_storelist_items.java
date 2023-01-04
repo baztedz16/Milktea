@@ -238,7 +238,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             String view = dataSnapshot.child(product.getItemID()).child("productview").getValue().toString();
-                            rootNode.getReference("products").child(product.getItemID()).child("productview").setValue(String.valueOf(Integer.parseInt(view)+1));
+                            rootNode.getReference("products").child(product.getItemID()).child("productview").setValue(Integer.parseInt(view)+1);
 
                             Log.i("R","data:"+view);
 
@@ -321,7 +321,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             String view = dataSnapshot.child(product.getItemID()).child("productview").getValue().toString();
-                            rootNode.getReference("products").child(product.getItemID()).child("productview").setValue(String.valueOf(Integer.parseInt(view)+1));
+                            rootNode.getReference("products").child(product.getItemID()).child("productview").setValue(Integer.parseInt(view)+1);
 
                             Log.i("R","data:"+view);
 
@@ -404,7 +404,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             String view = dataSnapshot.child(product.getItemID()).child("productview").getValue().toString();
-                            rootNode.getReference("products").child(product.getItemID()).child("productview").setValue(String.valueOf(Integer.parseInt(view)+1));
+                            rootNode.getReference("products").child(product.getItemID()).child("productview").setValue(Integer.parseInt(view)+1);
 
                             Log.i("R","data:"+view);
 
