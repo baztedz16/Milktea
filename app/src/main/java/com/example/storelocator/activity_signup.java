@@ -1,9 +1,16 @@
 package com.example.storelocator;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +26,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,6 +45,9 @@ import com.sucho.placepicker.Constants;
 import com.sucho.placepicker.MapType;
 import com.sucho.placepicker.PlacePicker;
 
+import java.util.List;
+import java.util.Locale;
+
 
 public class activity_signup extends AppCompatActivity {
     private static final int REQUEST_PLACE_PICKER = 1001;
@@ -42,7 +56,7 @@ public class activity_signup extends AppCompatActivity {
     Button buttonSignup,pickLocationBtn;
     TextView textViewLogin;
     ProgressBar progressBar;
-
+    static Double lh,lt;
 
     FirebaseDatabase rootNode;
     DatabaseReference reference;
@@ -175,11 +189,39 @@ public class activity_signup extends AppCompatActivity {
 
         //Start ProgressBar first (Set visibility VISIBLE)
 
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (!(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)) {
+            Toast.makeText(getBaseContext(), "Please Connect to the Internet", Toast.LENGTH_SHORT).show();
+        } else {
+            if (ActivityCompat.checkSelfPermission(activity_signup.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity_signup.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            FusedLocationProviderClient fusedLocationProviderClient = new FusedLocationProviderClient(activity_signup.this);
+            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                @Override
+                public void onComplete(@NonNull Task<Location> task) {
+                    Location location = task.getResult();
+                    if (location != null) {
+                        Geocoder geocoder = new Geocoder(activity_signup.this, Locale.getDefault());
+                        try {
+                            List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                            lh = addressList.get(0).getLongitude();
+                            lt = addressList.get(0).getLatitude();
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
 
+                    }
+                }
+            });
+        }
     }
     private void showPlacePicker() {
+
         Intent intent = new PlacePicker.IntentBuilder()
-                .setLatLong(40.748672, -73.985628)
+                .setLatLong(lt, lh)
                 .showLatLong(true)
                 .setMapRawResourceStyle(R.raw.map_style)
                 .setMapType(MapType.NORMAL)
