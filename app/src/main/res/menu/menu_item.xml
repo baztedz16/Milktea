@@ -14,7 +14,12 @@
                 app:showAsAction="never"
                 >
             </item>
-
+            <item
+                android:id="@+id/store"
+                android:title="Store"
+                app:showAsAction="never"
+                >
+            </item>
             <item
                 android:id="@+id/orders"
                 android:title="Orders"
@@ -30,6 +35,12 @@
             <item
                 android:id="@+id/mangeStore"
                 android:title="Logout"
+                app:showAsAction="never"
+                >
+            </item>
+            <item
+                android:id="@+id/category"
+                android:title="Add Category"
                 app:showAsAction="never"
                 >
             </item></menu>

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -73,6 +74,7 @@ public class rider_list_reports extends Fragment {
     Button salesbtn,payablesbtn,exportcsv1;
     RecyclerView listpayables;
     Query query1;
+    LinearLayout linear1;
 
 
     FirebaseStorage storage;
@@ -94,6 +96,10 @@ public class rider_list_reports extends Fragment {
         status = view.findViewById(R.id.status);
         payablesbtn = view.findViewById(R.id.payablesbtn);
 
+        linear1=view.findViewById(R.id.linear1);
+
+
+
         SharedPreferences preferences = this.getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         String accountype = preferences.getString("accountype","");
         String ridername = preferences.getString("username","");
@@ -108,7 +114,14 @@ public class rider_list_reports extends Fragment {
         myAdapter = new adapter_rider_payables(view.getContext(),list);
         listpayables.setAdapter(myAdapter);
         //defaultview();
-
+        if(accountype.equals("STAFF")){
+            rdate.setVisibility(View.INVISIBLE);
+            reportdate.setVisibility(View.INVISIBLE);
+            listpayables.setVisibility(View.INVISIBLE);
+            linear1.setVisibility(View.INVISIBLE);
+            status.setVisibility(View.INVISIBLE);
+            payablesbtn.setVisibility(View.INVISIBLE);
+        }
 
         date1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,7 +144,18 @@ public class rider_list_reports extends Fragment {
         startdate = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                String startdate = (month+1) + "/" +day+ "/" + year;
+                String mnth ="",dayt="";
+                if(month+1 < 10){
+                    mnth = "0"+month;
+                }else{
+                    mnth = String.valueOf(month+1);
+                }
+                if(day < 10){
+                    dayt = "0"+day;
+                }else{
+                    dayt = String.valueOf(day);
+                }
+                String startdate = mnth + "/" +dayt+ "/" + year;
                 date1.setText(startdate);
             }
         };
@@ -157,7 +181,18 @@ public class rider_list_reports extends Fragment {
         enddate = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                String startdate = (month+1) + "/" +day+ "/" + year;
+                String mnth ="",dayt="";
+                if(month+1 < 10){
+                    mnth = "0"+month;
+                }else{
+                    mnth = String.valueOf(month+1);
+                }
+                if(day < 10){
+                    dayt = "0"+day;
+                }else{
+                    dayt = String.valueOf(day);
+                }
+                String startdate = mnth + "/" +dayt+ "/" + year;
                 date2.setText(startdate);
             }
         };
@@ -191,7 +226,7 @@ public class rider_list_reports extends Fragment {
         };
 
 
-        if(accountype.equals("STAFF")){
+        if(accountype.equals("STAFF") || accountype.equals("Store Owner")){
             payablesbtn.setText("SUBMIT RECIEVABLES");
         }
         reportdate.setOnClickListener(new View.OnClickListener() {
@@ -222,7 +257,7 @@ public class rider_list_reports extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 Log.i("musthappen","4");
 
-                if(accountype.equals("STAFF")){
+                if(accountype.equals("STAFF") || accountype.equals("Store Owner")){
                     listrecivables(reportdate.getText().toString());
                 }else{
                     listpayables(reportdate.getText().toString());
@@ -245,7 +280,7 @@ public class rider_list_reports extends Fragment {
                 if(!status.getText().equals("Under review") && !status.getText().equals("Approved")){
                     final EditText edittext = new EditText(getContext());
 
-                    if(accountype.equals("STAFF")){
+                    if(accountype.equals("STAFF") || accountype.equals("Store Owner")){
                         alert.setMessage("Enter Note!");
                         alert.setTitle("Receivables Process");
                         alert.setView(edittext);
@@ -428,13 +463,11 @@ public class rider_list_reports extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_order_rider orders = snapshot.getValue(helper_order_rider.class);
 
-                        if(accountype.equals("STAFF") && orders.getDate_order().equals(date)){
+                        if((accountype.equals("STAFF") || accountype.equals("Store Owner")) && orders.getDate_order().equals(date)){
                             if(orders.getStore().equals(staffstore)){
-                                if(orders.getStore().equals(staffstore) ){
-                                    list.add(orders);
-                                    Log.i("R","1");
-                                    totalpayablesdata = totalpayablesdata+Double.parseDouble(orders.getOrder_total().toString());
-                                }
+                                list.add(orders);
+                                Log.i("R","1");
+                                totalpayablesdata = totalpayablesdata+Double.parseDouble(orders.getOrder_total().toString());
                             }
                         }else{
                             if(orders.getRider().equals(rider) && orders.getDate_order().equals(date)){
@@ -485,7 +518,7 @@ public class rider_list_reports extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_order_rider orders = snapshot.getValue(helper_order_rider.class);
 
-                        if(accountype.equals("STAFF") && orders.getDate_order().equals(date)){
+                        if(accountype.equals("STAFF") || accountype.equals("Store Owner") && orders.getDate_order().equals(date)){
                                 if(orders.getStore().equals(staffstore) ){
                                     list.add(orders);
                                     Log.i("R","1");
@@ -534,13 +567,16 @@ public class rider_list_reports extends Fragment {
                         Log.i("R","4");
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             helper_receivables payables = snapshot.getValue(helper_receivables.class);
-                            if(payables.getRider().equals(staffstore) && payables.getDate_topay().equals(refdate)){
-                                status.setText(payables.getStatus());
-//                            Log.i("2DATA",rider+":"+snapshot.child("rider").getValue().toString());
+                            try {
+                                if(payables.getRider().equals(staffstore) && payables.getDate_topay().equals(refdate)){
+                                    status.setText(payables.getStatus());
+                                    Log.i("2DATA",rider+":"+snapshot.child("rider").getValue().toString()+" "+payables.getStatus());
 //                            list.add(orders);
-                            }else{
-                                status.setText("Not Yet Collected");
+                                }
+                            }catch (Exception e){
+                                Log.i("Error", ""+e);
                             }
+
                         }
                     }else{
 

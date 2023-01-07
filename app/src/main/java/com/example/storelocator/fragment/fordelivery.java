@@ -93,7 +93,7 @@ public class fordelivery extends Fragment {
                     Log.i("R","4");
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_order_rider orders = snapshot.getValue(helper_order_rider.class);
-                        if(accountype.equals("STAFF") && (orders.getStatus().equals("1") || orders.getStatus().equals("2") || orders.getStatus().equals("3") || orders.getStatus().equals("4"))){
+                        if(accountype.equals("STAFF") || accountype.equals("Store Owner") && (orders.getStatus().equals("1") || orders.getStatus().equals("2") || orders.getStatus().equals("3") || orders.getStatus().equals("4"))){
                             if(orders.getStore().equals(staffstore)){
                                 if(orders.getStore().equals(staffstore)){
                                     list.add(orders);

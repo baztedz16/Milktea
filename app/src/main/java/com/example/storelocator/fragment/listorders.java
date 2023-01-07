@@ -64,7 +64,7 @@ public class listorders extends Fragment {
         String accountype = preferences.getString("accountype","");
         String staffstore = preferences.getString("Store","");
 
-        if(accountype.equals("STAFF")){
+        if(accountype.equals("STAFF") || accountype.equals("Store Owner")){
             query1=reference.child("orders").orderByChild("status").equalTo("0");
         }else{
             query1=reference.child("orders").orderByChild("status").equalTo("1");

@@ -80,9 +80,14 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
         holder.address.setText(product.getAddress());
         holder.price.setText(product.getDescription());
         //variant price s,m,l
-        holder.textpricesm.setText(product.getPricesm());
-        holder.textpricemd.setText(product.getPricemd());
-        holder.textpricelg.setText(product.getPricelg());
+        String ssize = String.valueOf(Integer.parseInt( product.getPricesm())+5);
+        String msize = String.valueOf(Integer.parseInt( product.getPricemd())+5);
+        String lsize = String.valueOf(Integer.parseInt( product.getPricelg())+5);
+
+
+        holder.textpricesm.setText(ssize);
+        holder.textpricemd.setText(msize);
+        holder.textpricelg.setText(lsize);
 
         get_Myloc();
 
@@ -129,7 +134,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                 String itmname= product.getParoductName();
                 String owner = product.getStoreOwner();
                 String sotreUser = product.getStoreUser(); //StoreUser
-                String price = product.getPrice(); //StoreUser
+                String price = String.valueOf(Integer.parseInt(product.getPrice())+5); //StoreUser
                 int productview = product.getProductview();
                 //reference.setValue("sample");
                 preferences=context.getSharedPreferences("user",Context.MODE_PRIVATE);
@@ -212,7 +217,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                 String itmname= product.getParoductName();
                 String owner = product.getStoreOwner();
                 String sotreUser = product.getStoreUser(); //StoreUser
-                String price = product.getPricesm(); //StoreUser
+                String price = String.valueOf(Integer.parseInt(product.getPricesm())+5); //StoreUser
                 int productview = product.getProductview();
                 //reference.setValue("sample");
                 preferences=context.getSharedPreferences("user",Context.MODE_PRIVATE);
@@ -295,7 +300,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                 String itmname= product.getParoductName();
                 String owner = product.getStoreOwner();
                 String sotreUser = product.getStoreUser(); //StoreUser
-                String price = product.getPricemd(); //StoreUser
+                String price = String.valueOf(Integer.parseInt(product.getPricemd())+5); //StoreUser
                 int productview = product.getProductview();
                 //reference.setValue("sample");
                 preferences=context.getSharedPreferences("user",Context.MODE_PRIVATE);
@@ -378,7 +383,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                 String itmname= product.getParoductName();
                 String owner = product.getStoreOwner();
                 String sotreUser = product.getStoreUser(); //StoreUser
-                String price = product.getPricelg(); //StoreUser
+                String price = String.valueOf(Integer.parseInt(product.getPricelg())+5); //StoreUser
                 int productview = product.getProductview();
                 //reference.setValue("sample");
                 preferences=context.getSharedPreferences("user",Context.MODE_PRIVATE);

@@ -1,14 +1,20 @@
 package com.example.storelocator;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -57,141 +63,181 @@ public class activity_login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                final String enterUsername =  textInputEditTextUsername.getText().toString().trim();
-                final String enterPassword =  textInputEditTextPassword.getText().toString().trim();
 
-                Query query = reference.child("users").orderByChild("username").equalTo(enterUsername);
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            // dataSnapshot is the "issue" node with all children with id 0
-                            String passwordDB = dataSnapshot.child(enterUsername).child("password").getValue(String.class);
-                            String userType = dataSnapshot.child(enterUsername).child("accountype").getValue(String.class);
-                            String activation = dataSnapshot.child(enterUsername).child("activation").getValue(String.class);
-                            String lati = dataSnapshot.child(enterUsername).child("destlat").getValue(String.class);
-                            String longti = dataSnapshot.child(enterUsername).child("destlong").getValue(String.class);
-                            String address = dataSnapshot.child(enterUsername).child("address").getValue(String.class);
-                            Log.i("result",passwordDB);
-                            if(passwordDB.equals(enterPassword)){
-                                Log.i("yehey","Pasok");
-                                switch (activation){
-                                    case "0":
-                                        Intent intent = new Intent(activity_login.this, activity_activation_frame.class);
-                                        startActivity(intent);
-                                        break;
-                                    case  "1":
-                                        if(userType.equals("User")){
-                                            SharedPreferences preferences;
-                                            SharedPreferences.Editor editor;
+                loginfunction();
 
-                                            preferences = getSharedPreferences("user",MODE_PRIVATE);
-                                            editor = preferences.edit();
-                                            editor.putString("username",enterUsername);
-                                            editor.putString("accountype",userType);
-                                            editor.putString("address",address);
-                                            editor.putString("longti",longti);
-                                            editor.putString("lati",lati);
-                                            editor.commit();
-                                            Intent intent1 = new Intent(activity_login.this,mainframe.class);
-                                            startActivity(intent1);
-                                        }else if(userType.equals("Store Owner")){
-                                            SharedPreferences preferences;
-                                            SharedPreferences.Editor editor;
-
-                                            preferences = getSharedPreferences("user",MODE_PRIVATE);
-                                            editor = preferences.edit();
-                                            editor.putString("username",enterUsername);
-                                            editor.putString("accountype",userType);
-                                            editor.commit();
-
-                                            String storeName = dataSnapshot.child(enterUsername).child("storename").getValue(String.class);
-                                            String destlong = dataSnapshot.child(enterUsername).child("destlong").getValue(String.class);
-                                            String destlat = dataSnapshot.child(enterUsername).child("destlat").getValue(String.class);
-                                            Intent intent2 = new Intent(activity_login.this,store_owner.class);
-                                            intent2.putExtra("user",enterUsername);
-                                            intent2.putExtra("store",storeName);
-                                            intent2.putExtra("address",destlong+","+destlat);
-                                            startActivity(intent2);
-                                        }else if(userType.equals("Rider")){
-                                            SharedPreferences preferences;
-                                            SharedPreferences.Editor editor;
-
-                                            preferences = getSharedPreferences("user",MODE_PRIVATE);
-                                            editor = preferences.edit();
-                                            editor.putString("username",enterUsername);
-                                            editor.putString("accountype",userType);
-                                            editor.putString("Store","");
-                                            editor.commit();
-
-                                            String storeName = dataSnapshot.child(enterUsername).child("storename").getValue(String.class);
-                                            Intent intent2 = new Intent(activity_login.this,rider_frame.class);
-                                            intent2.putExtra("user",enterUsername);
-                                            intent2.putExtra("accountype",userType);
-
-                                            startActivity(intent2);
-                                        }else if(userType.equals("STAFF")){
-                                            SharedPreferences preferences;
-                                            SharedPreferences.Editor editor;
-
-                                            preferences = getSharedPreferences("user",MODE_PRIVATE);
-                                            editor = preferences.edit();
-                                            String storeName = dataSnapshot.child(enterUsername).child("storename").getValue(String.class);
-                                            editor.putString("username",enterUsername);
-                                            editor.putString("accountype",userType);
-                                            editor.putString("Store",storeName);
-                                            editor.commit();
-
-
-                                            Intent intent2 = new Intent(activity_login.this,rider_frame.class);
-                                            intent2.putExtra("user",enterUsername);
-                                            intent2.putExtra("accountype",userType);
-                                            intent2.putExtra("Store",storeName);
-                                            startActivity(intent2);
-                                        }else if(userType.equals("Admin")){
-                                            SharedPreferences preferences;
-                                            SharedPreferences.Editor editor;
-
-                                            preferences = getSharedPreferences("user",MODE_PRIVATE);
-                                            editor = preferences.edit();
-                                            String storeName = dataSnapshot.child(enterUsername).child("storename").getValue(String.class);
-                                            editor.putString("username",enterUsername);
-                                            editor.putString("accountype",userType);
-                                            editor.putString("Store",storeName);
-                                            editor.commit();
-
-
-                                            Intent intent2 = new Intent(activity_login.this,admin_frame.class);
-                                            intent2.putExtra("user",enterUsername);
-                                            intent2.putExtra("accountype",userType);
-                                            intent2.putExtra("Store",storeName);
-                                            startActivity(intent2);
-                                        }
-
-
-                                }
-
-
-
-                            }else {
-                                Log.i("error","Password1");
-                            }
-
-
-                        } else {
-                            Log.i("error","Password2");
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
             }
         });
 
     }
+    private void otp(Intent intent){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity_login.this);
+        builder.setTitle("Enter OTP");
 
+
+        final EditText input = new EditText(activity_login.this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        input.setGravity(Gravity.CENTER);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if(!input.getText().toString().isEmpty()){
+                    startActivity(intent);
+                }
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    }
+    private void loginfunction(){
+        final String enterUsername =  textInputEditTextUsername.getText().toString().trim();
+        final String enterPassword =  textInputEditTextPassword.getText().toString().trim();
+
+        Query query = reference.child("users").orderByChild("username").equalTo(enterUsername);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // dataSnapshot is the "issue" node with all children with id 0
+                    String passwordDB = dataSnapshot.child(enterUsername).child("password").getValue(String.class);
+                    String userType = dataSnapshot.child(enterUsername).child("accountype").getValue(String.class);
+                    String activation = dataSnapshot.child(enterUsername).child("activation").getValue(String.class);
+                    String lati = dataSnapshot.child(enterUsername).child("destlat").getValue(String.class);
+                    String longti = dataSnapshot.child(enterUsername).child("destlong").getValue(String.class);
+                    String address = dataSnapshot.child(enterUsername).child("address").getValue(String.class);
+                    Log.i("result",passwordDB);
+                    if(passwordDB.equals(enterPassword)){
+                        Log.i("yehey","Pasok");
+                        switch (activation){
+                            case "0":
+                                Intent intent = new Intent(activity_login.this, activity_activation_frame.class);
+                                startActivity(intent);
+                                break;
+                            case  "1":
+                                if(userType.equals("User")){
+                                    SharedPreferences preferences;
+                                    SharedPreferences.Editor editor;
+
+                                    preferences = getSharedPreferences("user",MODE_PRIVATE);
+                                    editor = preferences.edit();
+                                    editor.putString("username",enterUsername);
+                                    editor.putString("accountype",userType);
+                                    editor.putString("address",address);
+                                    editor.putString("longti",longti);
+                                    editor.putString("lati",lati);
+                                    editor.commit();
+                                    Intent intent1 = new Intent(activity_login.this,mainframe.class);
+                                    otp(intent1);
+                                }else if(userType.equals("Store Owner")){
+                                    SharedPreferences preferences;
+                                    SharedPreferences.Editor editor;
+
+
+
+                                    String storeName = dataSnapshot.child(enterUsername).child("storename").getValue(String.class);
+                                    String destlong = dataSnapshot.child(enterUsername).child("destlong").getValue(String.class);
+                                    String destlat = dataSnapshot.child(enterUsername).child("destlat").getValue(String.class);
+                                    Intent intent2 = new Intent(activity_login.this,store_owner.class);
+                                    intent2.putExtra("user",enterUsername);
+                                    intent2.putExtra("store",storeName);
+                                    intent2.putExtra("address",destlong+","+destlat);
+
+                                    preferences = getSharedPreferences("user",MODE_PRIVATE);
+                                    editor = preferences.edit();
+                                    editor.putString("username",enterUsername);
+                                    editor.putString("accountype",userType);
+                                    editor.putString("Store",storeName);
+                                    editor.commit();
+                                    otp(intent2);
+                                }else if(userType.equals("Rider")){
+                                    SharedPreferences preferences;
+                                    SharedPreferences.Editor editor;
+
+                                    preferences = getSharedPreferences("user",MODE_PRIVATE);
+                                    editor = preferences.edit();
+                                    editor.putString("username",enterUsername);
+                                    editor.putString("accountype",userType);
+                                    editor.putString("Store","");
+                                    editor.commit();
+
+                                    String storeName = dataSnapshot.child(enterUsername).child("storename").getValue(String.class);
+                                    Intent intent2 = new Intent(activity_login.this,rider_frame.class);
+                                    intent2.putExtra("user",enterUsername);
+                                    intent2.putExtra("accountype",userType);
+
+                                    otp(intent2);
+                                }else if(userType.equals("STAFF")){
+                                    SharedPreferences preferences;
+                                    SharedPreferences.Editor editor;
+
+                                    preferences = getSharedPreferences("user",MODE_PRIVATE);
+                                    editor = preferences.edit();
+                                    String storeName = dataSnapshot.child(enterUsername).child("storename").getValue(String.class);
+                                    editor.putString("username",enterUsername);
+                                    editor.putString("accountype",userType);
+                                    editor.putString("Store",storeName);
+                                    editor.commit();
+
+
+                                    Intent intent2 = new Intent(activity_login.this,rider_frame.class);
+                                    intent2.putExtra("user",enterUsername);
+                                    intent2.putExtra("accountype",userType);
+                                    intent2.putExtra("Store",storeName);
+                                    otp(intent2);
+                                }else if(userType.equals("Admin")){
+                                    SharedPreferences preferences;
+                                    SharedPreferences.Editor editor;
+
+                                    preferences = getSharedPreferences("user",MODE_PRIVATE);
+                                    editor = preferences.edit();
+                                    String storeName = dataSnapshot.child(enterUsername).child("storename").getValue(String.class);
+                                    editor.putString("username",enterUsername);
+                                    editor.putString("accountype",userType);
+                                    editor.putString("Store",storeName);
+                                    editor.commit();
+
+
+                                    Intent intent2 = new Intent(activity_login.this,admin_frame.class);
+                                    intent2.putExtra("user",enterUsername);
+                                    intent2.putExtra("accountype",userType);
+                                    intent2.putExtra("Store",storeName);
+                                    otp(intent2);
+                                }
+
+
+                        }
+
+
+
+                    }else {
+                        Log.i("error","Password1");
+                    }
+
+
+                } else {
+                    Log.i("error","Password2");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
     }

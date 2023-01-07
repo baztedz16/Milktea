@@ -1,7 +1,10 @@
 package com.example.storelocator;
 
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,15 +12,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +43,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class store_owner extends AppCompatActivity {
     TextView userid;
@@ -49,6 +57,7 @@ public class store_owner extends AppCompatActivity {
     FirebaseDatabase rootNode;
     DatabaseReference reference =FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
     RecyclerView recyclerView;
+    Spinner categoryspin;
 
     adapter_itemlist myAdapter;
     ArrayList<helper_product> list;
@@ -68,6 +77,9 @@ public class store_owner extends AppCompatActivity {
         price1 = findViewById(R.id.pricesm);
         price2 = findViewById(R.id.pricemd);
         price3 = findViewById(R.id.pricelg);
+        categoryspin = findViewById(R.id.categoryspin);
+
+
 
         //deleteitem = findViewById(R.id.deleteitem);
 
@@ -107,6 +119,34 @@ public class store_owner extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        reference.child("category").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Is better to use a List, because you don't know the size
+                // of the iterator returned by dataSnapshot.getChildren() to
+                // initialize the array
+                final List<String> areas = new ArrayList<String>();
+
+                for (DataSnapshot areaSnapshot: dataSnapshot.getChildren()) {
+                    String cat = areaSnapshot.child("store").getValue(String.class);
+                    if(cat.equals(store.getText().toString())){
+                        areas.add(areaSnapshot.child("categoryname").getValue(String.class));
+                    }
+
+                }
+
+
+                ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(store_owner.this, android.R.layout.simple_spinner_item, areas);
+                areasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                categoryspin.setAdapter(areasAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
@@ -255,6 +295,9 @@ public class store_owner extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int item_id = item.getItemId();
+        SharedPreferences preferences = store_owner.this.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String accountype = preferences.getString("accountype","");
+        String staffstore = preferences.getString("Store","");
         if(item_id == R.id.openLocator){
             Intent intent = new Intent(store_owner.this,mainframe.class);
             startActivity(intent);
@@ -266,7 +309,48 @@ public class store_owner extends AppCompatActivity {
             Intent intent = new Intent(store_owner.this,store_owner_staff.class);
             intent.putExtra("storeSelect",getIntent().getStringExtra("store"));
             startActivity(intent);
+        }else if(item_id == R.id.store){
+            Intent intent2 = new Intent(store_owner.this,rider_frame.class);
+            startActivity(intent2);
+        }else if(item_id == R.id.category){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Add Category");
+
+            final EditText input = new EditText(this);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT);
+            input.setLayoutParams(lp);
+            builder.setView(input);
+
+            // Set up the buttons
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    if(!input.getText().toString().isEmpty()){
+                        rootNode = FirebaseDatabase.getInstance();
+                        reference = rootNode.getReference("category");
+                        String storeowner = store.getText().toString();
+                        String ref = reference.push().getKey();
+                        String category = input.getText().toString();
+
+
+                        helper_category helper_category = new helper_category(category,ref,storeowner);
+                        reference.child(ref).setValue(helper_category);
+                    }
+
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            builder.show();
         }
+
         return true;
     }
 }

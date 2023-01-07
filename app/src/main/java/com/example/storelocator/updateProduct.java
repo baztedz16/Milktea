@@ -1,7 +1,9 @@
 package com.example.storelocator;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,10 +11,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +41,7 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class updateProduct extends AppCompatActivity {
     EditText productid,productname;
@@ -49,6 +54,7 @@ public class updateProduct extends AppCompatActivity {
     FirebaseDatabase rootNode;
     DatabaseReference reference =FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
     RecyclerView recyclerView;
+    Spinner categoryspin;
 
 
     public Uri imageUri;
@@ -60,6 +66,7 @@ public class updateProduct extends AppCompatActivity {
         productid = findViewById(R.id.itemID);
         productname = findViewById(R.id.UpdateitemName);
         productImg = findViewById(R.id.updateImage);
+        categoryspin = findViewById(R.id.categoryspin);
 
 
         updateitem = findViewById(R.id.updatebtn);
@@ -83,6 +90,37 @@ public class updateProduct extends AppCompatActivity {
                 reference = rootNode.getReference("products").child(itemID);
                 //reference.setValue("sample");
                 reference.child("paroductName").setValue(productname.getText().toString());
+            }
+        });
+        SharedPreferences preferences = updateProduct.this.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String accountype = preferences.getString("accountype","");
+        String ridername = preferences.getString("username","");
+        String storename = preferences.getString("Store","");
+        reference.child("category").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Is better to use a List, because you don't know the size
+                // of the iterator returned by dataSnapshot.getChildren() to
+                // initialize the array
+                final List<String> areas = new ArrayList<String>();
+
+                for (DataSnapshot areaSnapshot: dataSnapshot.getChildren()) {
+                    String cat = areaSnapshot.child("store").getValue(String.class);
+                    if(cat.equals(storename)){
+                        areas.add(areaSnapshot.child("categoryname").getValue(String.class));
+                    }
+
+                }
+
+
+                ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(updateProduct.this, android.R.layout.simple_spinner_item, areas);
+                areasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                categoryspin.setAdapter(areasAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
 

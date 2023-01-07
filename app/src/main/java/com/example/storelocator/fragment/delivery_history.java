@@ -148,7 +148,7 @@ public class delivery_history extends Fragment {
                     Log.i("R","4");
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_order_rider orders = snapshot.getValue(helper_order_rider.class);
-                        if(accountype.equals("STAFF") && (orders.getStatus().equals("5") )){
+                        if(accountype.equals("STAFF") || accountype.equals("Store Owner") && (orders.getStatus().equals("5") )){
                             if(orders.getStore().equals(staffstore)){
                                 if(orders.getStore().equals(staffstore)){
                                     list.add(orders);
