@@ -88,14 +88,14 @@
             android:id="@+id/linear1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/total"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="50dp"
-                android:text="Total" />
+                android:text="OrderTotal " />
 
             <TextView
                 android:id="@+id/totaltxt"
@@ -103,6 +103,49 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Total" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/DelFee"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Del. Fee" />
+
+            <TextView
+                android:id="@+id/totalfee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total" />
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/Totalpayables"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/payablesTxt"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Payble  :" />
+
+            <TextView
+                android:id="@+id/tpayables"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total" />
+
 
         </LinearLayout>
 

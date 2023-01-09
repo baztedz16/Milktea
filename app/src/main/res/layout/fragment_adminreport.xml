@@ -65,7 +65,7 @@
             android:id="@+id/genreport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Generate Report" />
+            android:text="Export" />
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/barchartReport"

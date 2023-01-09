@@ -3,8 +3,10 @@ package com.example.storelocator;
 
 public class helper_order_rider {
     String store,order_id,status,order_user,order_total,address,longti,lati,rider,date_order,prof_image;
+    int itemcount;
 
-    public helper_order_rider(String store, String order_id, String status, String order_user, String order_total, String address, String longti, String lati, String rider, String date_order,String prof_image){
+    public helper_order_rider(String store, String order_id, String status, String order_user, String order_total, String address, String longti, String lati, String rider, String date_order,String prof_image,int itemcount
+    ){
         this.store = store;
         this.order_id = order_id;
         this.status = status;
@@ -16,6 +18,7 @@ public class helper_order_rider {
         this.rider = rider;
         this.date_order = date_order;
         this.prof_image = prof_image;
+        this.itemcount = itemcount;
 
     }
     public helper_order_rider(){
@@ -108,5 +111,13 @@ public class helper_order_rider {
 
     public void setProf_image(String prof_image) {
         this.prof_image = prof_image;
+    }
+
+    public int getItemcount() {
+        return itemcount;
+    }
+
+    public void setItemcount(int itemcount) {
+        this.itemcount = itemcount;
     }
 }

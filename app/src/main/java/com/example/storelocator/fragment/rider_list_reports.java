@@ -66,7 +66,7 @@ public class rider_list_reports extends Fragment {
     ArrayList<helper_order_rider> list;
     adapter_rider_payables myAdapter;
 
-    TextView rdate,totalpayables,status;
+    TextView rdate,totalpayables,totalfee,tpayables,DelFee,payablesTxt,status;
     EditText date1,date2,reportdate;
     DatePickerDialog.OnDateSetListener startdate,enddate,payabledate;
     BarChart barchartReport;
@@ -95,8 +95,12 @@ public class rider_list_reports extends Fragment {
         totalpayables = view.findViewById(R.id.totaltxt);
         status = view.findViewById(R.id.status);
         payablesbtn = view.findViewById(R.id.payablesbtn);
+        totalfee = view.findViewById(R.id.totalfee);
+        tpayables = view.findViewById(R.id.tpayables);
 
         linear1=view.findViewById(R.id.linear1);
+        DelFee=view.findViewById(R.id.DelFee);
+        payablesTxt=view.findViewById(R.id.payablesTxt);
 
 
 
@@ -146,7 +150,7 @@ public class rider_list_reports extends Fragment {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 String mnth ="",dayt="";
                 if(month+1 < 10){
-                    mnth = "0"+month;
+                    mnth = ""+month+1;
                 }else{
                     mnth = String.valueOf(month+1);
                 }
@@ -183,7 +187,7 @@ public class rider_list_reports extends Fragment {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 String mnth ="",dayt="";
                 if(month+1 < 10){
-                    mnth = "0"+month;
+                    mnth = ""+month+1;
                 }else{
                     mnth = String.valueOf(month+1);
                 }
@@ -212,13 +216,18 @@ public class rider_list_reports extends Fragment {
         payabledate= new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                String val = "";
-                if(day <10){
-                    val = "0"+String.valueOf(day);
+                String mnth ="",dayt="";
+                if(month+1 < 10){
+                    mnth = ""+month+1;
                 }else{
-                    val =String.valueOf(day);
+                    mnth = String.valueOf(month+1);
                 }
-                String startdate = (month+1) + "/" +val+ "/" + year;
+                if(day < 10){
+                    dayt = "0"+day;
+                }else{
+                    dayt = String.valueOf(day);
+                }
+                String startdate = mnth + "/" +dayt+ "/" + year;
 //                String pattern = "MM-dd-yyyy";
 //                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
                 reportdate.setText(startdate);
@@ -259,8 +268,12 @@ public class rider_list_reports extends Fragment {
 
                 if(accountype.equals("STAFF") || accountype.equals("Store Owner")){
                     listrecivables(reportdate.getText().toString());
+                    DelFee.setText("Admin Fee");
+                    payablesTxt.setText("Receivables");
                 }else{
                     listpayables(reportdate.getText().toString());
+                    DelFee.setText("Delivery Fee");
+                    payablesTxt.setText("Receivables");
                 }
 
 
@@ -297,7 +310,7 @@ public class rider_list_reports extends Fragment {
                                 reference.child("reference_no").setValue(edittext.getText().toString());
                                 reference.child("status").setValue("Under review");
                                 reference.child("rider").setValue(storename);
-                                reference.child("amount").setValue(totalpayables.getText().toString());
+                                reference.child("amount").setValue(tpayables.getText().toString());
                                 reference.child("txntype").setValue("pay");
 //                    //OR
 //                    String YouEditTextValue = edittext.getText().toString();
@@ -320,7 +333,7 @@ public class rider_list_reports extends Fragment {
                                 reference.child("reference_no").setValue(edittext.getText().toString());
                                 reference.child("status").setValue("Under review");
                                 reference.child("rider").setValue(ridername);
-                                reference.child("amount").setValue(totalpayables.getText().toString());
+                                reference.child("amount").setValue(tpayables.getText().toString());
                                 reference.child("txntype").setValue("rec");
 //                    //OR
 //                    String YouEditTextValue = edittext.getText().toString();
@@ -456,6 +469,7 @@ public class rider_list_reports extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 double totalpayablesdata = 0.0;
+                double totalfeeAdmin = 0.0;
                 //Log.i("R",editTextname.getText().toString());
                 if (dataSnapshot.exists()) {
                     list.clear();
@@ -468,6 +482,7 @@ public class rider_list_reports extends Fragment {
                                 list.add(orders);
                                 Log.i("R","1");
                                 totalpayablesdata = totalpayablesdata+Double.parseDouble(orders.getOrder_total().toString());
+                                totalfeeAdmin = totalfeeAdmin+(10*orders.getItemcount());
                             }
                         }else{
                             if(orders.getRider().equals(rider) && orders.getDate_order().equals(date)){
@@ -480,6 +495,8 @@ public class rider_list_reports extends Fragment {
                         }
                     }
                     totalpayables.setText(String.valueOf(totalpayablesdata));
+                    totalfee.setText(String.valueOf(totalfeeAdmin));
+                    tpayables.setText(String.valueOf(totalpayablesdata - totalfeeAdmin));
                     getrecievables(date);
                     myAdapter.notifyDataSetChanged();
                 }else{
@@ -511,6 +528,7 @@ public class rider_list_reports extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 double totalpayablesdata = 0.0;
+                double totalfeeRider = 0.0;
                 //Log.i("R",editTextname.getText().toString());
                 if (dataSnapshot.exists()) {
                     list.clear();
@@ -523,6 +541,7 @@ public class rider_list_reports extends Fragment {
                                     list.add(orders);
                                     Log.i("R","1");
                                     totalpayablesdata = totalpayablesdata+Double.parseDouble(orders.getOrder_total().toString());
+
                                 }
                         }else{
                             if(orders.getRider().equals(rider) && orders.getDate_order().equals(date)){
@@ -531,10 +550,13 @@ public class rider_list_reports extends Fragment {
                                 Log.i("2DATA",rider+":"+snapshot.child("order_id").getValue().toString());
                                 list.add(orders);
                                 totalpayablesdata = totalpayablesdata+Double.parseDouble(orders.getOrder_total().toString());
+                                totalfeeRider = totalfeeRider+60;
                             }
                         }
                     }
                     totalpayables.setText(String.valueOf(totalpayablesdata));
+                    totalfee.setText(String.valueOf(totalfeeRider));
+                    tpayables.setText(String.valueOf(totalpayablesdata - totalfeeRider));
                     getpayablesdetails(date,rider);
                     myAdapter.notifyDataSetChanged();
                 }else{
@@ -570,6 +592,11 @@ public class rider_list_reports extends Fragment {
                             try {
                                 if(payables.getRider().equals(staffstore) && payables.getDate_topay().equals(refdate)){
                                     status.setText(payables.getStatus());
+                                    if(payables.getStatus().equals("Approved")){
+                                        payablesbtn.setVisibility(View.INVISIBLE);
+                                    }else{
+                                        payablesbtn.setVisibility(View.VISIBLE);
+                                    }
                                     Log.i("2DATA",rider+":"+snapshot.child("rider").getValue().toString()+" "+payables.getStatus());
 //                            list.add(orders);
                                 }
@@ -615,12 +642,18 @@ public class rider_list_reports extends Fragment {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             helper_payables payables = snapshot.getValue(helper_payables.class);
                             try {
+                                Log.i("Rider: ",ridername +"-"+refdate);
                                 if(payables.getRider().equals(ridername) && payables.getDate_topay().equals(refdate)){
                                     status.setText(payables.getStatus());
+                                    if(payables.getStatus().equals("Approved")){
+                                        payablesbtn.setVisibility(View.INVISIBLE);
+                                    }else{
+                                        payablesbtn.setVisibility(View.VISIBLE);
+                                    }
 //                            Log.i("2DATA",rider+":"+snapshot.child("rider").getValue().toString());
 //                            list.add(orders);
                                 }else{
-                                    status.setText("Not Yet Collected");
+                                    //status.setText("Not Yet Collected");
                                 }
                             }catch (Exception e){
                                 Log.i("R",e.toString());

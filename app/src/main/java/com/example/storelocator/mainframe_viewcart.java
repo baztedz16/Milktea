@@ -49,7 +49,7 @@ public class mainframe_viewcart extends AppCompatActivity {
     adapter_cart myAdapter;
     RecyclerView recyclerView;
     SharedPreferences preferences;
-    int cartValue =0 ;
+    int cartValue =0,totalitems=0 ;
     FirebaseStorage storage;
     StorageReference ref;
     FirebaseDatabase rootNode;
@@ -112,7 +112,7 @@ public class mainframe_viewcart extends AppCompatActivity {
     private  void alertCharges(){
         AlertDialog.Builder builder = new AlertDialog.Builder(mainframe_viewcart.this);
         builder.setTitle("Order Details");
-        builder.setMessage("Your Orders Amount is: PHP"+ cartValue +" and Delivery Charge of: PHP60");
+        builder.setMessage("Your Orders Amount is: PHP"+ cartValue +"\n and Delivery Charge of: PHP60\n"+"TOTAL:"+(cartValue+60));
 
 //        final EditText input = new EditText(mainframe_viewcart.this);
 //        input.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -162,6 +162,7 @@ public class mainframe_viewcart extends AppCompatActivity {
         reference.child(id).child("lati").setValue(longti);
         reference.child(id).child("store").setValue(store);
         reference.child(id).child("rider").setValue(store);
+        reference.child(id).child("itemcount").setValue(totalitems);
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         LocalDateTime now = LocalDateTime.now();
@@ -218,6 +219,7 @@ public class mainframe_viewcart extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Log.i("R",editTextname.getText().toString());
                 cartValue=0;
+                totalitems=0;
                 if (dataSnapshot.exists()) {
                     list.clear();
 
@@ -229,6 +231,7 @@ public class mainframe_viewcart extends AppCompatActivity {
                                 Log.i("OS:",snapshot.child("orderstatus").getValue().toString());
                                 Log.i("Values",snapshot.child("price").getValue().toString() +"x"+ snapshot.child("qty").getValue().toString());
                                 cartValue = cartValue + (Integer.parseInt(snapshot.child("price").getValue().toString())*Integer.parseInt(snapshot.child("qty").getValue().toString()));
+                                totalitems = totalitems+1;
                                 Log.i("OrderTotal:", String.valueOf(cartValue));
                                 list.add(product);
                             }

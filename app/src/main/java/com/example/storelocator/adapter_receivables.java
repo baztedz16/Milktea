@@ -116,8 +116,8 @@ public class adapter_receivables extends RecyclerView.Adapter<adapter_receivable
             public void onClick(View view) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(context);
                     final EditText edittext = new EditText(context);
-                    alert.setMessage("Enter Your Reference Number!");
-                    alert.setTitle("Payment Process");
+                    alert.setMessage("Reason!");
+                    alert.setTitle("Payment Reject");
 
                     alert.setView(edittext);
 
