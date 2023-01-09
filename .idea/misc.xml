@@ -23,6 +23,7 @@
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/fragment_riderreport.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/list_account.xml" value="0.33" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/list_addtocart.xml" value="0.33" />
+        <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/list_category.xml" value="0.37864583333333335" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/list_delivery_rider.xml" value="0.18072916666666666" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/list_item.xml" value="0.33" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/list_item2.xml" value="0.18072916666666666" />
@@ -35,12 +36,13 @@
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/list_view_staff.xml" value="0.5" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/listpayables.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/listreceivables.xml" value="0.33" />
-        <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/main_frame.xml" value="0.18072916666666666" />
+        <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/main_frame.xml" value="0.25" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/mainframe_viewcart.xml" value="0.18072916666666666" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/store_owner.xml" value="0.33" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/layout/update_product.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/menu/menu_item.xml" value="0.18072916666666666" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/menu/menu_item2.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator 2 DEBUG/app/src/main/res/menu/menu_item3.xml" value="0.15677083333333333" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator/app/src/main/res/drawable/more_vert.xml" value="0.21770833333333334" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator/app/src/main/res/layout/activity_activation.xml" value="0.21979166666666666" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/StoreLocator/app/src/main/res/layout/activity_api.xml" value="0.21666666666666667" />

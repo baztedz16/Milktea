@@ -90,6 +90,7 @@ public class updateProduct extends AppCompatActivity {
                 reference = rootNode.getReference("products").child(itemID);
                 //reference.setValue("sample");
                 reference.child("paroductName").setValue(productname.getText().toString());
+                reference.child("category").setValue(categoryspin.getSelectedItem().toString());
             }
         });
         SharedPreferences preferences = updateProduct.this.getSharedPreferences("user", Context.MODE_PRIVATE);
@@ -116,6 +117,10 @@ public class updateProduct extends AppCompatActivity {
                 ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(updateProduct.this, android.R.layout.simple_spinner_item, areas);
                 areasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 categoryspin.setAdapter(areasAdapter);
+                categoryspin.setSelection(((ArrayAdapter<String>)categoryspin.getAdapter()).getPosition(getIntent().getStringExtra("category")));
+
+
+
             }
 
             @Override

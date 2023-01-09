@@ -265,14 +265,14 @@ public class store_owner extends AppCompatActivity {
                         String pricemd = price2.getText().toString();
                         String pricelg = price3.getText().toString();
                         String[] strParts = address.getText().toString().split(",");
-
+                        String category = categoryspin.getSelectedItem().toString();
 
 
                         String deslong = strParts[0].toString();
                         String deslat =  strParts[1].toString();
                         String link=String.valueOf(randomkey)+"."+getFileExt(imageUri);
 
-                        helper_product helper_product = new helper_product(productname,storeowner,uri.toString(),add,img,deslong,deslat,getIntent().getStringExtra("user"),0,"",pricesm,pricesm,pricemd,pricelg);
+                        helper_product helper_product = new helper_product(productname,storeowner,uri.toString(),add,img,deslong,deslat,getIntent().getStringExtra("user"),0,"",pricesm,pricesm,pricemd,pricelg,category);
                         reference.child(img).setValue(helper_product);
 
                     }

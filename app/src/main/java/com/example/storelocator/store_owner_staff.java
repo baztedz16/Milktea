@@ -50,11 +50,15 @@ public class store_owner_staff extends AppCompatActivity {
         addstaff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(store_owner_staff.this,signupstaff.class);
-                intent.putExtra("storeSelect",getIntent().getStringExtra("storeSelect"));
-                startActivity(intent);
+                addstaff();
             }
         });
+    }
+    private void addstaff(){
+        Intent intent = new Intent(store_owner_staff.this,signupstaff.class);
+        intent.putExtra("storeSelect",getIntent().getStringExtra("storeSelect"));
+        intent.putExtra("hasdata","0");
+        startActivity(intent);
     }
     public void defaultview(){
 

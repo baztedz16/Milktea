@@ -57,6 +57,24 @@ public class adapter_userlist extends RecyclerView.Adapter<adapter_userlist.MyVi
        }
         //String orderid = (String) holder.orderid.getText();
 
+        holder.accountname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,signupstaff.class);
+                intent.putExtra("storeSelect",user.getStorename());
+                intent.putExtra("fullname",user.getFullname());
+                intent.putExtra("username",user.getUsername());
+                intent.putExtra("email",user.getEmail());
+                intent.putExtra("password",user.getPassword());
+                intent.putExtra("phone",user.getPhone());
+                intent.putExtra("address",user.getAddress());
+                intent.putExtra("long",user.getDestlong());
+                intent.putExtra("lat",user.getDestlat());
+                intent.putExtra("hasdata","1");
+                context.startActivity(intent);
+            }
+        });
+
         holder.activate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

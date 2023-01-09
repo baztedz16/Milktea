@@ -32,6 +32,9 @@
             android:name=".rider_frame"
             android:exported="false" />
         <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity_activation_frame"
             android:exported="false" />
         <activity

@@ -119,6 +119,9 @@ public class activity_login extends AppCompatActivity {
                     String lati = dataSnapshot.child(enterUsername).child("destlat").getValue(String.class);
                     String longti = dataSnapshot.child(enterUsername).child("destlong").getValue(String.class);
                     String address = dataSnapshot.child(enterUsername).child("address").getValue(String.class);
+                    String fullname = dataSnapshot.child(enterUsername).child("fullname").getValue(String.class);
+                    String email = dataSnapshot.child(enterUsername).child("email").getValue(String.class);
+                    String phone = dataSnapshot.child(enterUsername).child("phone").getValue(String.class);
                     Log.i("result",passwordDB);
                     if(passwordDB.equals(enterPassword)){
                         Log.i("yehey","Pasok");
@@ -134,13 +137,17 @@ public class activity_login extends AppCompatActivity {
 
                                     preferences = getSharedPreferences("user",MODE_PRIVATE);
                                     editor = preferences.edit();
+                                    editor.putString("fullname",fullname);
+                                    editor.putString("email",email);
+                                    editor.putString("phone",phone);
                                     editor.putString("username",enterUsername);
+                                    editor.putString("password",enterPassword);
                                     editor.putString("accountype",userType);
                                     editor.putString("address",address);
                                     editor.putString("longti",longti);
                                     editor.putString("lati",lati);
                                     editor.commit();
-                                    Intent intent1 = new Intent(activity_login.this,mainframe.class);
+                                    Intent intent1 = new Intent(activity_login.this,list_store.class);
                                     otp(intent1);
                                 }else if(userType.equals("Store Owner")){
                                     SharedPreferences preferences;
