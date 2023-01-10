@@ -273,6 +273,8 @@ public class activity_login extends AppCompatActivity {
                                     intent2.putExtra("user",enterUsername);
                                     intent2.putExtra("accountype",userType);
                                     intent2.putExtra("Store",storeName);
+
+                                    startActivity(intent2);
                                     finish();
 //                                    otp(intent2);
                                 }else if(userType.equals("Admin")){
