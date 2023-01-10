@@ -33,7 +33,7 @@
                 android:layout_marginStart="17dp"
                 android:layout_toEndOf="@+id/imageShow"
                 android:text="Item Name"
-                android:textSize="30dp"
+                android:textSize="20dp"
                 android:textStyle="bold" />
 
             <TextView

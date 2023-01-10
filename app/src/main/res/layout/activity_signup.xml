@@ -55,7 +55,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/storename"
             android:layout_width="250dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="24dp"
             android:hint="@string/Storename"
             android:minHeight="48dp" />

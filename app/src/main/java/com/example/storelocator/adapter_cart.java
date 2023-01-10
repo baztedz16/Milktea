@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -106,6 +107,7 @@ public class adapter_cart extends RecyclerView.Adapter<adapter_cart.MyViewHolder
                         if(Integer.parseInt(holder.qty.getText().toString()) <= 1){
                             for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
                                 appleSnapshot.getRef().removeValue();
+                                Toast.makeText(context,"Item Removed",Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             holder.qty.setText(String.valueOf(Integer.parseInt(holder.qty.getText().toString()) -1));

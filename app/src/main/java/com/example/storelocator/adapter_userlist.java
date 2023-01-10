@@ -50,13 +50,34 @@ public class adapter_userlist extends RecyclerView.Adapter<adapter_userlist.MyVi
         //holder.getOrder.setVisibility(View.INVISIBLE);
         holder.accountname.setText(user.getFullname());
         holder.accountype.setText(user.getAccountype());
+
+        if(user.getAccountype().equals("Store Owner")){
+            holder.ratings.setVisibility(View.VISIBLE);
+        }else{
+            holder.ratings.setVisibility(View.INVISIBLE);
+        }
        if(user.getActivation().equals("1")){
            holder.status.setText("Account Active");
        }else{
            holder.status.setText("Account Inactive");
        }
+       if(user.getActivation().equals("0")){
+           holder.activate.setVisibility(View.VISIBLE);
+           holder.deactivate.setVisibility(View.INVISIBLE);
+       }else{
+           holder.activate.setVisibility(View.INVISIBLE);
+           holder.deactivate.setVisibility(View.VISIBLE);
+       }
         //String orderid = (String) holder.orderid.getText();
 
+        holder.ratings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,activity_storeratings.class);
+                intent.putExtra("storeSelect",user.getStorename());
+                context.startActivity(intent);
+            }
+        });
         holder.accountname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,7 +163,7 @@ public class adapter_userlist extends RecyclerView.Adapter<adapter_userlist.MyVi
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         TextView accountname,accountype,status;
-        Button activate,deactivate;
+        Button activate,deactivate,ratings;
         public MyViewHolder(@NonNull View itemView){
             super(itemView);
             accountname = itemView.findViewById(R.id.AccountName);
@@ -150,6 +171,7 @@ public class adapter_userlist extends RecyclerView.Adapter<adapter_userlist.MyVi
             status = itemView.findViewById(R.id.status);
             activate = itemView.findViewById(R.id.activate);
             deactivate = itemView.findViewById(R.id.deactivate);
+            ratings = itemView.findViewById(R.id.ratings);
         }
     }
 }

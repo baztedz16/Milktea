@@ -1,5 +1,6 @@
 package com.example.storelocator;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 
 import androidx.annotation.NonNull;
@@ -7,6 +8,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +19,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
@@ -48,11 +52,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -60,7 +67,7 @@ import java.util.ArrayList;
  */
 public class order_details extends AppCompatActivity {
     ImageView getRider,pickupRider,onDelivery,ImageView;
-    Button accept,confirm,button4,button5;
+    Button accept,confirm,button4,button5,calltxt;
     TextView textorderid,userText,address,status;
     ProgressBar simpleProgressBar;
 
@@ -81,6 +88,16 @@ public class order_details extends AppCompatActivity {
 
     FirebaseDatabase rootNode;
     DatabaseReference reference =FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
+
+    private static final String CONTACT_PATTERN = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
+            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
+            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$";
+    private static final Pattern pattern_contact = Pattern.compile(CONTACT_PATTERN);
+
+    public static boolean isValidContact(final String contact) {
+        Matcher matcher = pattern_contact.matcher(contact);
+        return matcher.matches();
+    }
      protected void onCreate(Bundle savedInstanceState) {
 
          super.onCreate(savedInstanceState);
@@ -105,7 +122,7 @@ public class order_details extends AppCompatActivity {
          address = findViewById(R.id.address);
          status = findViewById(R.id.status);
          ImageView = findViewById(R.id.ImageProf);
-
+         calltxt = findViewById(R.id.calltxt);
          textorderid.setText(getIntent().getStringExtra("orderid").toString());
 
          //buttons
@@ -127,8 +144,55 @@ public class order_details extends AppCompatActivity {
 
          SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
          accountype = preferences.getString("accountype","");
+
+
+
          getOrderItems();
          getOrderDetails();
+
+
+
+         calltxt.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 AlertDialog.Builder builder = new AlertDialog.Builder(order_details.this);
+                 builder.setTitle("Choose Action");
+
+
+                 // Set up the buttons
+                 builder.setPositiveButton("Call", new DialogInterface.OnClickListener() {
+                     @Override
+                     public void onClick(DialogInterface dialog, int which) {
+
+                         if (ContextCompat.checkSelfPermission(order_details.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                             ActivityCompat.requestPermissions(order_details.this, new String[]{Manifest.permission.CALL_PHONE},100);
+                         } else {
+
+                         }
+                         Intent intent_call = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+ "09989616175"));
+                         startActivity(intent_call);
+
+                     }
+                 });
+                 // Set up the buttons
+                 builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                     @Override
+                     public void onClick(DialogInterface dialog, int which) {
+                         dialog.cancel();
+
+
+                     }
+                 });
+                 builder.setNegativeButton("Message", new DialogInterface.OnClickListener() {
+                     @Override
+                     public void onClick(DialogInterface dialog, int which) {
+                         Intent intent_sms = new Intent(Intent.ACTION_SENDTO,Uri.parse("smsto:" + "09989616175"));
+                         startActivity(intent_sms);
+                     }
+                 });
+                 builder.show();
+             }
+         });
 
          accept.setOnClickListener(new View.OnClickListener() {
              @Override
@@ -136,6 +200,7 @@ public class order_details extends AppCompatActivity {
                  Intent intent2 = new Intent(order_details.this,rating_store.class);
                  intent2.putExtra("user",preferences.getString("username",""));
                  intent2.putExtra("store",Storename);
+                 intent2.putExtra("orderdate",getIntent().getStringExtra("orderdate"));
                  intent2.putExtra("orderid",textorderid.getText().toString());
                  startActivity(intent2);
              }
@@ -258,7 +323,7 @@ public class order_details extends AppCompatActivity {
                         simpleProgressBar.setProgress(100);
                         userText.setText(order.getOrder_user());
                         address.setText(order.getAddress());
-
+                        Picasso.get().load(order.getProf_image()).into(ImageView);
                         switch(order.getStatus()){
                             case "1":
                                 simpleProgressBar.setProgress(25);

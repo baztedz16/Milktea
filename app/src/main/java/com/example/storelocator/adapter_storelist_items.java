@@ -152,6 +152,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                 reference.child(id).child("qty").setValue("1");
                 reference.child(id).child("orderstatus").setValue("0");
                 reference.child(id).child("itemrating").setValue("0");
+                Toast.makeText(context,"Item: "+ itmname+" Added",Toast.LENGTH_SHORT).show();
                 //rootNode.getReference("products").child(product.getItemID()).child("view").setValue(1);
                 DatabaseReference reference1 = FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
                 Query query1 = reference1.child("products").orderByChild("itemID").equalTo(product.getItemID());

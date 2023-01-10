@@ -3,6 +3,7 @@ package com.example.storelocator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
@@ -79,10 +84,39 @@ public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.s
                 context.startActivity(intent);
             }
         });
+        Query query1=reference.child("reviews").orderByChild("store").startAt(store.getStorename()).endAt(store.getStorename()+"\uf8ff");
+        query1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i("R",store.getStorename());
+                double totalrating = 0.0;
+                int reviewcount = 0;
+                if (dataSnapshot.exists()) {
+                    Log.i("R","4");
+
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        helper_review review = snapshot.getValue(helper_review.class);
+                        if(review.getRatingtype().equals("Store") && !review.getRating_count().equals("0")){
+                            totalrating = totalrating+ Double.parseDouble(review.getRating_count());
+                            reviewcount=reviewcount+1;
+                        }
+
+                    }
+                    holder.Rating.setText("Ratings: " +String.valueOf((float) totalrating/reviewcount));
+                }else{
+                    //Log.i("error at default:","6"+getIntent().getStringExtra("storeName"));
+                    //Log.i("R",searchtext);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
     }
-
     @Override
     public int getItemCount() {
 
@@ -90,13 +124,14 @@ public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.s
     }
 
     public static class storeHolder extends RecyclerView.ViewHolder{
-        TextView itemName,storeAddress;
+        TextView itemName,storeAddress,Rating;
         ImageView itemImage;
         public storeHolder(@NonNull View itemView){
             super(itemView);
             itemName = itemView.findViewById(R.id.storeListName);
             storeAddress = itemView.findViewById(R.id.storeListAdd);
             itemImage = itemView.findViewById(R.id.imageView3);
+            Rating = itemView.findViewById(R.id.Rating);
         }
     }
 }

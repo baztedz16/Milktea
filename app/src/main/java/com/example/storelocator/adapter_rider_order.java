@@ -12,6 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -114,9 +115,11 @@ public class adapter_rider_order extends RecyclerView.Adapter<adapter_rider_orde
                 if(accountype.equals("Rider")){
                     reference.child("status").setValue("2");
                     reference.child("rider").setValue(rider);
+                    Toast.makeText(context,"Order: "+ holder.orderid.getText().toString()+" Succesfully Process",Toast.LENGTH_SHORT).show();
                 }else{
                     reference.child("status").setValue("1");
                     reference.child("rider").setValue("");
+                    Toast.makeText(context,"Order: "+ holder.orderid.getText().toString()+" Succesfully Added",Toast.LENGTH_SHORT).show();
                 }
 
 

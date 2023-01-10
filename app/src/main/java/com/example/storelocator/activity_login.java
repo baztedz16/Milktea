@@ -3,6 +3,7 @@ package com.example.storelocator;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -13,10 +14,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.storelocator.email.GMailSender;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,6 +28,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 public class activity_login extends AppCompatActivity {
     DatabaseReference reference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
@@ -44,13 +50,14 @@ public class activity_login extends AppCompatActivity {
         textViewSignup = findViewById(R.id.signUpText);
         progressBar = findViewById(R.id.progress);
 
-        btnsetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(),api_keys.class);
-                startActivity(intent);
-            }
-        });
+//        btnsetting.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getApplicationContext(),api_keys.class);
+//                startActivity(intent);
+//            }
+//        });
+        btnsetting.setVisibility(View.GONE);
         textViewSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,17 +69,27 @@ public class activity_login extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 loginfunction();
 
             }
         });
 
     }
-    private void otp(Intent intent){
+    private void otp(Intent intent,String email,DatabaseReference reference,int verifCode){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity_login.this);
-        builder.setTitle("Enter OTP");
+        builder.setTitle("Enter your One Time Pin.");
+        builder.setMessage("The OTP has been sent on " + email);
+
+//        int verifCode = codeSendFunction();
+//
+//        String username = "storelocator2023@gmail.com";
+//        String password = "ceqcpxxmxadyvzod";
+//
+//        sendEmail(username,
+//                password,
+//                email,
+//                "Email Verification From Milkea App",
+//                "The Code is "+verifCode+".");
 
 
         final EditText input = new EditText(activity_login.this);
@@ -83,14 +100,43 @@ public class activity_login extends AppCompatActivity {
         input.setLayoutParams(lp);
         input.setGravity(Gravity.CENTER);
         builder.setView(input);
+        builder.setCancelable(false);
+
+//        builder.setPositiveButton("Submit",null);
+//        builder.setNegativeButton("Cancel",null);
+//        Button dialog_pos = builder.show().getButton(AlertDialog.BUTTON_POSITIVE);
+//        Button dialog_neg = builder.show().getButton(AlertDialog.BUTTON_NEGATIVE);
+//
+//        dialog_pos.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(input.getText().toString().isEmpty()){
+//                    Toast.makeText(activity_login.this,"Please Enter your Code",Toast.LENGTH_LONG).show();
+//                } else if (Integer.parseInt(input.getText().toString().trim()) != verifCode ) {
+//                    Toast.makeText(activity_login.this,"Wrong Code. Try Again.",Toast.LENGTH_LONG).show();
+//                } else {
+//                    startActivity(intent);
+//                    reference.setValue("1");
+//                }
+//            }
+//        });
 
         // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                if(!input.getText().toString().isEmpty()){
+                if(input.getText().toString().isEmpty()){
+                    Toast.makeText(activity_login.this,"Please Enter your Code",Toast.LENGTH_LONG).show();
+                    otp(intent,email,reference,verifCode);
+                } else if (Integer.parseInt(input.getText().toString().trim()) != verifCode ) {
+                    otp(intent,email,reference,verifCode);
+                    Toast.makeText(activity_login.this,"Wrong Code. Try Again.",Toast.LENGTH_LONG).show();
+                } else {
                     startActivity(intent);
+                    reference.setValue("1");
+                    dialog.cancel();
+                    finish();
                 }
 
             }
@@ -101,11 +147,14 @@ public class activity_login extends AppCompatActivity {
                 dialog.cancel();
             }
         });
+        builder.create();
         builder.show();
     }
     private void loginfunction(){
         final String enterUsername =  textInputEditTextUsername.getText().toString().trim();
         final String enterPassword =  textInputEditTextPassword.getText().toString().trim();
+
+        DatabaseReference ref = reference.child("users").child(enterUsername).child("activation");
 
         Query query = reference.child("users").orderByChild("username").equalTo(enterUsername);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -119,16 +168,38 @@ public class activity_login extends AppCompatActivity {
                     String lati = dataSnapshot.child(enterUsername).child("destlat").getValue(String.class);
                     String longti = dataSnapshot.child(enterUsername).child("destlong").getValue(String.class);
                     String address = dataSnapshot.child(enterUsername).child("address").getValue(String.class);
-                    String fullname = dataSnapshot.child(enterUsername).child("fullname").getValue(String.class);
                     String email = dataSnapshot.child(enterUsername).child("email").getValue(String.class);
-                    String phone = dataSnapshot.child(enterUsername).child("phone").getValue(String.class);
                     Log.i("result",passwordDB);
                     if(passwordDB.equals(enterPassword)){
                         Log.i("yehey","Pasok");
                         switch (activation){
                             case "0":
                                 Intent intent = new Intent(activity_login.this, activity_activation_frame.class);
-                                startActivity(intent);
+                                Intent intent_user = new Intent(activity_login.this,list_store.class);
+                                if (userType.equals("User")) {
+                                    int verifCode = codeSendFunction();
+                                    SharedPreferences preferences;
+                                    SharedPreferences.Editor editor;
+                                    preferences = getSharedPreferences("user",MODE_PRIVATE);
+                                    editor = preferences.edit();
+                                    editor.putString("username",enterUsername);
+                                    editor.putString("accountype",userType);
+                                    editor.putString("address",address);
+                                    editor.putString("longti",longti);
+                                    editor.putString("lati",lati);
+                                    editor.commit();
+                                    String username = "storelocator2023@gmail.com";
+                                    String password = "ceqcpxxmxadyvzod";
+
+                                    sendEmail(username,
+                                            password,
+                                            email,
+                                            "Email Verification From Milkea App",
+                                            "The Code is "+verifCode+".");
+                                    otp(intent_user,email,ref,verifCode);
+                                } else {
+                                    startActivity(intent);
+                                }
                                 break;
                             case  "1":
                                 if(userType.equals("User")){
@@ -137,24 +208,18 @@ public class activity_login extends AppCompatActivity {
 
                                     preferences = getSharedPreferences("user",MODE_PRIVATE);
                                     editor = preferences.edit();
-                                    editor.putString("fullname",fullname);
-                                    editor.putString("email",email);
-                                    editor.putString("phone",phone);
                                     editor.putString("username",enterUsername);
-                                    editor.putString("password",enterPassword);
                                     editor.putString("accountype",userType);
                                     editor.putString("address",address);
                                     editor.putString("longti",longti);
                                     editor.putString("lati",lati);
                                     editor.commit();
                                     Intent intent1 = new Intent(activity_login.this,list_store.class);
-                                    otp(intent1);
+                                    startActivity(intent1);
+//                                    otp(intent1);
                                 }else if(userType.equals("Store Owner")){
                                     SharedPreferences preferences;
                                     SharedPreferences.Editor editor;
-
-
-
                                     String storeName = dataSnapshot.child(enterUsername).child("storename").getValue(String.class);
                                     String destlong = dataSnapshot.child(enterUsername).child("destlong").getValue(String.class);
                                     String destlat = dataSnapshot.child(enterUsername).child("destlat").getValue(String.class);
@@ -169,7 +234,9 @@ public class activity_login extends AppCompatActivity {
                                     editor.putString("accountype",userType);
                                     editor.putString("Store",storeName);
                                     editor.commit();
-                                    otp(intent2);
+                                    startActivity(intent2);
+                                    finish();
+//                                    otp(intent2);
                                 }else if(userType.equals("Rider")){
                                     SharedPreferences preferences;
                                     SharedPreferences.Editor editor;
@@ -186,7 +253,9 @@ public class activity_login extends AppCompatActivity {
                                     intent2.putExtra("user",enterUsername);
                                     intent2.putExtra("accountype",userType);
 
-                                    otp(intent2);
+                                    startActivity(intent2);
+                                    finish();
+//                                    otp(intent2);
                                 }else if(userType.equals("STAFF")){
                                     SharedPreferences preferences;
                                     SharedPreferences.Editor editor;
@@ -204,7 +273,8 @@ public class activity_login extends AppCompatActivity {
                                     intent2.putExtra("user",enterUsername);
                                     intent2.putExtra("accountype",userType);
                                     intent2.putExtra("Store",storeName);
-                                    otp(intent2);
+                                    finish();
+//                                    otp(intent2);
                                 }else if(userType.equals("Admin")){
                                     SharedPreferences preferences;
                                     SharedPreferences.Editor editor;
@@ -222,7 +292,9 @@ public class activity_login extends AppCompatActivity {
                                     intent2.putExtra("user",enterUsername);
                                     intent2.putExtra("accountype",userType);
                                     intent2.putExtra("Store",storeName);
-                                    otp(intent2);
+                                    startActivity(intent2);
+                                    finish();
+//                                    otp(intent2);
                                 }
 
 
@@ -231,11 +303,13 @@ public class activity_login extends AppCompatActivity {
 
 
                     }else {
+                        Toast.makeText(activity_login.this,"Invalid Credentials",Toast.LENGTH_SHORT).show();
                         Log.i("error","Password1");
                     }
 
 
                 } else {
+                    Toast.makeText(activity_login.this,"Please Put on Fields.",Toast.LENGTH_SHORT).show();
                     Log.i("error","Password2");
                 }
             }
@@ -247,4 +321,37 @@ public class activity_login extends AppCompatActivity {
         });
     }
 
+
+    private void sendEmail(final String Sender,final String Password,final String Receiver,final String Title,final String Message)
+    {
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    GMailSender sender = new GMailSender(Sender,Password);
+                    sender.sendMail(Title, "<b>"+Message+"</b>", Sender, Receiver);
+                    makeAlert(Receiver);
+
+                } catch (Exception e) {
+                    Log.e("SendMail", e.getMessage(), e);
+                }
+            }
+
+        }).start();
     }
+    private void makeAlert(String email){
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                System.out.println("Mail Sent to "+email+".");
+            }
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public int codeSendFunction() {
+        return ThreadLocalRandom.current().nextInt(1000, 9999);
+    }
+
+}

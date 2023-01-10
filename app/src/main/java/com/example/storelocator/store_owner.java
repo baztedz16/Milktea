@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -61,6 +62,7 @@ public class store_owner extends AppCompatActivity {
 
     adapter_itemlist myAdapter;
     ArrayList<helper_product> list;
+    LinearLayout linearLayout6;
 
     public Uri imageUri;
     public static final String KEY_STORE = "sstore";
@@ -78,10 +80,12 @@ public class store_owner extends AppCompatActivity {
         price2 = findViewById(R.id.pricemd);
         price3 = findViewById(R.id.pricelg);
         categoryspin = findViewById(R.id.categoryspin);
+        linearLayout6 = findViewById(R.id.linearLayout6);
 
+        linearLayout6.getLayoutParams().height = 1; // LayoutParams: android.view.ViewGroup.LayoutParams
+        // wv.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
+        linearLayout6.requestLayout();//It is necesary to refresh the screen
 
-
-        //deleteitem = findViewById(R.id.deleteitem);
 
         recyclerView = findViewById(R.id.viewItems);
 
@@ -178,14 +182,34 @@ public class store_owner extends AppCompatActivity {
         saveitem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(imageUri != null){
-                    //Snackbar.make(findViewById(android.R.id.content),"Please add product image!!",Snackbar.LENGTH_SHORT).show();
-                    uploadImage();
-                }else if(itemname.getText().toString().equals("") || itemname.getText().toString().equals(null)){
-                    Snackbar.make(findViewById(android.R.id.content),"Please add product name!!",Snackbar.LENGTH_SHORT).show();
-                }else{
-                    chooseImage();
+                if (saveitem.getText().toString().equals("Add Item")){
+                    saveitem.setText("SAVE");
+                    linearLayout6.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT; // LayoutParams: android.view.ViewGroup.LayoutParams
+                    // wv.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
+                    linearLayout6.requestLayout();//It is necesary to refresh the screen
+                    //deleteitem = findViewById(R.id.deleteitem);
+
+
+                }else if(saveitem.getText().toString().equals("SAVE")){
+                    if(imageUri != null){
+                        //Snackbar.make(findViewById(android.R.id.content),"Please add product image!!",Snackbar.LENGTH_SHORT).show();
+                        uploadImage();
+                        linearLayout6.getLayoutParams().height = 1; // LayoutParams: android.view.ViewGroup.LayoutParams
+                        // wv.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
+                        linearLayout6.requestLayout();//It is necesary to refresh the screen
+                        //deleteitem = findViewById(R.id.deleteitem);
+                        saveitem.setText("Add Item");
+
+                    }else if(itemname.getText().toString().equals("") || itemname.getText().toString().equals(null)){
+                        Snackbar.make(findViewById(android.R.id.content),"Please add product name!!",Snackbar.LENGTH_SHORT).show();
+
+                    }else{
+
+                        chooseImage();
+                    }
+
                 }
+
 
             }
         });
@@ -349,6 +373,10 @@ public class store_owner extends AppCompatActivity {
                 }
             });
             builder.show();
+        }else if(item_id == R.id.reviews){
+            Intent intent = new Intent(this,activity_storeratings.class);
+            intent.putExtra("storeSelect",store.getText().toString());
+            startActivity(intent);
         }
 
         return true;

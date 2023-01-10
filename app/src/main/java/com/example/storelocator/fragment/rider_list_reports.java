@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -204,7 +205,25 @@ public class rider_list_reports extends Fragment {
         salesbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                defaultview(date1.getText().toString(),date2.getText().toString());
+                if(date1.getText().toString().equals("") || date2.getText().toString().equals("")){
+                    Toast.makeText(getContext(),"Error:  Please Select Date Properly",Toast.LENGTH_SHORT).show();
+                }else{
+                    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                    try {
+                        Date strDate = sdf.parse(date1.getText().toString());
+                        Date edDate = sdf.parse(date2.getText().toString());
+                        if (edDate.after(strDate) ) {
+                            defaultview(date1.getText().toString(),date2.getText().toString());
+                        }else{
+                            Toast.makeText(getContext(),"Error:  End date is Greater Than Start Date",Toast.LENGTH_SHORT).show();
+                        }
+
+                    }catch (Exception e){
+                        Log.i("Error Date: " , ""+e);
+                    }
+                }
+
+
             }
         });
 //        barchartReport.setOnClickListener(new View.OnClickListener() {
@@ -236,6 +255,7 @@ public class rider_list_reports extends Fragment {
 
 
         if(accountype.equals("STAFF") || accountype.equals("Store Owner")){
+
             payablesbtn.setText("SUBMIT RECIEVABLES");
         }
         reportdate.setOnClickListener(new View.OnClickListener() {

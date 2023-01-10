@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +56,7 @@ public class updateProduct extends AppCompatActivity {
     DatabaseReference reference =FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
     RecyclerView recyclerView;
     Spinner categoryspin;
+    RatingBar itemrating;
 
 
     public Uri imageUri;
@@ -67,11 +69,11 @@ public class updateProduct extends AppCompatActivity {
         productname = findViewById(R.id.UpdateitemName);
         productImg = findViewById(R.id.updateImage);
         categoryspin = findViewById(R.id.categoryspin);
-
+        itemrating= findViewById(R.id.itemrating);
 
         updateitem = findViewById(R.id.updatebtn);
         deleteitem = findViewById(R.id.deletebtn);
-
+        defaultview();
 
 
 
@@ -91,6 +93,7 @@ public class updateProduct extends AppCompatActivity {
                 //reference.setValue("sample");
                 reference.child("paroductName").setValue(productname.getText().toString());
                 reference.child("category").setValue(categoryspin.getSelectedItem().toString());
+                Toast.makeText(getApplicationContext(),"Item: "+ productname.getText().toString()+" Updated",Toast.LENGTH_SHORT).show();
             }
         });
         SharedPreferences preferences = updateProduct.this.getSharedPreferences("user", Context.MODE_PRIVATE);
@@ -142,6 +145,7 @@ public class updateProduct extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
                             appleSnapshot.getRef().removeValue();
+                            Toast.makeText(getApplicationContext(),"Item: "+ productname.getText().toString()+" Removed",Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -159,5 +163,38 @@ public class updateProduct extends AppCompatActivity {
 
 
 
+    }
+    public void defaultview(){
+        Query query1=reference.child("cart").orderByChild("product").startAt(productid.getText().toString()).endAt(productid.getText().toString()+"\uf8ff");
+        query1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i("R",productid.getText().toString());
+                double totalrating = 0.0;
+                int reviewcount = 0;
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        helper_cart cart = snapshot.getValue(helper_cart.class);
+                        if(!cart.getItemrating().equals("0")){
+                            totalrating = totalrating+ Double.parseDouble(cart.getItemrating());
+                            reviewcount=reviewcount+1;
+                            Log.i("Count",""+Double.parseDouble(cart.getItemrating()));
+                        }
+
+
+                    }
+                    Log.i("Total",""+totalrating);
+                    itemrating.setRating((float) totalrating/reviewcount);
+                }else{
+                    Log.i("error at default:","6"+getIntent().getStringExtra("storeName"));
+                    //Log.i("R",searchtext);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

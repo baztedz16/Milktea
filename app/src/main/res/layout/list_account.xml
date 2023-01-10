@@ -80,6 +80,14 @@
                 android:layout_height="20dp"
                 android:text="Status" />
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/ratings"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="right"
+                android:background="@color/teal_700"
+                android:text="Ratings" />
+
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

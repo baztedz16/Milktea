@@ -52,6 +52,7 @@ public class adapter_user_order extends RecyclerView.Adapter<adapter_user_order.
         holder.store.setText(order.getStore());
         holder.getOrder.setText("View Order");
         String orderid = (String) holder.orderid.getText();
+        String orderdate = order.getDate_order();
 
         SharedPreferences preferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         String accountype = preferences.getString("accountype","");
@@ -86,6 +87,7 @@ public class adapter_user_order extends RecyclerView.Adapter<adapter_user_order.
             public void onClick(View view) {
                 Intent intent2 = new Intent(context,order_details.class);
                 intent2.putExtra("orderid",orderid);
+                intent2.putExtra("orderdate",orderdate);
                 context.startActivity(intent2);
             }
         });

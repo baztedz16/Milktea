@@ -75,6 +75,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.google.android.libraries.places:places:2.2.0'
 
+    //email
+    implementation 'com.sun.mail:android-mail:1.6.0'
+    implementation 'com.sun.mail:android-activation:1.6.0'
+
 
     //graph
     implementation 'com.github.Philjay:MPAndroidChart:v3.1.0'

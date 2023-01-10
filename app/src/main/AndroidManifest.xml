@@ -92,6 +92,9 @@
         <activity
             android:name=".staff_frame"
             android:exported="true" />
+        <activity
+            android:name=".activity_storeratings"
+            android:exported="true" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
