@@ -7,6 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.storelocator.R;
+import com.example.storelocator.activity_signup;
 import com.example.storelocator.adapter_rider_delivery;
 import com.example.storelocator.adapter_userlist;
 import com.example.storelocator.helper_order_rider;
@@ -36,7 +40,7 @@ public class admin_list_account extends Fragment {
     adapter_userlist myAdapter;
     RecyclerView recyclerView;
     TextView textView15;
-
+    Spinner spinner;
     Query query1;
     FirebaseStorage storage;
     StorageReference ref;
@@ -50,12 +54,27 @@ public class admin_list_account extends Fragment {
         recyclerView = view.findViewById(R.id.accountview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
+        spinner = view.findViewById(R.id.spinner);
+        ArrayAdapter<String> list2 = new ArrayAdapter<String>(getActivity()
+                , android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.sorting));
+        list2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(list2);
 
         list = new ArrayList<>();
         myAdapter = new adapter_userlist(view.getContext(),list);
         recyclerView.setAdapter(myAdapter);
         defaultview();
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                defaultview(spinner.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         // Inflate the layout for this fragment
         return view;
     }
@@ -79,6 +98,58 @@ public class admin_list_account extends Fragment {
                         helper_user user = snapshot.getValue(helper_user.class);
                         if(!user.getAccountype().equals("Store Owner") && !user.getAccountype().equals("Admin")){
                             list.add(user);
+                        }
+
+//                        if(accountype.equals("STAFF") && (user.getStatus().equals("5") )){
+//                            if(user.getStore().equals(staffstore)){
+//                                if(user.getStore().equals(staffstore)){
+//
+//                                    Log.i("R","1");
+//                                }
+//                            }
+//                        }else{
+//                            if(user.getRider().equals(rider) ){
+//
+//                                Log.i("2DATA",rider+":"+snapshot.child("rider").getValue().toString());
+//                                list.add(user);
+//                            }
+//                        }
+                    }
+                    myAdapter.notifyDataSetChanged();
+                }else{
+                    Log.i("R","6");
+                    //Log.i("R",searchtext);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void defaultview(String values){
+
+        SharedPreferences preferences = this.getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String rider = preferences.getString("username","");
+        String accountype = preferences.getString("accountype","");
+        String staffstore = preferences.getString("Store","");
+
+        query1=reference.child("users");
+        query1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Log.i("R",editTextname.getText().toString());
+                if (dataSnapshot.exists()) {
+                    list.clear();
+                    Log.i("R","4");
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        helper_user user = snapshot.getValue(helper_user.class);
+                        if(!user.getAccountype().equals("Store Owner") && !user.getAccountype().equals("Admin")){
+                            if(user.getAccountype().equals(values)){
+                                list.add(user);
+                            }
+
                         }
 
 //                        if(accountype.equals("STAFF") && (user.getStatus().equals("5") )){

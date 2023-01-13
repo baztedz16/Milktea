@@ -47,6 +47,14 @@
                 android:textSize="20dp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/Distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rating:0"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

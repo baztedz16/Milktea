@@ -67,7 +67,7 @@ public class rider_list_reports extends Fragment {
     ArrayList<helper_order_rider> list;
     adapter_rider_payables myAdapter;
 
-    TextView rdate,totalpayables,totalfee,tpayables,DelFee,payablesTxt,status;
+    TextView rdate,totalpayables,totalfee,tpayables,DelFee,payablesTxt,status,totalTxt;
     EditText date1,date2,reportdate;
     DatePickerDialog.OnDateSetListener startdate,enddate,payabledate;
     BarChart barchartReport;
@@ -98,6 +98,7 @@ public class rider_list_reports extends Fragment {
         payablesbtn = view.findViewById(R.id.payablesbtn);
         totalfee = view.findViewById(R.id.totalfee);
         tpayables = view.findViewById(R.id.tpayables);
+        totalTxt = view.findViewById(R.id.totalTxt);
 
         linear1=view.findViewById(R.id.linear1);
         DelFee=view.findViewById(R.id.DelFee);
@@ -396,6 +397,7 @@ public class rider_list_reports extends Fragment {
                 //Log.i("R",editTextname.getText().toString());
                 if (dataSnapshot.exists()) {
                     list.clear();
+                    double salesTotal = 0.0;
                     Log.i("R","4");
                     Map<String, String> map = new TreeMap<>();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -409,7 +411,9 @@ public class rider_list_reports extends Fragment {
                             startdate = format.parse(date1);
                             enddate = format.parse(date2);
                             if(dateformdb.after(startdate) && dateformdb.before(enddate)){
+                                salesTotal = salesTotal + Double.parseDouble(orders.getOrder_total());
                                 if(accountype.equals("Rider")){
+
                                     if(map.containsKey(orders.getDate_order()) && orders.getRider().equals(ridername) ){
                                         valueNew = Double.parseDouble(map.get(orders.getDate_order()))+ Double.parseDouble( orders.getOrder_total());
                                         map.put(orders.getDate_order(),String.valueOf(valueNew));
@@ -427,7 +431,7 @@ public class rider_list_reports extends Fragment {
 
                                     }
                                 }
-
+                                totalTxt.setText("Total Sales: "+String.valueOf(salesTotal));
                                 //Log.i("Get",orders.getOrder_id()+" @"+orders.getDate_order());
                             }else{
                                 //Log.i("Pass",orders.getOrder_id()+" @"+orders.getDate_order());

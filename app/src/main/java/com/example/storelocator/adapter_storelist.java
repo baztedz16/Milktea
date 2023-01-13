@@ -1,8 +1,16 @@
 package com.example.storelocator;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +33,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.storeHolder>{
     Context context;
@@ -30,6 +41,7 @@ public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.s
     ArrayList<helper_liststore> list;
     DatabaseReference reference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
     RecyclerView recyclerView;
+
 
 
     public adapter_storelist(Context context, ArrayList<helper_liststore> list) {
@@ -41,6 +53,7 @@ public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.s
     @Override
     public storeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.list_storehelper,parent,false);
+
         return  new storeHolder(v);
     }
 
@@ -50,7 +63,11 @@ public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.s
         holder.itemName.setText(store.getStorename());
         holder.storeAddress.setText(store.getAddress());
 
-        //StorageReference gsReference = storage.getReferenceFromUrl("gs://storelocator-c908a.appspot.com/1643612433037.jpg");
+
+
+
+        holder.Distance.setText(store.getCurrLocation());
+                //StorageReference gsReference = storage.getReferenceFromUrl("gs://storelocator-c908a.appspot.com/1643612433037.jpg");
         Picasso.get().load(store.getImage()).into(holder.itemImage);
 
 
@@ -123,8 +140,9 @@ public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.s
         return list.size();
     }
 
+
     public static class storeHolder extends RecyclerView.ViewHolder{
-        TextView itemName,storeAddress,Rating;
+        TextView itemName,storeAddress,Rating,Distance;
         ImageView itemImage;
         public storeHolder(@NonNull View itemView){
             super(itemView);
@@ -132,6 +150,8 @@ public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.s
             storeAddress = itemView.findViewById(R.id.storeListAdd);
             itemImage = itemView.findViewById(R.id.imageView3);
             Rating = itemView.findViewById(R.id.Rating);
+            Distance = itemView.findViewById(R.id.Distance);
         }
     }
+
 }

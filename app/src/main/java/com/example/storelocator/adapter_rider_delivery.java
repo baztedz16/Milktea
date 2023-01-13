@@ -64,6 +64,8 @@ public class adapter_rider_delivery extends RecyclerView.Adapter<adapter_rider_d
             public void onClick(View view) {
                 Intent intent2 = new Intent(context,order_details.class);
                 intent2.putExtra("orderid",order.getOrder_id());
+                intent2.putExtra("orderid",order.getOrder_id());
+                intent2.putExtra("total",order.getOrder_total());
                 context.startActivity(intent2);
             }
         });

@@ -1,8 +1,11 @@
 package com.example.storelocator;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
@@ -19,6 +22,8 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.storelocator.email.GMailSender;
 import com.google.android.material.textfield.TextInputEditText;
@@ -29,6 +34,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class activity_login extends AppCompatActivity {
@@ -49,6 +56,7 @@ public class activity_login extends AppCompatActivity {
         btnsetting = findViewById(R.id.btnsetting);
         textViewSignup = findViewById(R.id.signUpText);
         progressBar = findViewById(R.id.progress);
+        checkLocationPermission();
 
 //        btnsetting.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -169,6 +177,7 @@ public class activity_login extends AppCompatActivity {
                     String longti = dataSnapshot.child(enterUsername).child("destlong").getValue(String.class);
                     String address = dataSnapshot.child(enterUsername).child("address").getValue(String.class);
                     String email = dataSnapshot.child(enterUsername).child("email").getValue(String.class);
+                    String storeName = dataSnapshot.child(enterUsername).child("storename").getValue(String.class);
                     Log.i("result",passwordDB);
                     if(passwordDB.equals(enterPassword)){
                         Log.i("yehey","Pasok");
@@ -220,7 +229,6 @@ public class activity_login extends AppCompatActivity {
                                 }else if(userType.equals("Store Owner")){
                                     SharedPreferences preferences;
                                     SharedPreferences.Editor editor;
-                                    String storeName = dataSnapshot.child(enterUsername).child("storename").getValue(String.class);
                                     String destlong = dataSnapshot.child(enterUsername).child("destlong").getValue(String.class);
                                     String destlat = dataSnapshot.child(enterUsername).child("destlat").getValue(String.class);
                                     Intent intent2 = new Intent(activity_login.this,store_owner.class);
@@ -248,7 +256,6 @@ public class activity_login extends AppCompatActivity {
                                     editor.putString("Store","");
                                     editor.commit();
 
-                                    String storeName = dataSnapshot.child(enterUsername).child("storename").getValue(String.class);
                                     Intent intent2 = new Intent(activity_login.this,rider_frame.class);
                                     intent2.putExtra("user",enterUsername);
                                     intent2.putExtra("accountype",userType);
@@ -262,7 +269,7 @@ public class activity_login extends AppCompatActivity {
 
                                     preferences = getSharedPreferences("user",MODE_PRIVATE);
                                     editor = preferences.edit();
-                                    String storeName = dataSnapshot.child(enterUsername).child("storename").getValue(String.class);
+
                                     editor.putString("username",enterUsername);
                                     editor.putString("accountype",userType);
                                     editor.putString("Store",storeName);
@@ -283,7 +290,6 @@ public class activity_login extends AppCompatActivity {
 
                                     preferences = getSharedPreferences("user",MODE_PRIVATE);
                                     editor = preferences.edit();
-                                    String storeName = dataSnapshot.child(enterUsername).child("storename").getValue(String.class);
                                     editor.putString("username",enterUsername);
                                     editor.putString("accountype",userType);
                                     editor.putString("Store",storeName);
@@ -349,6 +355,23 @@ public class activity_login extends AppCompatActivity {
                 System.out.println("Mail Sent to "+email+".");
             }
         });
+    }
+
+    private  boolean checkLocationPermission(){
+        int location = ContextCompat.checkSelfPermission(activity_login.this, Manifest.permission.ACCESS_FINE_LOCATION);
+        int location2 = ContextCompat.checkSelfPermission(activity_login.this,Manifest.permission.ACCESS_COARSE_LOCATION);
+        List<String> listPermission = new ArrayList<>();
+        if(location != PackageManager.PERMISSION_GRANTED){
+
+            listPermission.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if(location2 != PackageManager.PERMISSION_GRANTED){
+            listPermission.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        }
+        if(!listPermission.isEmpty()){
+            ActivityCompat.requestPermissions((Activity) activity_login.this,listPermission.toArray(new String[listPermission.size()]),1);
+        }
+        return true;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

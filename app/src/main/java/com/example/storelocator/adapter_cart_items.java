@@ -55,14 +55,21 @@ public class adapter_cart_items extends RecyclerView.Adapter<adapter_cart_items.
         helper_cart product = list.get(position);
         holder.itemName.setText(product.getItmname());
         holder.itemID.setText(product.getCartid());
+        holder.storeListName.setText(product.getOwner());
         holder.qty.setText(product.getQty() + "  PC/S");
         SharedPreferences preferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         String rider = preferences.getString("username","");
         String accountype = preferences.getString("accountype","");
         String staffstore = preferences.getString("Store","");
 
+
         if(accountype.equals("User")){
             holder.itemrating.setVisibility(View.VISIBLE);
+                if(product.getOrderstatus().equals("5")){
+                    holder.itemrating.setVisibility(View.VISIBLE);
+                }else{
+                    holder.itemrating.setVisibility(View.INVISIBLE);
+                }
         }else{
             holder.itemrating.setVisibility(View.INVISIBLE);
         }
@@ -88,12 +95,13 @@ public class adapter_cart_items extends RecyclerView.Adapter<adapter_cart_items.
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView itemName,itemName1,itemID,qty,price;
+        TextView storeListName,itemName,itemName1,itemID,qty,price;
         RatingBar itemrating;
         public MyViewHolder(@NonNull View itemView){
             super(itemView);
+            storeListName = itemView.findViewById(R.id.storeListName);
             itemName = itemView.findViewById(R.id.itemNameList);
-            itemName1 = itemView.findViewById(R.id.storeListName);
+            //itemName1 = itemView.findViewById(R.id.storeListName);
             itemID = itemView.findViewById(R.id.itemid);
             qty = itemView.findViewById(R.id.qty);
             price  = itemView.findViewById(R.id.price);

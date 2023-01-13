@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,7 +65,7 @@ public class mainframe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_frame);
         editTextname = findViewById(R.id.etname);
-        buttonfetch = findViewById(R.id.btnfetch);
+//        buttonfetch = findViewById(R.id.btnfetch);
         recyclerView = findViewById(R.id.storeList);
         recyclerViewcatlist = findViewById(R.id.catlist);
         buttonStoreList = findViewById(R.id.liststoreBtn);
@@ -131,66 +133,108 @@ public class mainframe extends AppCompatActivity {
                 //finish();
             }
         });
-        buttonfetch.setOnClickListener(new View.OnClickListener() {
-            String searchtext = editTextname.getText().toString();
+        editTextname.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                if(editTextname.getText().toString().equals(null) || editTextname.getText().toString().equals("")){
-                    Query query1=reference.child("products").orderByChild("storeOwner").startAt(getIntent().getStringExtra("storeName")).endAt(getIntent().getStringExtra("storeName")+"\uf8ff");
-                    query1.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                list.clear();
-                                Log.i("R","1");
-                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                    helper_product product = snapshot.getValue(helper_product.class);
-                                    Log.i("R","2");
-                                    list.add(product);
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if(editTextname.getText().toString().equals(null) || editTextname.getText().toString().equals("")){
+                        Query query1=reference.child("products").orderByChild("storeOwner").startAt(getIntent().getStringExtra("storeName")).endAt(getIntent().getStringExtra("storeName")+"\uf8ff");
+                            query1.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        list.clear();
+                                        Log.i("R","1");
+                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                            helper_product product = snapshot.getValue(helper_product.class);
+                                            Log.i("R","2");
+                                            list.add(product);
+                                        }
+                                        myAdapter.notifyDataSetChanged();
+                                    }else{
+                                        Log.i("R","3");
+                                    }
                                 }
-                                myAdapter.notifyDataSetChanged();
-                            }else{
-                                Log.i("R","3");
-                            }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                        }
-                    });
-                }else {
-                    Query query1=reference.child("products").orderByChild("storeOwner").startAt(editTextname.getText().toString().trim()).endAt(editTextname.getText().toString().trim()+"\uf8ff");
-                    query1.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Log.i("R",editTextname.getText().toString());
-                            if (dataSnapshot.exists()) {
-                                list.clear();
-
-                                Log.i("R","4");
-                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                    helper_product product = snapshot.getValue(helper_product.class);
-
-                                    list.add(product);
                                 }
-                                myAdapter.notifyDataSetChanged();
-                            }else{
-                                Log.i("R","6");
-                                list.clear();
-                                myAdapter.notifyDataSetChanged();
-                                //Log.i("R",searchtext);
+                            });
+                    }else{
+                        Query query1=reference.child("products").orderByChild("paroductName").startAt(editTextname.getText().toString()).endAt(editTextname.getText().toString()+"\uf8ff");
+                        query1.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Log.i("R",editTextname.getText().toString());
+                                if (dataSnapshot.exists()) {
+                                    list.clear();
+
+                                    Log.i("R","4");
+                                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                        helper_product product = snapshot.getValue(helper_product.class);
+
+                                        list.add(product);
+                                    }
+                                    myAdapter.notifyDataSetChanged();
+                                }else{
+                                    Log.i("R","6");
+                                    list.clear();
+                                    myAdapter.notifyDataSetChanged();
+                                    //Log.i("R",searchtext);
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
-                        }
-                    });
-                }
+                            }
+                        });
+                    }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
+//        buttonfetch.setOnClickListener(new View.OnClickListener() {
+//            String searchtext = editTextname.getText().toString();
+//            @Override
+//            public void onClick(View view) {
+//                if(editTextname.getText().toString().equals(null) || editTextname.getText().toString().equals("")){
+//                    Query query1=reference.child("products").orderByChild("paroductName").startAt(getIntent().getStringExtra("storeName")).endAt(getIntent().getStringExtra("storeName")+"\uf8ff");
+//                    query1.addValueEventListener(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            if (dataSnapshot.exists()) {
+//                                list.clear();
+//                                Log.i("R","1");
+//                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                                    helper_product product = snapshot.getValue(helper_product.class);
+//                                    Log.i("R","2");
+//                                    list.add(product);
+//                                }
+//                                myAdapter.notifyDataSetChanged();
+//                            }else{
+//                                Log.i("R","3");
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError error) {
+//
+//                        }
+//                    });
+//                }else {
+//
+//                }
+//            }
+//        });
 
     }
 

@@ -123,7 +123,7 @@ public class order_details extends AppCompatActivity {
          status = findViewById(R.id.status);
          ImageView = findViewById(R.id.ImageProf);
          calltxt = findViewById(R.id.calltxt);
-         textorderid.setText(getIntent().getStringExtra("orderid").toString());
+         textorderid.setText(getIntent().getStringExtra("orderid").toString()+"\n TOTAL: "+getIntent().getStringExtra("total").toString());
 
          //buttons
          accept = findViewById(R.id.accept);
@@ -144,7 +144,11 @@ public class order_details extends AppCompatActivity {
 
          SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
          accountype = preferences.getString("accountype","");
-
+         if(accountype.equals("Rider")){
+             button5.setVisibility(View.VISIBLE);
+         }else{
+             button5.setVisibility(View.INVISIBLE);
+         }
 
 
          getOrderItems();
@@ -228,7 +232,9 @@ public class order_details extends AppCompatActivity {
          onDelivery.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
-                 onDeliveryRider();
+                 if(accountype.equals("Rider")){
+                     onDeliveryRider();
+                 }
              }
              });
          button4.setOnClickListener(new View.OnClickListener() { //this for the lcoation of store
@@ -281,7 +287,7 @@ public class order_details extends AppCompatActivity {
         SharedPreferences.Editor editor;
 
         preferences = getSharedPreferences("user", MODE_PRIVATE);
-        Query query1 = reference.child("cart").orderByChild("order_id").equalTo(textorderid.getText().toString());
+        Query query1 = reference.child("cart").orderByChild("order_id").equalTo(textorderid.getText().toString().replace("\n TOTAL: "+getIntent().getStringExtra("total").toString(),""));
         query1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -308,7 +314,7 @@ public class order_details extends AppCompatActivity {
     }
     public void getOrderDetails() {
         SharedPreferences preferences = getSharedPreferences("user", MODE_PRIVATE);
-        Query query12 = reference.child("orders").orderByChild("order_id").equalTo(textorderid.getText().toString());
+        Query query12 = reference.child("orders").orderByChild("order_id").equalTo(textorderid.getText().toString().replace("\n TOTAL: "+getIntent().getStringExtra("total").toString(),""));
         query12.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -345,7 +351,10 @@ public class order_details extends AppCompatActivity {
                             case "5":
                                 simpleProgressBar.setProgress(100);
                                 status.setText("Delivery Completed");
-
+                                accept.setText("Ratings");
+                                confirm.setText("Delivered");
+                                button4.setVisibility(View.INVISIBLE);
+                                button5.setVisibility(View.INVISIBLE);
                                 if(preferences.getString("accountype","").equals("User")){
                                     accept.setVisibility(View.VISIBLE);
                                 }
@@ -405,7 +414,7 @@ public class order_details extends AppCompatActivity {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
                         rootNode = FirebaseDatabase.getInstance();
-                        reference = rootNode.getReference("orders").child(textorderid.getText().toString());
+                        reference = rootNode.getReference("orders").child(textorderid.getText().toString().replace("\n TOTAL: "+getIntent().getStringExtra("total").toString(),""));
                         reference.child("status").setValue("3");
                         break;
 
@@ -428,7 +437,7 @@ public class order_details extends AppCompatActivity {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
                         rootNode = FirebaseDatabase.getInstance();
-                        reference = rootNode.getReference("orders").child(textorderid.getText().toString());
+                        reference = rootNode.getReference("orders").child(textorderid.getText().toString().replace("\n TOTAL: "+getIntent().getStringExtra("total").toString(),""));
                         reference.child("status").setValue("4");
 
                         break;

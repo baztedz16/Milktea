@@ -60,6 +60,8 @@ public class adapter_user_order extends RecyclerView.Adapter<adapter_user_order.
         if(order.getStatus().equals("10")){
             holder.getOrder.setText("Cancel");
             holder.getOrder.setEnabled(false);
+        }else{
+            holder.getOrder.setEnabled(true);
         }
 
         if(order.getStatus().equals("0")){
@@ -87,6 +89,7 @@ public class adapter_user_order extends RecyclerView.Adapter<adapter_user_order.
             public void onClick(View view) {
                 Intent intent2 = new Intent(context,order_details.class);
                 intent2.putExtra("orderid",orderid);
+                intent2.putExtra("total",order.getOrder_total());
                 intent2.putExtra("orderdate",orderdate);
                 context.startActivity(intent2);
             }

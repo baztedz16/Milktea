@@ -90,7 +90,18 @@ public class delivery_history extends Fragment {
         startdate = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                String startdate = (month+1) + "/" +day+ "/" + year;
+                String mnth ="",dayt="";
+                if(month+1 < 10){
+                    mnth = ""+month+1;
+                }else{
+                    mnth = String.valueOf(month+1);
+                }
+                if(day < 10){
+                    dayt = "0"+day;
+                }else{
+                    dayt = String.valueOf(day);
+                }
+                String startdate = mnth + "/" +dayt+ "/" + year;
                 date.setText(startdate);
             }
         };

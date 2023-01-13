@@ -66,7 +66,7 @@ public class admin_list_reports extends Fragment {
     ArrayList<helper_order_rider> list;
     adapter_rider_delivery myAdapter;
 
-    TextView rdate;
+    TextView rdate,totalTxt;
     EditText date1,date2;
     DatePickerDialog.OnDateSetListener startdate,enddate;
     BarChart barchartReport;
@@ -90,6 +90,7 @@ public class admin_list_reports extends Fragment {
         rdate = view.findViewById(R.id.rdate);
         genreport =view.findViewById(R.id.genreport);
         storelist= view.findViewById(R.id.storelist);
+        totalTxt = view.findViewById(R.id.totalTxt);
         list = new ArrayList<>();
         myAdapter = new adapter_rider_delivery(view.getContext(),list);
 
@@ -99,7 +100,7 @@ public class admin_list_reports extends Fragment {
         genreport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri uriUrl = Uri.parse("http://192.168.0.190/firabse-milktea/index.php");
+                Uri uriUrl = Uri.parse("https://dentalclinicmng.000webhostapp.com/firebase_milktea/index.php");
                 Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
                 startActivity(launchBrowser);
             }
@@ -207,6 +208,7 @@ public class admin_list_reports extends Fragment {
                 //Log.i("R",editTextname.getText().toString());
                 if (dataSnapshot.exists()) {
                     list.clear();
+                    double salesTotal = 0.0;
                     Log.i("R","4");
                     Map<String, String> map = new TreeMap<>();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -223,13 +225,16 @@ public class admin_list_reports extends Fragment {
                                 if(map.containsKey(orders.getDate_order())){
                                     Double valueNew = Double.parseDouble(map.get(orders.getDate_order()))+ Double.parseDouble( orders.getOrder_total());
                                     map.put(orders.getDate_order(),String.valueOf(valueNew));
+
                                 }else{
                                     map.put(orders.getDate_order(),orders.getOrder_total());
                                 }
+                                salesTotal = salesTotal + Double.parseDouble(orders.getOrder_total());
                                 //Log.i("Get",orders.getOrder_id()+" @"+orders.getDate_order());
                             }else{
                                 //Log.i("Pass",orders.getOrder_id()+" @"+orders.getDate_order());
                             }
+                            totalTxt.setText("Total Sales: "+String.valueOf(salesTotal));
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }

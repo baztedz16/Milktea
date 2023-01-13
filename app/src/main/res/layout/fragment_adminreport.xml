@@ -23,7 +23,7 @@
         <TextView
             android:id="@+id/textView9"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="1dp"
             android:text="Store Sales" />
 
         <Spinner
@@ -89,10 +89,11 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView11"
+                android:id="@+id/totalTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="User Count" />
+                android:textStyle="bold"
+                android:text="Total:" />
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/pichartreport"

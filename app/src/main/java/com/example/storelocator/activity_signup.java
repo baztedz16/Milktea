@@ -200,6 +200,7 @@ public class activity_signup extends AppCompatActivity {
 //                                            });
 //                                    AlertDialog alert = builder.create();
 //                                    alert.show();
+                                    Toast.makeText(activity_signup.this,"Username Exist!!!.",Toast.LENGTH_SHORT).show();
                                     regusername.setError("This username has already taken.");
                                     return;
                                 }else{
@@ -331,6 +332,12 @@ public class activity_signup extends AppCompatActivity {
                     Toast.makeText(activity_signup.this,"Successfully Register",Toast.LENGTH_SHORT).show();
                     startActivity(intent);
                     finish();
+//                    if(checkuser() == 1){
+//                        Toast.makeText(activity_signup.this,"Username Exist!!!.",Toast.LENGTH_SHORT).show();
+//                    }else{
+//
+//                    }
+
                 }
 
             }
@@ -357,5 +364,39 @@ public class activity_signup extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+//    private int checkuser(){
+//        Query query1=reference.child("users").orderByChild("username").startAt(username).endAt(username+"\uf8ff");
+//        query1.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Log.i("R",username.getText().toString());
+//                if (dataSnapshot.exists()) {
+//                    list.clear();
+//                    Log.i("R",cat);
+//                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                        helper_product product = snapshot.getValue(helper_product.class);
+//                        if(cat.equals("All")){
+//                            list.add(product);
+//                        }else{
+//                            if(cat.equals(product.getCategory())){
+//                                list.add(product);
+//                            }
+//                        }
+//
+//                    }
+//                    myAdapter.notifyDataSetChanged();
+//                }else{
+//                    Log.i("error at default:","6"+getIntent().getStringExtra("storeName"));
+//                    //Log.i("R",searchtext);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//        return 1;
+//    }
 
 }

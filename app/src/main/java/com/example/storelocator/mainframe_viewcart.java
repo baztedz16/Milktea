@@ -91,7 +91,7 @@ public class mainframe_viewcart extends AppCompatActivity {
 
         setContentView(R.layout.mainframe_viewcart);
         editTextname = findViewById(R.id.etname);
-        buttonfetch = findViewById(R.id.btnfetch);
+//        buttonfetch = findViewById(R.id.btnfetch);
         recyclerView = findViewById(R.id.storeList);
         buttonStoreList = findViewById(R.id.placeorder);
         total = findViewById(R.id.total);
