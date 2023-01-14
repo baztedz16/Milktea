@@ -32,6 +32,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -117,6 +118,7 @@ public class admin_list_receivable extends Fragment {
                     Log.i("R","6");
                     //Log.i("R",searchtext);
                 }
+                Collections.reverse(list);
                 myAdapter.notifyDataSetChanged();
             }
 
@@ -151,6 +153,7 @@ public class admin_list_receivable extends Fragment {
                     Log.i("R","6");
                     //Log.i("R",searchtext);
                 }
+                Collections.reverse(list);
                 myAdapter.notifyDataSetChanged();
             }
 

@@ -20,6 +20,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class user_order_get extends AppCompatActivity {
 
@@ -85,6 +86,7 @@ public class user_order_get extends AppCompatActivity {
                         list.add(orders);
 
                     }
+                    Collections.reverse(list);
                     myAdapter.notifyDataSetChanged();
                 }else{
                     Log.i("R","ErrorListing");

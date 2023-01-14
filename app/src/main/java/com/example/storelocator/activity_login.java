@@ -178,6 +178,7 @@ public class activity_login extends AppCompatActivity {
                     String address = dataSnapshot.child(enterUsername).child("address").getValue(String.class);
                     String email = dataSnapshot.child(enterUsername).child("email").getValue(String.class);
                     String storeName = dataSnapshot.child(enterUsername).child("storename").getValue(String.class);
+                    String phone = dataSnapshot.child(enterUsername).child("phone").getValue(String.class);
                     Log.i("result",passwordDB);
                     if(passwordDB.equals(enterPassword)){
                         Log.i("yehey","Pasok");
@@ -196,6 +197,7 @@ public class activity_login extends AppCompatActivity {
                                     editor.putString("address",address);
                                     editor.putString("longti",longti);
                                     editor.putString("lati",lati);
+                                    editor.putString("phone",phone);
                                     editor.commit();
                                     String username = "storelocator2023@gmail.com";
                                     String password = "ceqcpxxmxadyvzod";
@@ -222,6 +224,7 @@ public class activity_login extends AppCompatActivity {
                                     editor.putString("address",address);
                                     editor.putString("longti",longti);
                                     editor.putString("lati",lati);
+                                    editor.putString("phone",phone);
                                     editor.commit();
                                     Intent intent1 = new Intent(activity_login.this,list_store.class);
                                     startActivity(intent1);
@@ -254,6 +257,7 @@ public class activity_login extends AppCompatActivity {
                                     editor.putString("username",enterUsername);
                                     editor.putString("accountype",userType);
                                     editor.putString("Store","");
+                                    editor.putString("phone",phone);
                                     editor.commit();
 
                                     Intent intent2 = new Intent(activity_login.this,rider_frame.class);

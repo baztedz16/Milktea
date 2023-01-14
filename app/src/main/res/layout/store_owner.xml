@@ -36,11 +36,10 @@
         android:id="@+id/viewItems"
         android:layout_width="395dp"
         android:layout_height="268dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/catlist" />
 
     <TextView
         android:id="@+id/textView6"
@@ -54,6 +53,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/product_image" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/catlist"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        tools:listitem="@layout/list_category" />
+
     <LinearLayout
         android:id="@+id/linearLayout6"
         android:layout_width="match_parent"
@@ -62,6 +72,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <Spinner
+            android:id="@+id/categoryspin"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textAlignment="center" />
 
         <EditText
             android:id="@+id/itemname"
@@ -83,17 +99,11 @@
         <EditText
             android:id="@+id/address"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="1dp"
             android:layout_marginTop="8dp"
             android:editable="false"
             android:gravity="center"
             android:hint="Itemname" />
-
-        <Spinner
-            android:id="@+id/categoryspin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -58,6 +58,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
@@ -463,6 +464,7 @@ public class rider_list_reports extends Fragment {
                     barchartReport.getDescription().setText("Daily Sales Report");
                     barchartReport.animateY(2000);
                     rdate.setText(map.entrySet().toString());
+                    Collections.reverse(list);
                     myAdapter.notifyDataSetChanged();
                 }else{
                     Log.i("R","6");
@@ -522,6 +524,7 @@ public class rider_list_reports extends Fragment {
                     totalfee.setText(String.valueOf(totalfeeAdmin));
                     tpayables.setText(String.valueOf(totalpayablesdata - totalfeeAdmin));
                     getrecievables(date);
+                    Collections.reverse(list);
                     myAdapter.notifyDataSetChanged();
                 }else{
                     Log.i("payables","6");
@@ -582,6 +585,7 @@ public class rider_list_reports extends Fragment {
                     totalfee.setText(String.valueOf(totalfeeRider));
                     tpayables.setText(String.valueOf(totalpayablesdata - totalfeeRider));
                     getpayablesdetails(date,rider);
+                    Collections.reverse(list);
                     myAdapter.notifyDataSetChanged();
                 }else{
                     Log.i("payables","6");

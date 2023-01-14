@@ -36,6 +36,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 
 
 public class delivery_history extends Fragment {
@@ -174,6 +175,7 @@ public class delivery_history extends Fragment {
                             }
                         }
                     }
+                    Collections.reverse(list);
                     myAdapter.notifyDataSetChanged();
                 }else{
                     Log.i("R","6");
@@ -224,6 +226,7 @@ public class delivery_history extends Fragment {
                             }
                         }
                     }
+                    Collections.reverse(list);
                     myAdapter.notifyDataSetChanged();
                 }else{
                     Log.i("R","6");

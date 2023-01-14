@@ -19,7 +19,7 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Orders to Delivery" />
+            android:text="Orders to Deliver" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"

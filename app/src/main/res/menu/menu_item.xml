@@ -9,20 +9,8 @@
 
         <menu>
             <item
-                android:id="@+id/openLocator"
-                android:title="Open Locator"
-                app:showAsAction="never"
-                >
-            </item>
-            <item
                 android:id="@+id/store"
                 android:title="Store"
-                app:showAsAction="never"
-                >
-            </item>
-            <item
-                android:id="@+id/orders"
-                android:title="Orders"
                 app:showAsAction="never"
                 >
             </item>

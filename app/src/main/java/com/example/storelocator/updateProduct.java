@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class updateProduct extends AppCompatActivity {
-    EditText productid,productname;
+    EditText productid,productname,pricesm,pricemd,pricelg;
     Button updateitem,deleteitem;
     String sstore;
     ListView listview;
@@ -70,9 +70,13 @@ public class updateProduct extends AppCompatActivity {
         productImg = findViewById(R.id.updateImage);
         categoryspin = findViewById(R.id.categoryspin);
         itemrating= findViewById(R.id.itemrating);
-
+        itemrating.setVisibility(View.INVISIBLE);
         updateitem = findViewById(R.id.updatebtn);
         deleteitem = findViewById(R.id.deletebtn);
+
+        pricesm = findViewById(R.id.pricesm);
+        pricemd = findViewById(R.id.pricemd);
+        pricelg = findViewById(R.id.pricelg);
         defaultview();
 
 
@@ -80,6 +84,10 @@ public class updateProduct extends AppCompatActivity {
         //string here is the value when you load the page
         productid.setText(getIntent().getStringExtra("itemid"));
         productname.setText(getIntent().getStringExtra("itemname"));
+
+        pricesm.setText(getIntent().getStringExtra("pricesm"));
+        pricemd.setText(getIntent().getStringExtra("pricemd"));
+        pricelg.setText(getIntent().getStringExtra("pricelg"));
 
         Picasso.get().load(getIntent().getStringExtra("productimage")).into(productImg);
         //address.setText(getIntent().getStringExtra("address"));
@@ -93,6 +101,11 @@ public class updateProduct extends AppCompatActivity {
                 //reference.setValue("sample");
                 reference.child("paroductName").setValue(productname.getText().toString());
                 reference.child("category").setValue(categoryspin.getSelectedItem().toString());
+
+                reference.child("price").setValue(pricesm.getText().toString());
+                reference.child("pricesm").setValue(pricesm.getText().toString());
+                reference.child("pricemd").setValue(pricemd.getText().toString());
+                reference.child("pricelg").setValue(pricelg.getText().toString());
                 Toast.makeText(getApplicationContext(),"Item: "+ productname.getText().toString()+" Updated",Toast.LENGTH_SHORT).show();
             }
         });

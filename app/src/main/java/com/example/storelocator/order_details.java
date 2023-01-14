@@ -82,7 +82,7 @@ public class order_details extends AppCompatActivity {
     ArrayList<helper_cart> list;
     adapter_cart_items myAdapter;
     RecyclerView recyclerView;
-    String accountype;
+    String accountype,phone,rider;
 
 
 
@@ -144,16 +144,26 @@ public class order_details extends AppCompatActivity {
 
          SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
          accountype = preferences.getString("accountype","");
-         if(accountype.equals("Rider")){
-             button5.setVisibility(View.VISIBLE);
-         }else{
-             button5.setVisibility(View.INVISIBLE);
-         }
+
 
 
          getOrderItems();
          getOrderDetails();
 
+         if(accountype.equals("STAFF")){
+             accept.setVisibility(View.INVISIBLE);
+             confirm.setVisibility(View.INVISIBLE);
+         }
+//         if(accountype.equals("Rider")){
+//             button5.setVisibility(View.VISIBLE);
+//             getContactClient(userText.getText().toString());
+//             calltxt.setText("Contact Client");
+//
+//         }else{
+//             button5.setVisibility(View.INVISIBLE);
+//             getContactClient(rider);
+//             calltxt.setText("Contact Rider");
+//         }
 
 
          calltxt.setOnClickListener(new View.OnClickListener() {
@@ -173,7 +183,7 @@ public class order_details extends AppCompatActivity {
                          } else {
 
                          }
-                         Intent intent_call = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+ "09989616175"));
+                         Intent intent_call = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+ phone));
                          startActivity(intent_call);
 
                      }
@@ -190,7 +200,7 @@ public class order_details extends AppCompatActivity {
                  builder.setNegativeButton("Message", new DialogInterface.OnClickListener() {
                      @Override
                      public void onClick(DialogInterface dialog, int which) {
-                         Intent intent_sms = new Intent(Intent.ACTION_SENDTO,Uri.parse("smsto:" + "09989616175"));
+                         Intent intent_sms = new Intent(Intent.ACTION_SENDTO,Uri.parse("smsto:" + phone));
                          startActivity(intent_sms);
                      }
                  });
@@ -328,8 +338,20 @@ public class order_details extends AppCompatActivity {
                         Storename = order.getStore();
                         simpleProgressBar.setProgress(100);
                         userText.setText(order.getOrder_user());
+
                         address.setText(order.getAddress());
                         Picasso.get().load(order.getProf_image()).into(ImageView);
+                        rider = order.getRider();
+                        if(accountype.equals("Rider")){
+                            button5.setVisibility(View.VISIBLE);
+                            getContactClient(userText.getText().toString());
+                            calltxt.setText("Contact Client");
+
+                        }else{
+                            button5.setVisibility(View.INVISIBLE);
+                            getContactClient(rider);
+                            calltxt.setText("Contact Rider");
+                        }
                         switch(order.getStatus()){
                             case "1":
                                 simpleProgressBar.setProgress(25);
@@ -397,6 +419,31 @@ public class order_details extends AppCompatActivity {
                     }
                 } else {
                     Log.i("error at default:", "6" + getIntent().getStringExtra("storeName"));
+                    //Log.i("R",searchtext);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void getContactClient(String storename){
+        Query query12 = reference.child("users").orderByChild("username").equalTo(storename);
+        query12.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        helper_user user = snapshot.getValue(helper_user.class);
+                        Log.i("User Contact",storename);
+                        phone = user.getPhone();
+
+                    }
+                } else {
+                    Log.i("error at default:", "6" + storename);
                     //Log.i("R",searchtext);
                 }
             }
@@ -488,7 +535,7 @@ public class order_details extends AppCompatActivity {
 
 
 
-                        Toast.makeText(order_details.this,"Successfully Register",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(order_details.this,"Order Successful",Toast.LENGTH_SHORT).show();
 
                         // While the file names are the same, the references point to different files
                         mountainsRef.getName().equals(mountainImagesRef.getName());    // true
@@ -503,7 +550,7 @@ public class order_details extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         rootNode = FirebaseDatabase.getInstance();
-                                        reference = rootNode.getReference("orders").child(textorderid.getText().toString());
+                                        reference = rootNode.getReference("orders").child(textorderid.getText().toString().replace("\n TOTAL: "+getIntent().getStringExtra("total").toString(),""));
                                         reference.child("status").setValue("5");
                                         reference.child("prof_image").setValue(uri.toString());
 

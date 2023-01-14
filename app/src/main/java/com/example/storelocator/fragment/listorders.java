@@ -28,6 +28,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class listorders extends Fragment {
 
@@ -92,6 +93,7 @@ public class listorders extends Fragment {
                         }
 
                     }
+                    Collections.reverse(list);
                     myAdapter.notifyDataSetChanged();
                 }else{
                     Log.i("R","6"+accountype);

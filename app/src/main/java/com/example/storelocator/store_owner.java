@@ -44,6 +44,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class store_owner extends AppCompatActivity {
@@ -57,12 +58,16 @@ public class store_owner extends AppCompatActivity {
     StorageReference ref;
     FirebaseDatabase rootNode;
     DatabaseReference reference =FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
-    RecyclerView recyclerView;
+    RecyclerView recyclerView,recyclerViewcatlist;
     Spinner categoryspin;
 
     adapter_itemlist myAdapter;
     ArrayList<helper_product> list;
     LinearLayout linearLayout6;
+
+    String catNow;
+    ArrayList<String> list2;
+    adapter_storelist_category myAdapter2;
 
     public Uri imageUri;
     public static final String KEY_STORE = "sstore";
@@ -81,7 +86,7 @@ public class store_owner extends AppCompatActivity {
         price3 = findViewById(R.id.pricelg);
         categoryspin = findViewById(R.id.categoryspin);
         linearLayout6 = findViewById(R.id.linearLayout6);
-
+        recyclerViewcatlist= findViewById(R.id.catlist);
         linearLayout6.getLayoutParams().height = 1; // LayoutParams: android.view.ViewGroup.LayoutParams
         // wv.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
         linearLayout6.requestLayout();//It is necesary to refresh the screen
@@ -96,36 +101,39 @@ public class store_owner extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
+        SharedPreferences preferences = store_owner.this.getSharedPreferences("selectionCat", Context.MODE_PRIVATE);
+        catNow = preferences.getString("cat","");
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerViewcatlist.setLayoutManager(mLayoutManager);
+        recyclerViewcatlist.setHasFixedSize(true);
+
+        list2 = new ArrayList<String>();
+        myAdapter2 = new adapter_storelist_category(this,list2);
+        recyclerViewcatlist.setAdapter(myAdapter2);
+        recyclerViewcatlist.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                SharedPreferences preferences = store_owner.this.getSharedPreferences("selectionCat", Context.MODE_PRIVATE);
+                String cat = preferences.getString("cat","");
+                defaultviewSearch(cat);
+            }
+        });
+
+        defaultview2(getIntent().getStringExtra("store"));
         productImg = findViewById(R.id.product_image);
         //string here is the value when you load the page
         userid.setText(getIntent().getStringExtra("user"));
         store.setText(getIntent().getStringExtra("store"));
         address.setText(getIntent().getStringExtra("address"));
-
+        getSupportActionBar().setTitle(getIntent().getStringExtra("store"));
         list = new ArrayList<>();
         myAdapter = new adapter_itemlist(this,list);
         recyclerView.setAdapter(myAdapter);
 
-        Query query = reference.child("products").orderByChild("storeOwner").equalTo(getIntent().getStringExtra("store"));
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                        list.clear();
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        helper_product product = snapshot.getValue(helper_product.class);
-                        list.add(product);
-                        Log.i("R",product.itemID.toString());
-                    }
-                    myAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        defaultView();
 
         reference.child("category").addValueEventListener(new ValueEventListener() {
             @Override
@@ -204,8 +212,16 @@ public class store_owner extends AppCompatActivity {
                         Snackbar.make(findViewById(android.R.id.content),"Please add product name!!",Snackbar.LENGTH_SHORT).show();
 
                     }else{
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                            if(!list.stream().map(helper_product ::getParoductName).anyMatch(itemname.getText().toString()::equals)){
+                                chooseImage();
+                            }else{
+                                Snackbar.make(findViewById(android.R.id.content),"Product Name Exist!!",Snackbar.LENGTH_SHORT).show();
+                            }
+                        }
 
-                        chooseImage();
+
+
                     }
 
                 }
@@ -229,6 +245,101 @@ public class store_owner extends AppCompatActivity {
 
 
 
+    }
+    public void defaultview2(String store){
+        SharedPreferences preferences;
+        SharedPreferences.Editor editor;
+
+        preferences = getSharedPreferences("user",MODE_PRIVATE);
+        editor = preferences.edit();
+        editor.putString("currentStore",store);
+        Query query1=reference.child("category").orderByChild("store").startAt(store).endAt(store+"\uf8ff");
+        query1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    list2.clear();
+                    list2.add("All");
+                    Log.i("R","4");
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        helper_category product = snapshot.getValue(helper_category.class);
+
+                        list2.add(product.categoryname);
+                    }
+                    myAdapter2.notifyDataSetChanged();
+                }else{
+                    Log.i("error at default:","6"+getIntent().getStringExtra("storeName"));
+                    //Log.i("R",searchtext);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void defaultView(){
+        Query query = reference.child("products").orderByChild("storeOwner").equalTo(getIntent().getStringExtra("store"));
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    list.clear();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        helper_product product = snapshot.getValue(helper_product.class);
+                        list.add(product);
+                        Log.i("R",product.itemID.toString());
+                    }
+                    myAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void defaultviewSearch(String cat){
+        SharedPreferences preferences;
+        SharedPreferences.Editor editor;
+
+        preferences = getSharedPreferences("user",MODE_PRIVATE);
+        editor = preferences.edit();
+        editor.putString("currentStore",getIntent().getStringExtra("storeName"));
+        Query query1=reference.child("products").orderByChild("storeOwner").equalTo(getIntent().getStringExtra("store"));
+        query1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    list.clear();
+
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        helper_product product = snapshot.getValue(helper_product.class);
+                        Log.i("R",product.getParoductName());
+                        if(cat.equals("All")){
+                            list.add(product);
+                        }else{
+                            if(cat.equals(product.getCategory())){
+                                list.add(product);
+                            }
+                        }
+
+                    }
+
+                }else{
+                    Log.i("error at default:","6"+getIntent().getStringExtra("storeName"));
+                    //Log.i("R",searchtext);
+                }
+                myAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
     private void chooseImage() {
         Intent intent = new Intent();
@@ -267,7 +378,7 @@ public class store_owner extends AppCompatActivity {
 
 
 
-        Toast.makeText(store_owner.this,"Successfully Register",Toast.LENGTH_SHORT).show();
+
 
         // While the file names are the same, the references point to different files
         mountainsRef.getName().equals(mountainImagesRef.getName());    // true
@@ -298,6 +409,8 @@ public class store_owner extends AppCompatActivity {
 
                         helper_product helper_product = new helper_product(productname,storeowner,uri.toString(),add,img,deslong,deslat,getIntent().getStringExtra("user"),0,"",pricesm,pricesm,pricemd,pricelg,category);
                         reference.child(img).setValue(helper_product);
+                        productImg.setImageURI(null);
+                        Toast.makeText(store_owner.this,"Product Successfully Added",Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -322,10 +435,11 @@ public class store_owner extends AppCompatActivity {
         SharedPreferences preferences = store_owner.this.getSharedPreferences("user", Context.MODE_PRIVATE);
         String accountype = preferences.getString("accountype","");
         String staffstore = preferences.getString("Store","");
-        if(item_id == R.id.openLocator){
-            Intent intent = new Intent(store_owner.this,mainframe.class);
-            startActivity(intent);
-        }else if(item_id == R.id.mangeStore){
+//        if(item_id == R.id.openLocator){
+//            Intent intent = new Intent(store_owner.this,mainframe.class);
+//            startActivity(intent);
+//        }else
+            if(item_id == R.id.mangeStore){
             Intent intent = new Intent(store_owner.this, activity_login.class);
             intent.putExtra("storeSelect",getIntent().getStringExtra("store"));
             startActivity(intent);

@@ -54,6 +54,10 @@ public class adapter_itemlist extends RecyclerView.Adapter<adapter_itemlist.MyVi
                 intent.putExtra("itemname",product.getParoductName());
                 intent.putExtra("productimage",product.getProductImage());
                 intent.putExtra("category",product.getCategory());
+
+                intent.putExtra("pricesm",product.getPricesm());
+                intent.putExtra("pricemd",product.getPricemd());
+                intent.putExtra("pricelg",product.getPricelg());
                 context.startActivity(intent);
 
             }

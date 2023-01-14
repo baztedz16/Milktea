@@ -171,7 +171,8 @@ public class signupstaff extends AppCompatActivity {
                     Toast.makeText(signupstaff.this,"Successfully Register",Toast.LENGTH_SHORT).show();
                 }
 
-
+                Intent intent = new Intent(signupstaff.this,store_owner.class);
+                startActivity(intent);
             }
         });
 

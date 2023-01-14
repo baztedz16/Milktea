@@ -35,6 +35,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 
 public class fordelivery extends Fragment {
 
@@ -110,6 +111,7 @@ public class fordelivery extends Fragment {
                             }
                         }
                     }
+                    Collections.reverse(list);
                     myAdapter.notifyDataSetChanged();
                 }else{
                     Log.i("R","6");
