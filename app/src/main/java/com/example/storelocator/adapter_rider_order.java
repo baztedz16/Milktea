@@ -59,7 +59,7 @@ public class adapter_rider_order extends RecyclerView.Adapter<adapter_rider_orde
         holder.address.setText(order.getAddress());
         holder.store.setText(order.getStore());
 
-        if(order.getStatus().equals("5") || order.getStatus().equals("4")){
+        if(order.getStatus().equals("5") || order.getStatus().equals("4") || order.getStatus().equals("3") || order.getStatus().equals("1")){
             holder.cancel.setVisibility(View.INVISIBLE);
 
         }

@@ -76,6 +76,10 @@ public class signupstaff extends AppCompatActivity {
 
         buttonSignup = findViewById(R.id.signupBtn);
 
+        if(getIntent().getStringExtra("hasdata").equals("1")){
+            regstorename.getLayoutParams().height = 1;
+        }
+
         if(getIntent().getStringExtra("hasdata").equals("1") || getIntent().getStringExtra("hasdata").equals("2")){
             regfullname.setText(getIntent().getStringExtra("fullname"));
             regemail.setText(getIntent().getStringExtra("email"));

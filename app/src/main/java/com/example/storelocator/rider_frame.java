@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,9 +54,28 @@ public class rider_frame extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int item_id = item.getItemId();
+        SharedPreferences preferences = rider_frame.this.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String accountype = preferences.getString("accountype","");
+        String staffstore = preferences.getString("Store","");
         if(item_id == R.id.mangeStore){
             Intent intent = new Intent(rider_frame.this, activity_login.class);
             intent.putExtra("storeSelect",getIntent().getStringExtra("store"));
+            startActivity(intent);
+        }else if(item_id == R.id.Account){
+
+            SharedPreferences preferences1 = this.getSharedPreferences("user", Context.MODE_PRIVATE);
+            Intent intent = new Intent(rider_frame.this,signupstaff.class);
+            intent.putExtra("storeSelect","N/A");
+            intent.putExtra("fullname",preferences.getString("fullname",""));
+            intent.putExtra("username",preferences.getString("username",""));
+            intent.putExtra("email",preferences.getString("email",""));
+            intent.putExtra("password",preferences.getString("password",""));
+            intent.putExtra("phone",preferences.getString("phone",""));
+            intent.putExtra("address",preferences.getString("address",""));
+            intent.putExtra("long",preferences.getString("longti",""));
+            intent.putExtra("lat",preferences.getString("lati",""));
+            intent.putExtra("action",preferences.getString("1",""));
+            intent.putExtra("hasdata","2");
             startActivity(intent);
         }
         return true;

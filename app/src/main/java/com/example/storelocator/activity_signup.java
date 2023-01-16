@@ -64,6 +64,8 @@ public class activity_signup extends AppCompatActivity {
     ProgressBar progressBar;
     static Double lh,lt;
 
+    DatabaseReference verifydb = FirebaseDatabase.getInstance().getReference();
+
     FirebaseDatabase rootNode;
     DatabaseReference reference;
     WifiManager wifiManager;
@@ -129,7 +131,7 @@ public class activity_signup extends AppCompatActivity {
 //        progressBar = findViewById(R.id.progress);
 
         ArrayAdapter<String> list = new ArrayAdapter<String>(activity_signup.this
-                , android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.account_type));
+                ,android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.account_type));
         list.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(list);
 
@@ -169,9 +171,9 @@ public class activity_signup extends AppCompatActivity {
                         || Destlongt.isEmpty() || Deslati.isEmpty() || Address.isEmpty()){
                     Toast.makeText(activity_signup.this,"Kindly fillup all fields",Toast.LENGTH_SHORT).show();
                 } else if (!isValidName(fullname)) {
-                    regfullname.setError("Please Enter Right Name");
+                    regfullname.setError("Name should be valid.");
                 } else if (!isValidEmail(email)) {
-                    regemail.setError("Please use a Right Email.");
+                    regemail.setError("Please use a Valid Email.");
                 } else if (password.length() > 6) {
                     regpassword.setError("The password is too short.");
                 } else if (phone.length() < 10) {
@@ -200,7 +202,6 @@ public class activity_signup extends AppCompatActivity {
 //                                            });
 //                                    AlertDialog alert = builder.create();
 //                                    alert.show();
-                                    Toast.makeText(activity_signup.this,"Username Exist!!!.",Toast.LENGTH_SHORT).show();
                                     regusername.setError("This username has already taken.");
                                     return;
                                 }else{
@@ -214,9 +215,12 @@ public class activity_signup extends AppCompatActivity {
                                     if (accountype.equals("Store Owner")) {
                                         storeNameCreate(fullname,username,password,email,storename,phone,accountype,Destlongt,Deslati,image,"0","0",Address,intent_login,reference);
                                     } else {
+                                        if (accountype.equals("User")) {
+                                            verifydb.child("forOTP").child(username).setValue(1);
+                                        }
                                         helper_user helper_user = new helper_user(fullname,username,password,email,storename,phone,accountype,Destlongt,Deslati,image,"0","0",Address);
                                         reference.child(username).setValue(helper_user);
-                                        Toast.makeText(activity_signup.this,"Successfully Register",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(activity_signup.this,"Registered Successfully",Toast.LENGTH_SHORT).show();
                                         startActivity(intent_login);
                                         finish();
                                     }
@@ -332,12 +336,6 @@ public class activity_signup extends AppCompatActivity {
                     Toast.makeText(activity_signup.this,"Successfully Register",Toast.LENGTH_SHORT).show();
                     startActivity(intent);
                     finish();
-//                    if(checkuser() == 1){
-//                        Toast.makeText(activity_signup.this,"Username Exist!!!.",Toast.LENGTH_SHORT).show();
-//                    }else{
-//
-//                    }
-
                 }
 
             }
@@ -364,39 +362,5 @@ public class activity_signup extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-//    private int checkuser(){
-//        Query query1=reference.child("users").orderByChild("username").startAt(username).endAt(username+"\uf8ff");
-//        query1.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Log.i("R",username.getText().toString());
-//                if (dataSnapshot.exists()) {
-//                    list.clear();
-//                    Log.i("R",cat);
-//                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                        helper_product product = snapshot.getValue(helper_product.class);
-//                        if(cat.equals("All")){
-//                            list.add(product);
-//                        }else{
-//                            if(cat.equals(product.getCategory())){
-//                                list.add(product);
-//                            }
-//                        }
-//
-//                    }
-//                    myAdapter.notifyDataSetChanged();
-//                }else{
-//                    Log.i("error at default:","6"+getIntent().getStringExtra("storeName"));
-//                    //Log.i("R",searchtext);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//        return 1;
-//    }
 
 }

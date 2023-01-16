@@ -275,7 +275,7 @@ public class mainframe_viewcart extends AppCompatActivity {
 
             }
         });
-        Intent intent1 = new Intent(mainframe_viewcart.this,mainframe.class);
+        Intent intent1 = new Intent(mainframe_viewcart.this,list_store.class);
         intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent1);
     }

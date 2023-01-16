@@ -54,7 +54,7 @@ public class rating_store extends AppCompatActivity {
         user = getIntent().getStringExtra("user");
         getReviewStore();
         getReviewService();
-
+accept.setVisibility(View.INVISIBLE);
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,11 +63,14 @@ public class rating_store extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
-
+                                rootNode = FirebaseDatabase.getInstance();
+                                reference = rootNode.getReference("orders").child(orderid.getText().toString());
+                                    reference.child("status").setValue("10");
+                                    Toast.makeText(getApplicationContext(),"Order: "+ orderid.getText().toString()+" Succesfully Accepted",Toast.LENGTH_SHORT).show();
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
-                                //No button clicked
+
                                 break;
                         }
                     }
@@ -104,7 +107,13 @@ public class rating_store extends AppCompatActivity {
                                 reference.child(id).child("rating_count").setValue(rating_count);
                                 reference.child(id).child("order_date").setValue(order_date);
                                 reference.child(id).child("store").setValue(store_rated);
+
+
+
                                 Toast.makeText(getApplicationContext(),"Order: "+ id+" Rating Submitted",Toast.LENGTH_SHORT).show();
+                                rootNode = FirebaseDatabase.getInstance();
+                                reference = rootNode.getReference("orders").child(orderid.getText().toString());
+                                reference.child("status").setValue("10");
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -146,6 +155,9 @@ public class rating_store extends AppCompatActivity {
                                 reference.child(id).child("order_date").setValue(order_date);
                                 reference.child(id).child("store").setValue(store_rated);
                                 Toast.makeText(getApplicationContext(),"Order: "+ id+" Service Rating Submitted",Toast.LENGTH_SHORT).show();
+                                rootNode = FirebaseDatabase.getInstance();
+                                reference = rootNode.getReference("orders").child(orderid.getText().toString());
+                                reference.child("status").setValue("10");
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:

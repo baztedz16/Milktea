@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -84,16 +86,28 @@ public class adapter_receivables extends RecyclerView.Adapter<adapter_receivable
                     alert.show();
                 }else{
                     AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                    alert.setMessage("Your About to accept the Payables!");
+                    alert.setMessage("Your About to Approved the Payables!");
                     alert.setTitle("Payment Process");
 
+                    final EditText input = new EditText(context.getApplicationContext());
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT);
+                    input.setLayoutParams(lp);
+                    input.setHint("Reference number");
+                    alert.setView(input);
                     alert.setPositiveButton("Yes Option", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
+                            if(input.getText().equals("") || input.getText().toString().isEmpty()){
+                                Toast.makeText(context.getApplicationContext(), "Please Enter Reference Number",Toast.LENGTH_LONG).show();
+                            }else{
+                                Toast.makeText(context.getApplicationContext(), "Payables Succesfully Paid",Toast.LENGTH_LONG).show();
+                                rootNode = FirebaseDatabase.getInstance();
+                                reference = rootNode.getReference("storereceivables").child(user.getRider()+user.getDate_topay().replace("/",""));
+                                reference.child("reference_no").setValue(input.getText().toString());
+                                reference.child("status").setValue("Approved");
+                            }
 
-                            rootNode = FirebaseDatabase.getInstance();
-                            reference = rootNode.getReference("storereceivables").child(user.getRider()+user.getDate_topay().replace("/",""));
-                            //reference.setValue("sample");
-                            reference.child("status").setValue("Approved");
 //                    //OR
 //                    String YouEditTextValue = edittext.getText().toString();
                         }

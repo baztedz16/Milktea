@@ -3,12 +3,15 @@ package com.example.storelocator.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -42,6 +45,7 @@ public class admin_list_account extends Fragment {
     TextView textView15;
     Spinner spinner;
     Query query1;
+    EditText usernameSearch;
     FirebaseStorage storage;
     StorageReference ref;
     FirebaseDatabase rootNode;
@@ -51,6 +55,7 @@ public class admin_list_account extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_accountlist, container, false);
         textView15 = view.findViewById(R.id.textView15);
+        usernameSearch = view.findViewById(R.id.usernameSearch);
         recyclerView = view.findViewById(R.id.accountview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -72,6 +77,27 @@ public class admin_list_account extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        usernameSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(usernameSearch.getText().toString().equals("") || usernameSearch.getText().toString().isEmpty()){
+                    defaultview();
+                }else{
+                    defaultview(spinner.getSelectedItem().toString(),usernameSearch.getText().toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
 
             }
         });
@@ -147,6 +173,58 @@ public class admin_list_account extends Fragment {
                         helper_user user = snapshot.getValue(helper_user.class);
                         if(!user.getAccountype().equals("Store Owner") && !user.getAccountype().equals("Admin")){
                             if(user.getAccountype().equals(values)){
+                                list.add(user);
+                            }
+
+                        }
+
+//                        if(accountype.equals("STAFF") && (user.getStatus().equals("5") )){
+//                            if(user.getStore().equals(staffstore)){
+//                                if(user.getStore().equals(staffstore)){
+//
+//                                    Log.i("R","1");
+//                                }
+//                            }
+//                        }else{
+//                            if(user.getRider().equals(rider) ){
+//
+//                                Log.i("2DATA",rider+":"+snapshot.child("rider").getValue().toString());
+//                                list.add(user);
+//                            }
+//                        }
+                    }
+                    myAdapter.notifyDataSetChanged();
+                }else{
+                    Log.i("R","6");
+                    //Log.i("R",searchtext);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void defaultview(String values, String username){
+
+        SharedPreferences preferences = this.getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String rider = preferences.getString("username","");
+        String accountype = preferences.getString("accountype","");
+        String staffstore = preferences.getString("Store","");
+
+        query1=reference.child("users");
+        query1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Log.i("R",editTextname.getText().toString());
+                if (dataSnapshot.exists()) {
+                    list.clear();
+                    Log.i("R","4");
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        helper_user user = snapshot.getValue(helper_user.class);
+                        if(!user.getAccountype().equals("Store Owner") && !user.getAccountype().equals("Admin")){
+                            if(user.getAccountype().equals(values) && user.getFullname().contains(username)){
                                 list.add(user);
                             }
 

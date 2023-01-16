@@ -222,18 +222,37 @@ public class admin_list_reports extends Fragment {
                             dateformdb = format.parse(orders.getDate_order());
                             startdate = format.parse(date1);
                             enddate = format.parse(date2);
-                            if(dateformdb.after(startdate) && dateformdb.before(enddate)){
-                                if(map.containsKey(orders.getDate_order())){
-                                    Double valueNew = Double.parseDouble(map.get(orders.getDate_order()))+ Double.parseDouble( orders.getOrder_total());
-                                    map.put(orders.getDate_order(),String.valueOf(valueNew));
+                            if(storelist.getSelectedItem().toString().equals("All")){
+                                if(dateformdb.after(startdate) && dateformdb.before(enddate)){
+                                    if(map.containsKey(orders.getDate_order())){
+                                        Double valueNew = Double.parseDouble(map.get(orders.getDate_order()))+ Double.parseDouble( orders.getOrder_total());
+                                        map.put(orders.getDate_order(),String.valueOf(valueNew));
 
+                                    }else{
+                                        map.put(orders.getDate_order(),orders.getOrder_total());
+                                    }
+                                    salesTotal = salesTotal + Double.parseDouble(orders.getOrder_total());
+                                    //Log.i("Get",orders.getOrder_id()+" @"+orders.getDate_order());
                                 }else{
-                                    map.put(orders.getDate_order(),orders.getOrder_total());
+                                    //Log.i("Pass",orders.getOrder_id()+" @"+orders.getDate_order());
                                 }
-                                salesTotal = salesTotal + Double.parseDouble(orders.getOrder_total());
-                                //Log.i("Get",orders.getOrder_id()+" @"+orders.getDate_order());
                             }else{
-                                //Log.i("Pass",orders.getOrder_id()+" @"+orders.getDate_order());
+                                if(orders.getStore().equals(storelist.getSelectedItem().toString())){
+                                    if(dateformdb.after(startdate) && dateformdb.before(enddate)){
+                                        if(map.containsKey(orders.getDate_order())){
+                                            Double valueNew = Double.parseDouble(map.get(orders.getDate_order()))+ Double.parseDouble( orders.getOrder_total());
+                                            map.put(orders.getDate_order(),String.valueOf(valueNew));
+
+                                        }else{
+                                            map.put(orders.getDate_order(),orders.getOrder_total());
+                                        }
+                                        salesTotal = salesTotal + Double.parseDouble(orders.getOrder_total());
+                                        //Log.i("Get",orders.getOrder_id()+" @"+orders.getDate_order());
+                                    }else{
+                                        //Log.i("Pass",orders.getOrder_id()+" @"+orders.getDate_order());
+                                    }
+                                }
+
                             }
                             totalTxt.setText("Total Sales: "+String.valueOf(salesTotal));
                         } catch (ParseException e) {

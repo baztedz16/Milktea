@@ -215,7 +215,7 @@ public class order_details extends AppCompatActivity {
                  intent2.putExtra("user",preferences.getString("username",""));
                  intent2.putExtra("store",Storename);
                  intent2.putExtra("orderdate",getIntent().getStringExtra("orderdate"));
-                 intent2.putExtra("orderid",textorderid.getText().toString());
+                 intent2.putExtra("orderid",textorderid.getText().toString().replace("\n TOTAL: "+getIntent().getStringExtra("total").toString(),""));
                  startActivity(intent2);
              }
          });
@@ -242,7 +242,7 @@ public class order_details extends AppCompatActivity {
          onDelivery.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
-                 if(accountype.equals("Rider")){
+                 if(accountype.equals("Rider") && simpleProgressBar.getProgress() == 75){
                      onDeliveryRider();
                  }
              }
@@ -497,7 +497,7 @@ public class order_details extends AppCompatActivity {
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Your going to deliver this Item?").setPositiveButton("Yes", dialogClickListener)
+        builder.setMessage("Confirm Delivery?").setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
 
     }

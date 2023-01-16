@@ -64,6 +64,7 @@ public class listorders extends Fragment {
         SharedPreferences preferences = this.getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         String accountype = preferences.getString("accountype","");
         String staffstore = preferences.getString("Store","");
+        String username = preferences.getString("username","");
 
         if(accountype.equals("STAFF") || accountype.equals("Store Owner")){
             query1=reference.child("orders").orderByChild("status").equalTo("0");
@@ -85,8 +86,8 @@ public class listorders extends Fragment {
                                 list.add(orders);
                                 Log.i("R","1");
                             }
-                        }else{
-                            if(orders.getStatus().equals("1")){
+                        }else if (accountype.equals("Rider")){
+                            if(orders.getStatus().equals("1") || !orders.getRider().equals(username)){
                                 list.add(orders);
                                 Log.i("R","2");
                             }
@@ -98,6 +99,8 @@ public class listorders extends Fragment {
                 }else{
                     Log.i("R","6"+accountype);
                     //Log.i("R",searchtext);
+                    list.clear();
+                    myAdapter.notifyDataSetChanged();
                 }
             }
 
