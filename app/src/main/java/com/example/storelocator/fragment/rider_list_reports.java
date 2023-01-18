@@ -36,6 +36,7 @@ import com.example.storelocator.helper_order_rider;
 import com.example.storelocator.helper_payables;
 import com.example.storelocator.helper_receivables;
 import com.example.storelocator.helper_user;
+import com.example.storelocator.signupstaff;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.BarData;
@@ -76,7 +77,7 @@ public class rider_list_reports extends Fragment {
     Button salesbtn,payablesbtn,exportcsv1;
     RecyclerView listpayables;
     Query query1;
-    LinearLayout linear1;
+    LinearLayout linear1,linear2,Totalpayables;
 
 
     FirebaseStorage storage;
@@ -102,6 +103,8 @@ public class rider_list_reports extends Fragment {
         totalTxt = view.findViewById(R.id.totalTxt);
 
         linear1=view.findViewById(R.id.linear1);
+        linear2=view.findViewById(R.id.linear2);
+        Totalpayables=view.findViewById(R.id.Totalpayables);
         DelFee=view.findViewById(R.id.DelFee);
         payablesTxt=view.findViewById(R.id.payablesTxt);
 
@@ -126,6 +129,8 @@ public class rider_list_reports extends Fragment {
             reportdate.setVisibility(View.INVISIBLE);
             listpayables.setVisibility(View.INVISIBLE);
             linear1.setVisibility(View.INVISIBLE);
+            linear2.setVisibility(View.INVISIBLE);
+            Totalpayables.setVisibility(View.INVISIBLE);
             status.setVisibility(View.INVISIBLE);
             payablesbtn.setVisibility(View.INVISIBLE);
         }
@@ -310,71 +315,75 @@ public class rider_list_reports extends Fragment {
         payablesbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                if(!status.getText().equals("Under review") && !status.getText().equals("Approved")){
-                    final EditText edittext = new EditText(getContext());
-
-                    if(accountype.equals("STAFF") || accountype.equals("Store Owner")){
-                        alert.setMessage("Enter Note!");
-                        alert.setTitle("Receivables Process");
-                        alert.setView(edittext);
-
-                        alert.setPositiveButton("Yes Option", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                //What ever you want to do with the value
-                                Editable YouEditTextValue = edittext.getText();
-
-                                rootNode = FirebaseDatabase.getInstance();
-                                reference = rootNode.getReference("storereceivables").child(storename+reportdate.getText().toString().replace("/",""));
-                                //reference.setValue("sample");
-                                reference.child("date_topay").setValue(reportdate.getText().toString());
-                                reference.child("reference_no").setValue(edittext.getText().toString());
-                                reference.child("status").setValue("Under review");
-                                reference.child("rider").setValue(storename);
-                                reference.child("amount").setValue(tpayables.getText().toString());
-                                reference.child("txntype").setValue("pay");
-//                    //OR
-//                    String YouEditTextValue = edittext.getText().toString();
-                            }
-                        });
-                    }else{
-                        alert.setMessage("Enter Your Reference Number!");
-                        alert.setTitle("Payables Process");
-                        alert.setView(edittext);
-
-                        alert.setPositiveButton("Yes Option", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                //What ever you want to do with the value
-                                Editable YouEditTextValue = edittext.getText();
-
-                                rootNode = FirebaseDatabase.getInstance();
-                                reference = rootNode.getReference("payables").child(ridername+reportdate.getText().toString().replace("/",""));
-                                //reference.setValue("sample");
-                                reference.child("date_topay").setValue(reportdate.getText().toString());
-                                reference.child("reference_no").setValue(edittext.getText().toString());
-                                reference.child("status").setValue("Under review");
-                                reference.child("rider").setValue(ridername);
-                                reference.child("amount").setValue(tpayables.getText().toString());
-                                reference.child("txntype").setValue("rec");
-//                    //OR
-//                    String YouEditTextValue = edittext.getText().toString();
-                            }
-                        });
-                    }
-
-
-
-
-                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            // what ever you want to do with No option.
-                        }
-                    });
-
-                    alert.show();
+                if(reportdate.getText().toString().equals("") || reportdate.getText().toString().isEmpty()){
+                    Toast.makeText(getContext(),"Please Select Date",Toast.LENGTH_SHORT).show();
                 }else{
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                    if(!status.getText().equals("Under review") && !status.getText().equals("Approved")){
+                        final EditText edittext = new EditText(getContext());
+
+                        if(accountype.equals("STAFF") || accountype.equals("Store Owner")){
+                            alert.setMessage("Enter Note!");
+                            alert.setTitle("Receivables Process");
+                            alert.setView(edittext);
+
+                            alert.setPositiveButton("Yes Option", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    //What ever you want to do with the value
+                                    Editable YouEditTextValue = edittext.getText();
+
+                                    rootNode = FirebaseDatabase.getInstance();
+                                    reference = rootNode.getReference("storereceivables").child(storename+reportdate.getText().toString().replace("/",""));
+                                    //reference.setValue("sample");
+                                    reference.child("date_topay").setValue(reportdate.getText().toString());
+                                    reference.child("reference_no").setValue(edittext.getText().toString());
+                                    reference.child("status").setValue("Under review");
+                                    reference.child("rider").setValue(storename);
+                                    reference.child("amount").setValue(tpayables.getText().toString());
+                                    reference.child("txntype").setValue("pay");
+//                    //OR
+//                    String YouEditTextValue = edittext.getText().toString();
+                                }
+                            });
+                        }else{
+                            alert.setMessage("Enter Your Reference Number!");
+                            alert.setTitle("Payables Process");
+                            alert.setView(edittext);
+
+                            alert.setPositiveButton("Yes Option", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    //What ever you want to do with the value
+                                    Editable YouEditTextValue = edittext.getText();
+
+                                    rootNode = FirebaseDatabase.getInstance();
+                                    reference = rootNode.getReference("payables").child(ridername+reportdate.getText().toString().replace("/",""));
+                                    //reference.setValue("sample");
+                                    reference.child("date_topay").setValue(reportdate.getText().toString());
+                                    reference.child("reference_no").setValue(edittext.getText().toString());
+                                    reference.child("status").setValue("Under review");
+                                    reference.child("rider").setValue(ridername);
+                                    reference.child("amount").setValue(tpayables.getText().toString());
+                                    reference.child("txntype").setValue("rec");
+//                    //OR
+//                    String YouEditTextValue = edittext.getText().toString();
+                                }
+                            });
+                        }
+
+
+
+
+                        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                // what ever you want to do with No option.
+                            }
+                        });
+
+                        alert.show();
+                    }else{
+                    }
                 }
+
             }
         });
 

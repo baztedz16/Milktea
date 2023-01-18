@@ -86,7 +86,7 @@
                 android:layout_height="50dp"
                 android:layout_gravity="right"
                 android:background="@color/teal_700"
-                android:text="Ratings" />
+                android:text="Ratings and Review" />
 
         </LinearLayout>
     </LinearLayout>

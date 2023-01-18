@@ -153,7 +153,9 @@ public class order_details extends AppCompatActivity {
          if(accountype.equals("STAFF")){
              accept.setVisibility(View.INVISIBLE);
              confirm.setVisibility(View.INVISIBLE);
+             button4.setVisibility(View.INVISIBLE);
          }
+
 //         if(accountype.equals("Rider")){
 //             button5.setVisibility(View.VISIBLE);
 //             getContactClient(userText.getText().toString());
@@ -183,8 +185,12 @@ public class order_details extends AppCompatActivity {
                          } else {
 
                          }
-                         Intent intent_call = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+ phone));
-                         startActivity(intent_call);
+                         Intent intent = new Intent(Intent.ACTION_DIAL);
+                         intent.setData(Uri.parse("tel:" + phone));
+                         if (intent.resolveActivity(getPackageManager()) != null) {
+                             startActivity(intent);
+                         }
+                         startActivity(intent);
 
                      }
                  });
@@ -342,6 +348,9 @@ public class order_details extends AppCompatActivity {
                         address.setText(order.getAddress());
                         Picasso.get().load(order.getProf_image()).into(ImageView);
                         rider = order.getRider();
+
+
+
                         if(accountype.equals("Rider")){
                             button5.setVisibility(View.VISIBLE);
                             getContactClient(userText.getText().toString());
@@ -368,7 +377,13 @@ public class order_details extends AppCompatActivity {
                             case "4":
                                 simpleProgressBar.setProgress(100);
                                 status.setText("Rider on the way...");
-                                confirm.setVisibility(View.VISIBLE);
+                                if(accountype.equals("Rider")){
+                                    confirm.setVisibility(View.VISIBLE);
+                                }
+                                if(preferences.getString("accountype","").equals("User")){
+                                    accept.setVisibility(View.VISIBLE);
+                                }
+
                                 break;
                             case "5":
                                 simpleProgressBar.setProgress(100);
@@ -377,14 +392,12 @@ public class order_details extends AppCompatActivity {
                                 confirm.setText("Delivered");
                                 button4.setVisibility(View.INVISIBLE);
                                 button5.setVisibility(View.INVISIBLE);
-                                if(preferences.getString("accountype","").equals("User")){
-                                    accept.setVisibility(View.VISIBLE);
-                                }
+
 
                                 confirm.setVisibility(View.INVISIBLE);
                                 break;
                             default:
-                                simpleProgressBar.setProgress(0);
+                                simpleProgressBar.setProgress(100);
 
                         }
                     }
@@ -443,7 +456,7 @@ public class order_details extends AppCompatActivity {
 
                     }
                 } else {
-                    Log.i("error at default:", "6" + storename);
+                    Log.i("error at ErrorContact:", "6" + storename);
                     //Log.i("R",searchtext);
                 }
             }
@@ -497,7 +510,7 @@ public class order_details extends AppCompatActivity {
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Confirm Delivery?").setPositiveButton("Yes", dialogClickListener)
+        builder.setMessage("Your Going to Deliver this Item").setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
 
     }
@@ -574,7 +587,7 @@ public class order_details extends AppCompatActivity {
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Your going to deliver this Item?").setPositiveButton("Yes", dialogClickListener)
+        builder.setMessage("Confirm Delivery?").setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
 
     }

@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,7 +49,7 @@ public class mainframe extends AppCompatActivity {
     adapter_storelist_category myAdapter2;
     RecyclerView recyclerView,recyclerViewcatlist;
     String catNow;
-
+    TextView StoreLocation;
     FirebaseStorage storage;
     StorageReference ref;
     FirebaseDatabase rootNode;
@@ -64,6 +66,7 @@ public class mainframe extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_frame);
+        getSupportActionBar().setTitle(getIntent().getStringExtra("storeName"));
         editTextname = findViewById(R.id.etname);
 //        buttonfetch = findViewById(R.id.btnfetch);
         recyclerView = findViewById(R.id.storeList);
@@ -71,6 +74,7 @@ public class mainframe extends AppCompatActivity {
         buttonStoreList = findViewById(R.id.liststoreBtn);
         viewCart = findViewById(R.id.viewCart);
         viewOrder = findViewById(R.id.viewOrders);
+        StoreLocation = findViewById(R.id.StoreLocation);
         SharedPreferences preferences = mainframe.this.getSharedPreferences("selectionCat", Context.MODE_PRIVATE);
         catNow = preferences.getString("cat","");
 
@@ -81,7 +85,7 @@ public class mainframe extends AppCompatActivity {
         myAdapter = new adapter_storelist_items(this,list);
         recyclerView.setAdapter(myAdapter);
 
-
+        StoreLocation.setText(getIntent().getStringExtra("address"));
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerViewcatlist.setLayoutManager(mLayoutManager);
@@ -110,7 +114,17 @@ public class mainframe extends AppCompatActivity {
 
 
 
+        StoreLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String strUri = "http://maps.google.com/maps?q=loc:" +getIntent().getStringExtra("lati")+ "," +getIntent().getStringExtra("long")+ " (" + "Store Lcoation" + ")";
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(strUri));
 
+                intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+
+                startActivity(intent);
+            }
+        });
         viewOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

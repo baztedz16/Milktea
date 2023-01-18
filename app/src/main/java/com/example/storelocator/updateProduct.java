@@ -2,6 +2,7 @@ package com.example.storelocator;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -95,18 +98,24 @@ public class updateProduct extends AppCompatActivity {
 
         updateitem.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                String itemID = productid.getText().toString();
-                rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference("products").child(itemID);
-                //reference.setValue("sample");
-                reference.child("paroductName").setValue(productname.getText().toString());
-                reference.child("category").setValue(categoryspin.getSelectedItem().toString());
+                if(pricesm.getText().toString().equals("") || pricemd.getText().toString().equals("") || pricelg.getText().toString().equals("")){
+                    Toast.makeText(getApplicationContext(),"Please Fill all Fields",Toast.LENGTH_SHORT).show();
+                }else{
+                    String itemID = productid.getText().toString();
+                    rootNode = FirebaseDatabase.getInstance();
+                    reference = rootNode.getReference("products").child(itemID);
+                    //reference.setValue("sample");
+                    reference.child("paroductName").setValue(productname.getText().toString());
+                    reference.child("category").setValue(categoryspin.getSelectedItem().toString());
 
-                reference.child("price").setValue(pricesm.getText().toString());
-                reference.child("pricesm").setValue(pricesm.getText().toString());
-                reference.child("pricemd").setValue(pricemd.getText().toString());
-                reference.child("pricelg").setValue(pricelg.getText().toString());
-                Toast.makeText(getApplicationContext(),"Item: "+ productname.getText().toString()+" Updated",Toast.LENGTH_SHORT).show();
+                    reference.child("price").setValue(pricesm.getText().toString());
+                    reference.child("pricesm").setValue(pricesm.getText().toString());
+                    reference.child("pricemd").setValue(pricemd.getText().toString());
+                    reference.child("pricelg").setValue(pricelg.getText().toString());
+                    Toast.makeText(getApplicationContext(),"Item: "+ productname.getText().toString()+" Updated",Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+
             }
         });
         SharedPreferences preferences = updateProduct.this.getSharedPreferences("user", Context.MODE_PRIVATE);
@@ -148,25 +157,50 @@ public class updateProduct extends AppCompatActivity {
         deleteitem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String itemID = productid.getText().toString();
-                rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference("products");
-                Query query = reference.orderByChild("itemID").equalTo(itemID);
-                //reference.setValue("sample");
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
-                            appleSnapshot.getRef().removeValue();
-                            Toast.makeText(getApplicationContext(),"Item: "+ productname.getText().toString()+" Removed",Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle("Delete This Product?");
 
+
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+//                input.setLayoutParams(lp);
+//                builder.setView(input);
+
+                // Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        //Log.e(TAG, "onCancelled", databaseError.toException());
+                    public void onClick(DialogInterface dialog, int which) {
+                        String itemID = productid.getText().toString();
+                        rootNode = FirebaseDatabase.getInstance();
+                        reference = rootNode.getReference("products");
+                        Query query = reference.orderByChild("itemID").equalTo(itemID);
+                        //reference.setValue("sample");
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
+                                    appleSnapshot.getRef().removeValue();
+                                    Toast.makeText(getApplicationContext(),"Item: "+ productname.getText().toString()+" Removed",Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                //Log.e(TAG, "onCancelled", databaseError.toException());
+                            }
+                        });
                     }
                 });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
+
 
 
                 //reference.removeValue(query);

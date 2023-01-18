@@ -1,9 +1,10 @@
 package com.example.storelocator;
 
 public class helper_liststore {
-    String accountype,address,email,fullname,password,phone,storename,username,image,destlat,destlong,currLocation;
+    String accountype,address,email,fullname,password,phone,storename,username,image,destlat,destlong,currLocation,metric;
 
-    public helper_liststore(String accountype, String address, String email, String fullname, String password, String phone, String storename, String username,String image,String destlat,String destlong,String currLocation) {
+    public helper_liststore(String accountype, String address, String email, String fullname, String password, String phone,
+                            String storename, String username,String image,String destlat,String destlong,String currLocation,String metric) {
         this.accountype = accountype;
         this.address = address;
         this.email = email;
@@ -16,6 +17,7 @@ public class helper_liststore {
         this.destlat = destlat;
         this.destlong = destlong;
         this.currLocation = currLocation;
+        this.metric = metric;
     }
     public  helper_liststore(){
 
@@ -115,5 +117,13 @@ public class helper_liststore {
 
     public void setCurrLocation(String currLocation) {
         this.currLocation = currLocation;
+    }
+
+    public String getMetric() {
+        return metric;
+    }
+
+    public void setMetric(String metric) {
+        this.metric = metric;
     }
 }

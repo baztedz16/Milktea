@@ -1,16 +1,21 @@
 package com.example.storelocator;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DatabaseReference;
@@ -56,7 +61,7 @@ public class adapter_user_order extends RecyclerView.Adapter<adapter_user_order.
 
         SharedPreferences preferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         String accountype = preferences.getString("accountype","");
-
+        holder.dateTxt.setText(order.getDate_order());
         if(order.getStatus().equals("10")){
             holder.getOrder.setText("Cancel");
             holder.getOrder.setEnabled(false);
@@ -77,10 +82,35 @@ public class adapter_user_order extends RecyclerView.Adapter<adapter_user_order.
         holder.cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference("orders").child(order.getOrder_id());
-                //reference.setValue("sample");
-                reference.child("status").setValue("10");
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle("Cancel Order?");
+
+
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+//                input.setLayoutParams(lp);
+//                builder.setView(input);
+
+                // Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(view.getContext(), "Order Cancel",Toast.LENGTH_SHORT).show();
+                        rootNode = FirebaseDatabase.getInstance();
+                        reference = rootNode.getReference("orders").child(order.getOrder_id());
+                        //reference.setValue("sample");
+                        reference.child("status").setValue("10");
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
+
             }
         });
 
@@ -103,7 +133,7 @@ public class adapter_user_order extends RecyclerView.Adapter<adapter_user_order.
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView storeName,orderid,address,store;
+        TextView storeName,orderid,address,store,dateTxt;
         Button getOrder,cancel;
         ImageView itemImage;
         public MyViewHolder(@NonNull View itemView){
@@ -115,6 +145,7 @@ public class adapter_user_order extends RecyclerView.Adapter<adapter_user_order.
             address = itemView.findViewById(R.id.Addressds);
             store = itemView.findViewById(R.id.Storeds);
             cancel = itemView.findViewById(R.id.cancel);
+            dateTxt = itemView.findViewById(R.id.dateTxt);
         }
     }
 }

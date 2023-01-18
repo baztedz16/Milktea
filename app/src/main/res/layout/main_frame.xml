@@ -56,12 +56,13 @@
         app:layout_constraintTop_toBottomOf="@+id/catlist" />
 
     <LinearLayout
+        android:id="@+id/linearLayout10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/storeList">
+        app:layout_constraintTop_toBottomOf="@+id/StoreLocation">
 
         <Button
             android:id="@+id/viewOrders"
@@ -75,8 +76,8 @@
             android:id="@+id/liststoreBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
             android:layout_marginTop="48dp"
+            android:layout_marginRight="10dp"
             android:text="List Store" />
 
         <Button
@@ -86,6 +87,19 @@
             android:layout_marginTop="48dp"
             android:text="viewCart" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/StoreLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.096"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/storeList" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

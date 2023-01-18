@@ -179,6 +179,7 @@ public class list_store extends AppCompatActivity {
                             metric = "Km";
                         }
                         product.setCurrLocation(String.valueOf(display));
+                        product.setMetric(metric);
                         list.add(product);
 
                     }

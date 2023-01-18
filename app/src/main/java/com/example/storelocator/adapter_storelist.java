@@ -66,7 +66,7 @@ public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.s
 
 
 
-        holder.Distance.setText(store.getCurrLocation());
+        holder.Distance.setText(store.getCurrLocation()+" "+store.getMetric());
                 //StorageReference gsReference = storage.getReferenceFromUrl("gs://storelocator-c908a.appspot.com/1643612433037.jpg");
         Picasso.get().load(store.getImage()).into(holder.itemImage);
 
@@ -83,6 +83,9 @@ public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.s
                 editor.commit();
                 Intent intent = new Intent(context,mainframe.class);
                 intent.putExtra("storeName",store.getStorename());
+                intent.putExtra("address",store.getAddress());
+                intent.putExtra("lati",store.getDestlat());
+                intent.putExtra("long",store.getDestlong());
                 context.startActivity(intent);
             }
         });
@@ -98,6 +101,9 @@ public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.s
                 editor.commit();
                 Intent intent = new Intent(context,mainframe.class);
                 intent.putExtra("storeName",store.getStorename());
+                intent.putExtra("address",store.getAddress());
+                intent.putExtra("lati",store.getDestlat());
+                intent.putExtra("long",store.getDestlong());
                 context.startActivity(intent);
             }
         });
