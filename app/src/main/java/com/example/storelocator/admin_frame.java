@@ -74,7 +74,7 @@ public class admin_frame extends AppCompatActivity {
             intent.putExtra("long",preferences.getString("longti",""));
             intent.putExtra("lat",preferences.getString("lati",""));
             intent.putExtra("action",preferences.getString("1",""));
-            intent.putExtra("hasdata","2");
+            intent.putExtra("hasdata","3");
             startActivity(intent);
         }
         return true;

@@ -154,6 +154,25 @@ public class signupstaff extends AppCompatActivity {
                     reference.child(username).setValue(helper_user);
 
                     Toast.makeText(signupstaff.this,"Successfully Updated",Toast.LENGTH_SHORT).show();
+                }else if(getIntent().getStringExtra("hasdata").equals("3")){
+                    String fullname = regfullname.getText().toString();
+                    String username = regusername.getText().toString();
+                    String password = regpassword.getText().toString();
+                    String email = regemail.getText().toString();
+                    String storename = regstorename.getText().toString();
+                    String phone = regphone.getText().toString();
+                    String accountype = "Admin";
+                    String Destlongt = longt.getText().toString();
+                    String Deslati = lati.getText().toString();
+                    String Address = address.getText().toString();
+                    String image = "https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png";
+
+
+                    //view usally use for storeowner for their store rating
+                    helper_user helper_user = new helper_user(fullname,username,password,email,storename,phone,accountype,Destlongt,Deslati,image,"1","1",Address);
+                    reference.child(username).setValue(helper_user);
+
+                    Toast.makeText(signupstaff.this,"Successfully Updated",Toast.LENGTH_SHORT).show();
                 }else{
                     String fullname = regfullname.getText().toString();
                     String username = regusername.getText().toString();

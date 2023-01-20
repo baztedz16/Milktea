@@ -397,7 +397,7 @@ public class order_details extends AppCompatActivity {
                                 confirm.setVisibility(View.INVISIBLE);
                                 break;
                             default:
-                                simpleProgressBar.setProgress(100);
+                                simpleProgressBar.setProgress(0);
 
                         }
                     }
