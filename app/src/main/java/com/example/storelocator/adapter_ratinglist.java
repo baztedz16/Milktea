@@ -43,7 +43,7 @@ public class adapter_ratinglist extends RecyclerView.Adapter<adapter_ratinglist.
         helper_review reviews = list.get(position);
         holder.username.setText(reviews.getUser());
         holder.date.setText(reviews.getOrder_date());
-        holder.comment.setText(reviews.getComment());
+        holder.comment.setText(reviews.getComment() +"  \n"+ reviews.getRatingtype()+" Rating" );
         holder.storerating.setRating((float) Double.parseDouble(reviews.getRating_count()));
         holder.storerating.setEnabled(false);
 

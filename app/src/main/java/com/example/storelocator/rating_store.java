@@ -65,7 +65,7 @@ accept.setVisibility(View.INVISIBLE);
                             case DialogInterface.BUTTON_POSITIVE:
                                 rootNode = FirebaseDatabase.getInstance();
                                 reference = rootNode.getReference("orders").child(orderid.getText().toString());
-                                    reference.child("status").setValue("10");
+                                    reference.child("status").setValue("5");
                                     Toast.makeText(getApplicationContext(),"Order: "+ orderid.getText().toString()+" Succesfully Accepted",Toast.LENGTH_SHORT).show();
                                 break;
 
@@ -113,7 +113,7 @@ accept.setVisibility(View.INVISIBLE);
                                 Toast.makeText(getApplicationContext(),"Order: "+ id+" Rating Submitted",Toast.LENGTH_SHORT).show();
                                 rootNode = FirebaseDatabase.getInstance();
                                 reference = rootNode.getReference("orders").child(orderid.getText().toString());
-                                reference.child("status").setValue("10");
+                                reference.child("status").setValue("5");
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -157,7 +157,7 @@ accept.setVisibility(View.INVISIBLE);
                                 Toast.makeText(getApplicationContext(),"Order: "+ id+" Service Rating Submitted",Toast.LENGTH_SHORT).show();
                                 rootNode = FirebaseDatabase.getInstance();
                                 reference = rootNode.getReference("orders").child(orderid.getText().toString());
-                                reference.child("status").setValue("10");
+                                reference.child("status").setValue("5");
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:

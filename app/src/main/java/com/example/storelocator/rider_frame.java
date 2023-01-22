@@ -28,7 +28,9 @@ public class rider_frame extends AppCompatActivity {
         vp = findViewById(R.id.viewpager);
         viewpager_ridersframe = new viewpager_ridersframe(this);
         vp.setAdapter(viewpager_ridersframe);
-
+        SharedPreferences preferences = rider_frame.this.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String user = preferences.getString("username","");
+        getSupportActionBar().setTitle(user);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -63,9 +65,8 @@ public class rider_frame extends AppCompatActivity {
             startActivity(intent);
         }else if(item_id == R.id.Account){
 
-            SharedPreferences preferences1 = this.getSharedPreferences("user", Context.MODE_PRIVATE);
             Intent intent = new Intent(rider_frame.this,signupstaff.class);
-            intent.putExtra("storeSelect","N/A");
+            intent.putExtra("storeSelect",staffstore);
             intent.putExtra("fullname",preferences.getString("fullname",""));
             intent.putExtra("username",preferences.getString("username",""));
             intent.putExtra("email",preferences.getString("email",""));

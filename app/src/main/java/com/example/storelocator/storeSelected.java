@@ -209,7 +209,7 @@ public class storeSelected extends AppCompatActivity {
 
 
 
-        Toast.makeText(storeSelected.this,"Successfully Register",Toast.LENGTH_SHORT).show();
+        Toast.makeText(storeSelected.this,"Successfully Uploaded",Toast.LENGTH_SHORT).show();
 
         // While the file names are the same, the references point to different files
         mountainsRef.getName().equals(mountainImagesRef.getName());    // true

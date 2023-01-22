@@ -124,6 +124,9 @@ public class rider_list_reports extends Fragment {
         myAdapter = new adapter_rider_payables(view.getContext(),list);
         listpayables.setAdapter(myAdapter);
         //defaultview();
+//        if(!accountype.equals("Rider")){
+//            payablesbtn.setText("");
+//        }
         if(accountype.equals("STAFF")){
             rdate.setVisibility(View.INVISIBLE);
             reportdate.setVisibility(View.INVISIBLE);
@@ -316,7 +319,7 @@ public class rider_list_reports extends Fragment {
             @Override
             public void onClick(View view) {
                 if(reportdate.getText().toString().equals("") || reportdate.getText().toString().isEmpty()){
-                    Toast.makeText(getContext(),"Please Select Date",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Select Date",Toast.LENGTH_SHORT).show();
                 }else{
                     AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                     if(!status.getText().equals("Under review") && !status.getText().equals("Approved")){
@@ -364,6 +367,8 @@ public class rider_list_reports extends Fragment {
                                     reference.child("rider").setValue(ridername);
                                     reference.child("amount").setValue(tpayables.getText().toString());
                                     reference.child("txntype").setValue("rec");
+                                    Toast.makeText(getContext()," Paybles Submitted",Toast.LENGTH_SHORT).show();
+
 //                    //OR
 //                    String YouEditTextValue = edittext.getText().toString();
                                 }
@@ -505,6 +510,7 @@ public class rider_list_reports extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 double totalpayablesdata = 0.0;
                 double totalfeeAdmin = 0.0;
+                double totalRiderFee = 0.0;
                 //Log.i("R",editTextname.getText().toString());
                 if (dataSnapshot.exists()) {
                     list.clear();
@@ -518,6 +524,7 @@ public class rider_list_reports extends Fragment {
                                 Log.i("R","1");
                                 totalpayablesdata = totalpayablesdata+Double.parseDouble(orders.getOrder_total().toString());
                                 totalfeeAdmin = totalfeeAdmin+(10*orders.getItemcount());
+                                totalRiderFee = totalRiderFee+60;
                             }
                         }else{
                             if(orders.getRider().equals(rider) && orders.getDate_order().equals(date)){
@@ -530,8 +537,9 @@ public class rider_list_reports extends Fragment {
                         }
                     }
                     totalpayables.setText(String.valueOf(totalpayablesdata));
-                    totalfee.setText(String.valueOf(totalfeeAdmin));
-                    tpayables.setText(String.valueOf(totalpayablesdata - totalfeeAdmin));
+                    DelFee.setText("Admin Fee: "+totalfeeAdmin+" Rider Shares: "+ totalRiderFee);
+                    totalfee.setText(String.valueOf(totalfeeAdmin+totalRiderFee));
+                    tpayables.setText(String.valueOf(totalpayablesdata - (totalfeeAdmin+totalRiderFee)));
                     getrecievables(date);
                     Collections.reverse(list);
                     myAdapter.notifyDataSetChanged();

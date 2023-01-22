@@ -211,6 +211,8 @@ public class store_owner extends AppCompatActivity {
                     }else if(itemname.getText().toString().equals("") || itemname.getText().toString().equals(null)){
                         Snackbar.make(findViewById(android.R.id.content),"Please add product name!!",Snackbar.LENGTH_SHORT).show();
 
+                    }else if(price1.getText().toString().equals("") || price2.getText().toString().equals("") || price3.getText().toString().equals("")){
+                        Toast.makeText(getApplicationContext(),"Please Fill all Fields",Toast.LENGTH_SHORT).show();
                     }else{
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                             if(!list.stream().map(helper_product ::getParoductName).anyMatch(itemname.getText().toString()::equals)){
@@ -491,7 +493,22 @@ public class store_owner extends AppCompatActivity {
             Intent intent = new Intent(this,activity_storeratings.class);
             intent.putExtra("storeSelect",store.getText().toString());
             startActivity(intent);
-        }
+        }else if(item_id == R.id.account){
+                SharedPreferences preferences1 = this.getSharedPreferences("user", Context.MODE_PRIVATE);
+                Intent intent = new Intent(this,signupstaff.class);
+                intent.putExtra("storeSelect",store.getText().toString());
+                intent.putExtra("fullname",preferences.getString("fullname",""));
+                intent.putExtra("username",preferences.getString("username",""));
+                intent.putExtra("email",preferences.getString("email",""));
+                intent.putExtra("password",preferences.getString("password",""));
+                intent.putExtra("phone",preferences.getString("phone",""));
+                intent.putExtra("address",preferences.getString("address",""));
+                intent.putExtra("long",preferences.getString("longti",""));
+                intent.putExtra("lat",preferences.getString("lati",""));
+                intent.putExtra("action",preferences.getString("1",""));
+                intent.putExtra("hasdata","2");
+                startActivity(intent);
+            }
 
         return true;
     }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -50,6 +51,7 @@ public class adapter_userlist extends RecyclerView.Adapter<adapter_userlist.MyVi
         //holder.getOrder.setVisibility(View.INVISIBLE);
         holder.accountname.setText(user.getFullname());
         holder.accountype.setText(user.getAccountype());
+        holder.storeListAdd.setText(user.getStorename());
 
         if(user.getAccountype().equals("Store Owner")){
             holder.ratings.setVisibility(View.VISIBLE);
@@ -111,6 +113,7 @@ public class adapter_userlist extends RecyclerView.Adapter<adapter_userlist.MyVi
                         reference = rootNode.getReference("users").child(user.getUsername());
                         //reference.setValue("sample");
                         reference.child("activation").setValue("1");
+                        Toast.makeText(view.getContext(), "(Account is active)",Toast.LENGTH_SHORT).show();
 //                    //OR
 //                    String YouEditTextValue = edittext.getText().toString();
                     }
@@ -139,6 +142,7 @@ public class adapter_userlist extends RecyclerView.Adapter<adapter_userlist.MyVi
                         reference = rootNode.getReference("users").child(user.getUsername());
                         //reference.setValue("sample");
                         reference.child("activation").setValue("0");
+                        Toast.makeText(view.getContext(), "(Account is inactive)",Toast.LENGTH_SHORT).show();
 //                    //OR
 //                    String YouEditTextValue = edittext.getText().toString();
                     }
@@ -162,7 +166,7 @@ public class adapter_userlist extends RecyclerView.Adapter<adapter_userlist.MyVi
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView accountname,accountype,status;
+        TextView accountname,accountype,status,storeListAdd;
         Button activate,deactivate,ratings;
         public MyViewHolder(@NonNull View itemView){
             super(itemView);
@@ -172,6 +176,7 @@ public class adapter_userlist extends RecyclerView.Adapter<adapter_userlist.MyVi
             activate = itemView.findViewById(R.id.activate);
             deactivate = itemView.findViewById(R.id.deactivate);
             ratings = itemView.findViewById(R.id.ratings);
+            storeListAdd = itemView.findViewById(R.id.storeListAdd);
         }
     }
 }

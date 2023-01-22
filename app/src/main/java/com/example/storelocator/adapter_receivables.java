@@ -72,6 +72,7 @@ public class adapter_receivables extends RecyclerView.Adapter<adapter_receivable
                             reference = rootNode.getReference("payables").child(user.getRider()+user.getDate_topay().replace("/",""));
                             //reference.setValue("sample");
                             reference.child("status").setValue("Approved");
+                            Toast.makeText(view.getContext(), "(Receivables Approved)",Toast.LENGTH_SHORT).show();
 //                    //OR
 //                    String YouEditTextValue = edittext.getText().toString();
                         }
@@ -106,11 +107,13 @@ public class adapter_receivables extends RecyclerView.Adapter<adapter_receivable
                                 reference = rootNode.getReference("storereceivables").child(user.getRider()+user.getDate_topay().replace("/",""));
                                 reference.child("reference_no").setValue(input.getText().toString());
                                 reference.child("status").setValue("Approved");
+                                Toast.makeText(view.getContext(), "(Payables Approved)",Toast.LENGTH_SHORT).show();
                             }
 
 //                    //OR
 //                    String YouEditTextValue = edittext.getText().toString();
                         }
+
                     });
 
                     alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -144,6 +147,7 @@ public class adapter_receivables extends RecyclerView.Adapter<adapter_receivable
                             reference = rootNode.getReference("payables").child(user.getRider()+user.getDate_topay().replace("/",""));
                             //reference.setValue("sample");
                             reference.child("status").setValue(edittext.getText().toString());
+                            Toast.makeText(view.getContext(), "(Receivable Rejected)",Toast.LENGTH_SHORT).show();
 //                    //OR
 //                    String YouEditTextValue = edittext.getText().toString();
                         }

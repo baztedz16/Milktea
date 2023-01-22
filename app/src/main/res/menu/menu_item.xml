@@ -9,6 +9,12 @@
 
         <menu>
             <item
+                android:id="@+id/account"
+                android:title="Account"
+                app:showAsAction="never"
+                >
+            </item>
+            <item
                 android:id="@+id/store"
                 android:title="Store"
                 app:showAsAction="never"

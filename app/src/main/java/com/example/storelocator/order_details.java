@@ -14,6 +14,8 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,6 +31,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowInsets;
@@ -102,7 +105,7 @@ public class order_details extends AppCompatActivity {
 
          super.onCreate(savedInstanceState);
          setContentView(R.layout.activity_order_details);
-
+         getSupportActionBar().setTitle("Order Status");
          storage = FirebaseStorage.getInstance();
          ref = storage.getReference();
 
@@ -390,6 +393,9 @@ public class order_details extends AppCompatActivity {
                                 status.setText("Delivery Completed");
                                 accept.setText("Ratings");
                                 confirm.setText("Delivered");
+                                if(preferences.getString("accountype","").equals("User")){
+                                    accept.setVisibility(View.VISIBLE);
+                                }
                                 button4.setVisibility(View.INVISIBLE);
                                 button5.setVisibility(View.INVISIBLE);
 
@@ -529,12 +535,33 @@ public class order_details extends AppCompatActivity {
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cR.getType(uri));
     }
+    public void startLoadingdialog() {
+
+        // adding ALERT Dialog builder object and passing activity as parameter
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // layoutinflater object and use activity to get layout inflater
+        LayoutInflater inflater = this.getLayoutInflater();
+        builder.setView(inflater.inflate(R.layout.loading, null));
+        builder.setCancelable(false);
+
+        AlertDialog dialog = builder.create();
+            dialog.show();
+    }
+
+    // dismiss method
+
     public void ConfirmDelivery(){
+
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
+                        ProgressDialog pd = new ProgressDialog(order_details.this);
+                        pd.setMessage("Finishing Delivery");
+                        pd.show();
+
                         // Create a reference to "mountains.jpg"
                         final Long randomkey= System.currentTimeMillis();
                         StorageReference mountainsRef = ref.child(String.valueOf(randomkey)+"."+getFileExt(stringUri));
@@ -548,7 +575,7 @@ public class order_details extends AppCompatActivity {
 
 
 
-                        Toast.makeText(order_details.this,"Order Successful",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(order_details.this,"Order Successful",Toast.LENGTH_SHORT).show();
 
                         // While the file names are the same, the references point to different files
                         mountainsRef.getName().equals(mountainImagesRef.getName());    // true
@@ -556,7 +583,7 @@ public class order_details extends AppCompatActivity {
                         mountainsRef.putFile(stringUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
+                                pd.hide();
                                 Snackbar.make(findViewById(android.R.id.content),"Image Uplaoded",Snackbar.LENGTH_SHORT).show();
 
                                 mountainsRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {

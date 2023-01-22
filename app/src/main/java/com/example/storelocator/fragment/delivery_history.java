@@ -146,9 +146,9 @@ public class delivery_history extends Fragment {
         String staffstore = preferences.getString("Store","");
 
         if(accountype.equals("Rider")){
-            query1=reference.child("orders").orderByChild("status").equalTo("10");
+            query1=reference.child("orders").orderByChild("status").equalTo("5");
         }else{
-            query1=reference.child("orders").orderByChild("status").equalTo("10");
+            query1=reference.child("orders").orderByChild("status").equalTo("5");
         }
 
         query1.addValueEventListener(new ValueEventListener() {

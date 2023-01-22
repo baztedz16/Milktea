@@ -195,6 +195,7 @@ public class activity_login extends AppCompatActivity {
                                     editor = preferences.edit();
                                     editor.putString("username",enterUsername);
                                     editor.putString("accountype",userType);
+                                    editor.putString("password",passwordDB);
                                     editor.putString("address",address);
                                     editor.putString("longti",longti);
                                     editor.putString("lati",lati);
@@ -224,6 +225,7 @@ public class activity_login extends AppCompatActivity {
                                     editor = preferences.edit();
                                     editor.putString("username",enterUsername);
                                     editor.putString("accountype",userType);
+                                    editor.putString("password",passwordDB);
                                     editor.putString("address",address);
                                     editor.putString("longti",longti);
                                     editor.putString("lati",lati);
@@ -248,9 +250,14 @@ public class activity_login extends AppCompatActivity {
                                     editor = preferences.edit();
                                     editor.putString("username",enterUsername);
                                     editor.putString("accountype",userType);
+                                    editor.putString("password",passwordDB);
                                     editor.putString("Store",storeName);
+                                    editor.putString("phone",phone);
                                     editor.putString("fullname",fullname);
                                     editor.putString("email",email);
+                                    editor.putString("address",address);
+                                    editor.putString("longti",longti);
+                                    editor.putString("lati",lati);
                                     editor.commit();
                                     startActivity(intent2);
                                     finish();
@@ -263,7 +270,11 @@ public class activity_login extends AppCompatActivity {
                                     editor = preferences.edit();
                                     editor.putString("username",enterUsername);
                                     editor.putString("accountype",userType);
+                                    editor.putString("password",passwordDB);
                                     editor.putString("Store","");
+                                    editor.putString("address",address);
+                                    editor.putString("longti",longti);
+                                    editor.putString("lati",lati);
                                     editor.putString("phone",phone);
                                     editor.putString("fullname",fullname);
                                     editor.putString("email",email);
@@ -285,7 +296,14 @@ public class activity_login extends AppCompatActivity {
 
                                     editor.putString("username",enterUsername);
                                     editor.putString("accountype",userType);
+                                    editor.putString("password",passwordDB);
                                     editor.putString("Store",storeName);
+                                    editor.putString("address",address);
+                                    editor.putString("longti",longti);
+                                    editor.putString("lati",lati);
+                                    editor.putString("phone",phone);
+                                    editor.putString("fullname",fullname);
+                                    editor.putString("email",email);
                                     editor.commit();
 
 
@@ -305,7 +323,12 @@ public class activity_login extends AppCompatActivity {
                                     editor = preferences.edit();
                                     editor.putString("username",enterUsername);
                                     editor.putString("accountype",userType);
+                                    editor.putString("password",passwordDB);
                                     editor.putString("Store",storeName);
+                                    editor.putString("address",address);
+                                    editor.putString("longti",longti);
+                                    editor.putString("lati",lati);
+                                    editor.putString("phone",phone);
                                     editor.putString("fullname",fullname);
                                     editor.putString("email",email);
                                     editor.commit();

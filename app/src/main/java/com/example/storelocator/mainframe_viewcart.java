@@ -322,9 +322,15 @@ public class mainframe_viewcart extends AppCompatActivity {
                         }
 
                     }
+                    if(list.isEmpty()){
+                        buttonStoreList.setVisibility(View.INVISIBLE);
+                    }else{
+                        buttonStoreList.setVisibility(View.VISIBLE);
+                    }
                     myAdapter.notifyDataSetChanged();
                 }else{
                     Log.i("R","6");
+
                     //Log.i("R",searchtext);
                 }
             }

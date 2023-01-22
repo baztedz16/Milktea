@@ -9,10 +9,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,6 +33,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class activity_storeratings extends AppCompatActivity {
     TextView storename;
@@ -39,6 +44,7 @@ public class activity_storeratings extends AppCompatActivity {
     int ii = 0;
     ArrayList<String> list2;
     RecyclerView ratinglist;
+    Spinner sortingspinner;
 
     DatabaseReference reference =FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
 
@@ -50,7 +56,7 @@ public class activity_storeratings extends AppCompatActivity {
         storename = findViewById(R.id.storename);
         storerating = findViewById(R.id.storerating);
         ratinglist = findViewById(R.id.ratinglist);
-
+        sortingspinner = findViewById(R.id.SortSpin);
         storerating.setEnabled(false);
 
 
@@ -60,14 +66,29 @@ public class activity_storeratings extends AppCompatActivity {
         list = new ArrayList<>();
         myAdapter = new adapter_ratinglist(this,list);
         ratinglist.setAdapter(myAdapter);
-
-
+        Spinner spinner= (Spinner) findViewById(R.id.SortSpin);
+        ArrayAdapter<String> list = new ArrayAdapter<String>(activity_storeratings.this
+                ,android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.sorting_rating));
+        list.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(list);
 
 
         storename.setText(getIntent().getStringExtra("storeSelect"));
         //view product listed to the mainframe
 
         defaultview();
+
+        sortingspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                sorting();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
 
     }
@@ -88,14 +109,13 @@ public class activity_storeratings extends AppCompatActivity {
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_review review = snapshot.getValue(helper_review.class);
-                        if(review.getRatingtype().equals("Store")){
                             list.add(review);
                             totalrating = totalrating+ Double.parseDouble(review.getRating_count());
                             reviewcount=reviewcount+1;
-                        }
 
                     }
-                    storerating.setRating((float) totalrating/5);
+                    storerating.setRating((float) totalrating/reviewcount);
+                    Collections.reverse(list);
                     myAdapter.notifyDataSetChanged();
                 }else{
                     Log.i("error at default:","6"+getIntent().getStringExtra("storeName"));
@@ -108,6 +128,24 @@ public class activity_storeratings extends AppCompatActivity {
 
             }
         });
+    }
+    private void sorting(){
+       if(sortingspinner.getSelectedItemId() == 1){
+           Collections.sort(list, new Comparator<helper_review>() {
+               @Override
+               public int compare(helper_review o1, helper_review o2) {
+                   return Double.parseDouble(o1.getRating_count()) < Double.parseDouble(o2.getRating_count()) ? -1 : Double.parseDouble(o1.getRating_count()) < Double.parseDouble(o2.getRating_count()) ? 1 : 0;
+               }
+           });
+       }else {
+           Collections.sort(list, new Comparator<helper_review>() {
+               @Override
+               public int compare(helper_review o1, helper_review o2) {
+                   return Double.parseDouble(o1.getRating_count()) > Double.parseDouble(o2.getRating_count()) ? -1 : Double.parseDouble(o1.getRating_count()) > Double.parseDouble(o2.getRating_count()) ? 1 : 0;
+               }
+           });
+       }
+        myAdapter.notifyDataSetChanged();
     }
 
 

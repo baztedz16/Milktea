@@ -15,10 +15,18 @@
     <string name="Fullname">Fullname</string>
     <string name="Phone">Phone</string>
     <string name="Address">Address</string>
+    <string-array name="store_status">
+        <item>InActive</item>
+        <item>Active</item>
+    </string-array>
+    <string-array name="sorting_rating">
+        <item>HIGHEST TO LOWEST</item>
+        <item>LOWEST TO HIGHEST</item>
+    </string-array>
+
     <string-array name="account_type">
         <item>User</item>
         <item>Store Owner</item>
-        <item>Admin</item>
         <item>Rider</item>
     </string-array>
     <string-array name="sorting">
