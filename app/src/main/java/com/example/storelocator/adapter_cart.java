@@ -1,7 +1,12 @@
 package com.example.storelocator;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +33,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class adapter_cart extends RecyclerView.Adapter<adapter_cart.MyViewHolder> {
 
@@ -83,17 +92,17 @@ public class adapter_cart extends RecyclerView.Adapter<adapter_cart.MyViewHolder
 
             }
         });
-        holder.addselect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                //commit prefs on change
-                if(isChecked){
-                    System.out.println(" is ding true");
-                }else{
-                    System.out.println(" is ding false");
-                }
-            }
-        });
+//        holder.addselect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//
+//                //commit prefs on change
+//                if(isChecked){
+//                    System.out.println(" is ding true");
+//                }else{
+//                    System.out.println(" is ding false");
+//                }
+//            }
+//        });
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,8 +151,59 @@ public class adapter_cart extends RecyclerView.Adapter<adapter_cart.MyViewHolder
                 reference.child("qty").setValue(holder.qty.getText().toString());
             }
         });
-    }
+        holder.addons.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences preferences;
+                SharedPreferences.Editor editor;
 
+                preferences = context.getSharedPreferences("currentOrder",context.MODE_PRIVATE);
+                editor = preferences.edit();
+                editor.putString("orderid",product.getCartid());
+                editor.putString("value",product.getPrice());
+                editor.commit();
+                DialogFragment newFragment = addons_dialogfragment.newInstance(
+                        R.string.alert_dialog_two_buttons_title);
+
+                newFragment.show( ((AppCompatActivity)context).getSupportFragmentManager(), "dialog");
+            }
+        });
+    }
+//    public void defaultview(){
+//        SharedPreferences sh = context.getSharedPreferences("user", context.MODE_PRIVATE);
+//
+//        String storename = sh.getString("store", "");
+//        Query query1=reference.child("products").orderByChild("store").startAt(storename).endAt(storename+"\uf8ff");
+//        query1.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Log.i("R",storename);
+//                double totalrating = 0.0;
+//                int reviewcount = 0;
+//                if (dataSnapshot.exists()) {
+//                    list2.clear();
+//                    Log.i("R","4");
+//
+//                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                        helper_product addonss = snapshot.getValue(helper_product.class);
+//                        list2.add(addonss);
+//
+//
+//                    }
+//                    Collections.reverse(list2);
+//                    myAdapter.notifyDataSetChanged();
+//                }else{
+//                    //Log.i("error at default:","6"+getIntent().getStringExtra("storeName"));
+//                    //Log.i("R",searchtext);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
     @Override
     public int getItemCount() {
         return list.size();
@@ -152,17 +212,17 @@ public class adapter_cart extends RecyclerView.Adapter<adapter_cart.MyViewHolder
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         TextView itemName,itemName1,itemID,owner,qty,price;
         Switch addselect ;
-        Button remove,add;
+        Button remove,add,addons;
         ImageView itemImage;
         public MyViewHolder(@NonNull View itemView){
             super(itemView);
+            addons = itemView.findViewById(R.id.addons);
             itemName = itemView.findViewById(R.id.itemNameList);
             itemName1 = itemView.findViewById(R.id.storeListName);
             itemImage = itemView.findViewById(R.id.imageShow);
             itemID = itemView.findViewById(R.id.itemid);
             qty = itemView.findViewById(R.id.qty);
             price  = itemView.findViewById(R.id.price);
-            addselect = itemView.findViewById(R.id.switch1);
             //owner= itemView.findViewById(R.id.ownerId);
             remove= itemView.findViewById(R.id.remove);
             add= itemView.findViewById(R.id.add);

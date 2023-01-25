@@ -368,10 +368,12 @@ public class order_details extends AppCompatActivity {
                             case "1":
                                 simpleProgressBar.setProgress(25);
                                 status.setText("Store Preparing your order");
+                                calltxt.setVisibility(View.INVISIBLE);
                                 break;
                             case "2":
                                 simpleProgressBar.setProgress(50);
                                 status.setText("You Found a Rider");
+                                calltxt.setVisibility(View.VISIBLE);
                                 break;
                             case "3":
                                 simpleProgressBar.setProgress(75);
@@ -380,6 +382,7 @@ public class order_details extends AppCompatActivity {
                             case "4":
                                 simpleProgressBar.setProgress(100);
                                 status.setText("Rider on the way...");
+                                accept.setVisibility(View.INVISIBLE);
                                 if(accountype.equals("Rider")){
                                     confirm.setVisibility(View.VISIBLE);
                                 }
@@ -389,6 +392,7 @@ public class order_details extends AppCompatActivity {
 
                                 break;
                             case "5":
+                                accept.setVisibility(View.VISIBLE);
                                 simpleProgressBar.setProgress(100);
                                 status.setText("Delivery Completed");
                                 accept.setText("Ratings");

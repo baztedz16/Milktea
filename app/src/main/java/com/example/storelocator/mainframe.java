@@ -271,8 +271,10 @@ public class mainframe extends AppCompatActivity {
                     Log.i("R","4");
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_product product = snapshot.getValue(helper_product.class);
+                        if(!product.getPricesm().equals("0") && !product.getPricemd().equals("0") && !product.getPricelg().equals("0")){
+                            list.add(product);
+                        }
 
-                        list.add(product);
                     }
                     myAdapter.notifyDataSetChanged();
                 }else{
@@ -343,7 +345,9 @@ public class mainframe extends AppCompatActivity {
                             list.add(product);
                         }else{
                             if(cat.equals(product.getCategory())){
-                                list.add(product);
+                                if(!product.getPricesm().equals("0") && !product.getPricemd().equals("0") && !product.getPricelg().equals("0")){
+                                    list.add(product);
+                                }
                             }
                         }
 

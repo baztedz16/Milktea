@@ -72,7 +72,8 @@ public class admin_list_account extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                defaultview(spinner.getSelectedItem().toString());
+                String acctype = spinner.getSelectedItem().toString();
+                defaultview();
             }
 
             @Override

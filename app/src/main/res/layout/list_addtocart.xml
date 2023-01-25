@@ -12,9 +12,8 @@
         android:layout_width="match_parent"
 
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_margin="0dp"
-        >
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -40,9 +39,9 @@
                         android:id="@+id/itemNameList"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
+                        android:text="TextView"
                         android:textSize="18dp"
-                        android:text="TextView" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/storeListName"
@@ -100,10 +99,18 @@
 
         </RelativeLayout>
 
-        <Switch
-            android:id="@+id/switch1"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="" />
+            android:layout_height="37dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/addons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Ons" />
+        </LinearLayout>
+
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>

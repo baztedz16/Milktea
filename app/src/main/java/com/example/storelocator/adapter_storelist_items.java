@@ -89,6 +89,28 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
         holder.textpricemd.setText(msize);
         holder.textpricelg.setText(lsize);
 
+        if(product.getPricesm().equals("0")){
+            holder.small.setVisibility(View.INVISIBLE);
+            holder.textpricesm.setVisibility(View.INVISIBLE);
+        }else{
+            holder.small.setVisibility(View.VISIBLE);
+            holder.textpricesm.setVisibility(View.VISIBLE);
+        }
+        if(product.getPricemd().equals("0")){
+            holder.medium.setVisibility(View.INVISIBLE);
+            holder.textpricemd.setVisibility(View.INVISIBLE);
+        }else{
+            holder.medium.setVisibility(View.VISIBLE);
+            holder.textpricemd.setVisibility(View.VISIBLE);
+        }
+        if(product.getPricelg().equals("0")){
+            holder.large.setVisibility(View.INVISIBLE);
+            holder.textpricelg.setVisibility(View.INVISIBLE);
+        }else{
+            holder.large.setVisibility(View.VISIBLE);
+            holder.textpricelg.setVisibility(View.VISIBLE);
+        }
+
         get_Myloc();
 
         float[] result = new float[1];
@@ -211,6 +233,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
 
             @Override
             public void onClick(View view) {
+                Toast.makeText(view.getContext(), "Small " + product.getParoductName()+" Added",Toast.LENGTH_SHORT).show();
                 rootNode = FirebaseDatabase.getInstance();
                 reference = rootNode.getReference("cart");
                 String id = reference.push().getKey();
@@ -294,6 +317,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
 
             @Override
             public void onClick(View view) {
+                Toast.makeText(view.getContext(), "Medium " + product.getParoductName()+" Added",Toast.LENGTH_SHORT).show();
                 rootNode = FirebaseDatabase.getInstance();
                 reference = rootNode.getReference("cart");
                 String id = reference.push().getKey();
@@ -377,6 +401,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
 
             @Override
             public void onClick(View view) {
+                Toast.makeText(view.getContext(), "Large " + product.getParoductName()+" Added",Toast.LENGTH_SHORT).show();
                 rootNode = FirebaseDatabase.getInstance();
                 reference = rootNode.getReference("cart");
                 String id = reference.push().getKey();
