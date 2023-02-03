@@ -60,6 +60,8 @@ public class admin_frame extends AppCompatActivity {
             Intent intent = new Intent(admin_frame.this, activity_login.class);
             intent.putExtra("storeSelect",getIntent().getStringExtra("store"));
             startActivity(intent);
+            finishAffinity();
+
         }else if(item_id == R.id.Account){
 
             SharedPreferences preferences1 = this.getSharedPreferences("user", Context.MODE_PRIVATE);
@@ -76,6 +78,7 @@ public class admin_frame extends AppCompatActivity {
             intent.putExtra("action",preferences.getString("1",""));
             intent.putExtra("hasdata","3");
             startActivity(intent);
+
         }
         return true;
     }

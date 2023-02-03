@@ -107,7 +107,7 @@
             <Button
                 android:id="@+id/addons"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="1dp"
                 android:text="Add Ons" />
         </LinearLayout>
 

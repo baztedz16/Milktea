@@ -45,6 +45,7 @@ public class mainframe extends AppCompatActivity {
     ArrayList<helper_product> list;
     adapter_storelist_items myAdapter;
     int ii = 0;
+    int cartValue =0,totalitems=0 ;
     ArrayList<String> list2;
     adapter_storelist_category myAdapter2;
     RecyclerView recyclerView,recyclerViewcatlist;
@@ -111,6 +112,7 @@ public class mainframe extends AppCompatActivity {
 
         defaultview();
         defaultview2();
+        countItems();
 
 
 
@@ -191,8 +193,10 @@ public class mainframe extends AppCompatActivity {
                                     Log.i("R","4");
                                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                         helper_product product = snapshot.getValue(helper_product.class);
+                                       if(product.getStoreOwner().equals(getIntent().getStringExtra("storeName"))){
+                                           list.add(product);
+                                        }
 
-                                        list.add(product);
                                     }
                                     myAdapter.notifyDataSetChanged();
                                 }else{
@@ -253,7 +257,46 @@ public class mainframe extends AppCompatActivity {
     }
 
 
+    public void countItems(){
+        SharedPreferences sh = getSharedPreferences("user", MODE_PRIVATE);
+        String store = sh.getString("store", "");
+        final String username = sh.getString("username","");
+        Query query1=reference.child("cart").orderByChild("username").equalTo(username);
+        Log.i("R",store);
+        query1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Log.i("R",editTextname.getText().toString());
+                cartValue=0;
+                totalitems=0;
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
+                        try{
+                            if(!snapshot.child("orderstatus").getValue().toString().equals("1") && snapshot.child("owner").getValue().equals(store)){
+                                helper_cart product = snapshot.getValue(helper_cart.class);
+                                cartValue = cartValue + (Integer.parseInt(snapshot.child("price").getValue().toString())*Integer.parseInt(snapshot.child("qty").getValue().toString()));
+                                totalitems = totalitems+1;
+                            }
+                            viewCart.setText("VIEWCART("+totalitems+")");
+                        }catch(Exception e){
+                            Log.i("Error",e.toString());
+                        }
+
+                    }
+                }else{
+                    Log.i("R","6");
+
+                    //Log.i("R",searchtext);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
     public void defaultview(){
         SharedPreferences preferences;
         SharedPreferences.Editor editor;
@@ -345,7 +388,9 @@ public class mainframe extends AppCompatActivity {
                             list.add(product);
                         }else{
                             if(cat.equals(product.getCategory())){
-                                if(!product.getPricesm().equals("0") && !product.getPricemd().equals("0") && !product.getPricelg().equals("0")){
+                                if(product.getPricesm().equals("0") && product.getPricemd().equals("0") && product.getPricelg().equals("0")){
+
+                                }else{
                                     list.add(product);
                                 }
                             }
@@ -398,6 +443,7 @@ public class mainframe extends AppCompatActivity {
             Intent intent = new Intent(mainframe.this, activity_login.class);
             intent.putExtra("storeSelect",getIntent().getStringExtra("store"));
             startActivity(intent);
+            finishAffinity();
         }
 
         return true;

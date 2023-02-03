@@ -445,6 +445,7 @@ public class store_owner extends AppCompatActivity {
             Intent intent = new Intent(store_owner.this, activity_login.class);
             intent.putExtra("storeSelect",getIntent().getStringExtra("store"));
             startActivity(intent);
+            finishAffinity();
         }else if(item_id == R.id.staff){
             Intent intent = new Intent(store_owner.this,store_owner_staff.class);
             intent.putExtra("storeSelect",getIntent().getStringExtra("store"));
@@ -478,6 +479,7 @@ public class store_owner extends AppCompatActivity {
 
                         helper_category helper_category = new helper_category(category,ref,storeowner);
                         reference.child(ref).setValue(helper_category);
+                        Toast.makeText(store_owner.this,"Category Successfully Added",Toast.LENGTH_SHORT).show();
                     }
 
                 }

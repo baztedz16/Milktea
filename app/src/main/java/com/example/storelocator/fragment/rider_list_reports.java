@@ -247,9 +247,9 @@ public class rider_list_reports extends Fragment {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 String mnth ="",dayt="";
                 if(month+1 < 10){
-                    mnth = ""+month+1;
+                    mnth = "0"+String.valueOf(month+1);
                 }else{
-                    mnth = String.valueOf(month+1);
+                    mnth = String.valueOf(month);
                 }
                 if(day < 10){
                     dayt = "0"+day;
@@ -426,7 +426,7 @@ public class rider_list_reports extends Fragment {
                             startdate = format.parse(date1);
                             enddate = format.parse(date2);
                             if(dateformdb.after(startdate) && dateformdb.before(enddate)){
-                                salesTotal = salesTotal + Double.parseDouble(orders.getOrder_total());
+
                                 if(accountype.equals("Rider")){
 
                                     if(map.containsKey(orders.getDate_order()) && orders.getRider().equals(ridername) ){
@@ -439,10 +439,13 @@ public class rider_list_reports extends Fragment {
                                     if(map.containsKey(orders.getDate_order()) && orders.getStore().equals(store) ){
                                         valueNew = Double.parseDouble(map.get(orders.getDate_order()))+ Double.parseDouble( orders.getOrder_total());
                                         map.put(orders.getDate_order(),String.valueOf(valueNew));
+                                        salesTotal = salesTotal + Double.parseDouble(orders.getOrder_total());
                                     }else{
                                         if(orders.getStore().equals(store)){
                                             map.put(orders.getDate_order(),orders.getOrder_total());
+                                            salesTotal = salesTotal + Double.parseDouble(orders.getOrder_total());
                                         }
+
 
                                     }
                                 }
@@ -502,7 +505,7 @@ public class rider_list_reports extends Fragment {
         if(accountype.equals("Rider")){
             query1=reference.child("orders").orderByChild("status").equalTo("5");
         }else{
-            query1=reference.child("orders");
+            query1=reference.child("orders").orderByChild("status").equalTo("5");
         }
 
         query1.addValueEventListener(new ValueEventListener() {
@@ -565,7 +568,7 @@ public class rider_list_reports extends Fragment {
         if(accountype.equals("Rider")){
             query1=reference.child("orders").orderByChild("status").equalTo("5");
         }else{
-            query1=reference.child("orders");
+            query1=reference.child("orders").orderByChild("status").equalTo("5");
         }
 
         query1.addValueEventListener(new ValueEventListener() {

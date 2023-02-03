@@ -313,7 +313,7 @@ public class mainframe_viewcart extends AppCompatActivity {
                                 Log.i("OS:",snapshot.child("orderstatus").getValue().toString());
                                 Log.i("Values",snapshot.child("price").getValue().toString() +"x"+ snapshot.child("qty").getValue().toString());
                                 cartValue = cartValue + (Integer.parseInt(snapshot.child("price").getValue().toString())*Integer.parseInt(snapshot.child("qty").getValue().toString()));
-                                totalitems = totalitems+1;
+                                totalitems = totalitems+Integer.parseInt(product.getQty());
                                 Log.i("OrderTotal:", String.valueOf(cartValue));
                                 list.add(product);
                             }

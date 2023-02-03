@@ -403,8 +403,10 @@ public class order_details extends AppCompatActivity {
                                 button4.setVisibility(View.INVISIBLE);
                                 button5.setVisibility(View.INVISIBLE);
 
+                                if(!accountype.equals("User")){
+                                    confirm.setVisibility(View.INVISIBLE);
+                                }
 
-                                confirm.setVisibility(View.INVISIBLE);
                                 break;
                             default:
                                 simpleProgressBar.setProgress(0);

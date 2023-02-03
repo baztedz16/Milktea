@@ -78,6 +78,7 @@ public class rider_frame extends AppCompatActivity {
             intent.putExtra("action",preferences.getString("1",""));
             intent.putExtra("hasdata","2");
             startActivity(intent);
+            finishAffinity();
         }
         return true;
     }
