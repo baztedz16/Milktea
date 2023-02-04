@@ -105,7 +105,7 @@ public class order_details extends AppCompatActivity {
 
          super.onCreate(savedInstanceState);
          setContentView(R.layout.activity_order_details);
-         getSupportActionBar().setTitle("Order Status");
+
          storage = FirebaseStorage.getInstance();
          ref = storage.getReference();
 
@@ -341,6 +341,7 @@ public class order_details extends AppCompatActivity {
                     Log.i("R", "OrderDetails");
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_order_rider order = snapshot.getValue(helper_order_rider.class);
+                        getSupportActionBar().setTitle("Order Status "+order.getDate_order());
                         latUser = order.getLati(); //getting the address to pass the location of the customer
                         longuser = order.getLongti();
                         getStoreDetails(order.getStore()); // passing the value to initiate the details of store
@@ -405,6 +406,10 @@ public class order_details extends AppCompatActivity {
 
                                 if(!accountype.equals("User")){
                                     confirm.setVisibility(View.INVISIBLE);
+
+                                }
+                                if(accountype.equals("rider") || accountype.equals("User")){
+                                    calltxt.setVisibility(View.INVISIBLE);
                                 }
 
                                 break;

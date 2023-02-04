@@ -93,9 +93,9 @@ public class delivery_history extends Fragment {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 String mnth ="",dayt="";
                 if(month+1 < 10){
-                    mnth = ""+month+1;
+                    mnth = "0"+String.valueOf(month+1);
                 }else{
-                    mnth = String.valueOf(month+1);
+                    mnth = String.valueOf(month);
                 }
                 if(day < 10){
                     dayt = "0"+day;
@@ -199,7 +199,7 @@ public class delivery_history extends Fragment {
         if(accountype.equals("Rider")){
             query1=reference.child("orders").orderByChild("status").equalTo("5");
         }else{
-            query1=reference.child("orders");
+            query1=reference.child("orders").orderByChild("status").equalTo("5");
         }
 
         query1.addValueEventListener(new ValueEventListener() {
@@ -211,7 +211,7 @@ public class delivery_history extends Fragment {
                     Log.i("R","4");
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_order_rider orders = snapshot.getValue(helper_order_rider.class);
-                        if(accountype.equals("STAFF") && orders.getDate_order().equals(date)){
+                        if((accountype.equals("STAFF") || accountype.equals("Store Owner")) && orders.getDate_order().equals(date)){
                             if(orders.getStore().equals(staffstore)){
                                 if(orders.getStore().equals(staffstore) ){
                                     list.add(orders);

@@ -37,7 +37,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class activity_storeratings extends AppCompatActivity {
-    TextView storename;
+    TextView storename,storerate;
     RatingBar storerating;
     ArrayList<helper_review> list;
     adapter_ratinglist myAdapter;
@@ -58,6 +58,7 @@ public class activity_storeratings extends AppCompatActivity {
         ratinglist = findViewById(R.id.ratinglist);
         sortingspinner = findViewById(R.id.SortSpin);
         storerating.setEnabled(false);
+        storerate = findViewById(R.id.ScoreRate);
 
 
         ratinglist.setHasFixedSize(true);
@@ -74,6 +75,7 @@ public class activity_storeratings extends AppCompatActivity {
 
 
         storename.setText(getIntent().getStringExtra("storeSelect"));
+
         //view product listed to the mainframe
 
         defaultview();
@@ -117,6 +119,7 @@ public class activity_storeratings extends AppCompatActivity {
                     storerating.setRating((float) totalrating/reviewcount);
                     Collections.reverse(list);
                     myAdapter.notifyDataSetChanged();
+                    storerate.setText("("+String.valueOf(totalrating/reviewcount)+")");
                 }else{
                     Log.i("error at default:","6"+getIntent().getStringExtra("storeName"));
                     //Log.i("R",searchtext);

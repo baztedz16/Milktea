@@ -98,6 +98,7 @@ public class signupstaff extends AppCompatActivity {
 
 
         progressBar = findViewById(R.id.progress);
+        regstorename.setVisibility(View.INVISIBLE);
         regstorename.setText(getIntent().getStringExtra("storeSelect"));
 
 

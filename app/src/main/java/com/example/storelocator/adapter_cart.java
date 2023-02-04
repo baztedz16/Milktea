@@ -63,6 +63,7 @@ public class adapter_cart extends RecyclerView.Adapter<adapter_cart.MyViewHolder
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         helper_cart product = list.get(position);
         holder.itemName.setText(product.getItmname());
+        holder.size.setText("  ("+product.getSize()+")");
         holder.itemID.setText(product.getCartid());
         holder.itemName1.setText(product.getOwner());
         holder.price.setText(product.getPrice());
@@ -210,7 +211,7 @@ public class adapter_cart extends RecyclerView.Adapter<adapter_cart.MyViewHolder
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView itemName,itemName1,itemID,owner,qty,price;
+        TextView itemName,itemName1,itemID,owner,qty,price,size;
         Switch addselect ;
         Button remove,add,addons;
         ImageView itemImage;
@@ -226,6 +227,7 @@ public class adapter_cart extends RecyclerView.Adapter<adapter_cart.MyViewHolder
             //owner= itemView.findViewById(R.id.ownerId);
             remove= itemView.findViewById(R.id.remove);
             add= itemView.findViewById(R.id.add);
+            size = itemView.findViewById(R.id.size);
         }
     }
 }

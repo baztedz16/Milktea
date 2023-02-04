@@ -73,7 +73,7 @@ public class admin_list_account extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String acctype = spinner.getSelectedItem().toString();
-                defaultview();
+                defaultview(acctype);
             }
 
             @Override

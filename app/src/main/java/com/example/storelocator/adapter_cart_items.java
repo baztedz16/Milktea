@@ -53,7 +53,7 @@ public class adapter_cart_items extends RecyclerView.Adapter<adapter_cart_items.
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         helper_cart product = list.get(position);
-        holder.itemName.setText(product.getItmname());
+        holder.itemName.setText(product.getItmname()+" ("+product.getSize()+")");
         holder.itemID.setText(product.getCartid());
         holder.storeListName.setText(product.getOwner());
         holder.qty.setText(product.getQty() + "  PC/S");

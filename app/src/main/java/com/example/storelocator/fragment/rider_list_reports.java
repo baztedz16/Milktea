@@ -3,11 +3,13 @@ package com.example.storelocator.fragment;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -101,7 +103,7 @@ public class rider_list_reports extends Fragment {
         totalfee = view.findViewById(R.id.totalfee);
         tpayables = view.findViewById(R.id.tpayables);
         totalTxt = view.findViewById(R.id.totalTxt);
-
+        exportcsv1= view.findViewById(R.id.genreport2);
         linear1=view.findViewById(R.id.linear1);
         linear2=view.findViewById(R.id.linear2);
         Totalpayables=view.findViewById(R.id.Totalpayables);
@@ -136,8 +138,19 @@ public class rider_list_reports extends Fragment {
             Totalpayables.setVisibility(View.INVISIBLE);
             status.setVisibility(View.INVISIBLE);
             payablesbtn.setVisibility(View.INVISIBLE);
+            exportcsv1.setVisibility(View.INVISIBLE);
         }
-
+        if(accountype.equals("rider")){
+            exportcsv1.setVisibility(View.INVISIBLE);
+        }
+        exportcsv1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uriUrl = Uri.parse("https://dentalclinicmng.000webhostapp.com/firabse-milktea_store/retrive_orders.php?StoreName="+storename);
+                Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                startActivity(launchBrowser);
+            }
+        });
         date1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -161,9 +174,9 @@ public class rider_list_reports extends Fragment {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 String mnth ="",dayt="";
                 if(month+1 < 10){
-                    mnth = ""+month+1;
+                    mnth = "0"+String.valueOf(month+1);
                 }else{
-                    mnth = String.valueOf(month+1);
+                    mnth = String.valueOf(month);
                 }
                 if(day < 10){
                     dayt = "0"+day;
@@ -198,9 +211,9 @@ public class rider_list_reports extends Fragment {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 String mnth ="",dayt="";
                 if(month+1 < 10){
-                    mnth = ""+month+1;
+                    mnth = "0"+String.valueOf(month+1);
                 }else{
-                    mnth = String.valueOf(month+1);
+                    mnth = String.valueOf(month);
                 }
                 if(day < 10){
                     dayt = "0"+day;

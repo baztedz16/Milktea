@@ -28,12 +28,31 @@
                 android:textSize="24dp"
                 android:text="Store Name" />
 
-            <RatingBar
-                android:id="@+id/storerating"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:max="5"
-                android:layout_weight="1" />
+
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/ScoreRate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:text="()"
+                    android:textSize="24dp"
+                    android:textStyle="bold" />
+
+                <RatingBar
+                    android:id="@+id/storerating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="5" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <Spinner

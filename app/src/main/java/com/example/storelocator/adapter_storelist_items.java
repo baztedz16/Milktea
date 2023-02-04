@@ -256,6 +256,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                 reference.child(id).child("owner").setValue(owner);
                 reference.child(id).child("delete").setValue("0");
                 reference.child(id).child("price").setValue(price);
+                reference.child(id).child("size").setValue("S");
                 reference.child(id).child("qty").setValue("1");
                 reference.child(id).child("orderstatus").setValue("0");
                 reference.child(id).child("itemrating").setValue("0");
@@ -339,6 +340,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                 reference.child(id).child("itmname").setValue(itmname);
                 reference.child(id).child("owner").setValue(owner);
                 reference.child(id).child("delete").setValue("0");
+                reference.child(id).child("size").setValue("M");
                 reference.child(id).child("price").setValue(price);
                 reference.child(id).child("qty").setValue("1");
                 reference.child(id).child("orderstatus").setValue("0");
@@ -423,6 +425,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
                 reference.child(id).child("itmname").setValue(itmname);
                 reference.child(id).child("owner").setValue(owner);
                 reference.child(id).child("delete").setValue("0");
+                reference.child(id).child("size").setValue("L");
                 reference.child(id).child("price").setValue(price);
                 reference.child(id).child("qty").setValue("1");
                 reference.child(id).child("orderstatus").setValue("0");

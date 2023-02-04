@@ -1,9 +1,10 @@
 package com.example.storelocator;
 
 public class helper_cart {
-    String img,itmname,owner,product,username,delete,cartid,qty,orderstatus,price,order_id,itemrating;
+    String img,itmname,owner,product,username,delete,cartid,qty,orderstatus,price,order_id,itemrating,size;
 
-    public helper_cart(String img,String itmname,String owner,String product,String username,String delete,String cartid,String qty,String orderstatus,String price,String order_id,String itemrating){
+    public helper_cart(String img,String itmname,String owner,String product,String username,String delete,String cartid,String qty,
+                       String orderstatus,String price,String order_id,String itemrating,String size){
         this.img = img;
         this.itmname = itmname;
         this.owner = owner;
@@ -16,6 +17,7 @@ public class helper_cart {
         this.price = price;
         this.order_id = order_id;
         this.itemrating = itemrating;
+        this.size = size;
 
 
 
@@ -118,5 +120,13 @@ public class helper_cart {
 
     public void setItemrating(String itemrating) {
         this.itemrating = itemrating;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 }

@@ -49,9 +49,9 @@ public class adapter_userlist extends RecyclerView.Adapter<adapter_userlist.MyVi
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         helper_user user = list.get(position);
         //holder.getOrder.setVisibility(View.INVISIBLE);
-        holder.accountname.setText(user.getFullname());
+        holder.accountname.setText(user.getStorename());
         holder.accountype.setText(user.getAccountype());
-        holder.storeListAdd.setText(user.getStorename());
+        holder.storeListAdd.setText(user.getFullname());
 
         if(user.getAccountype().equals("Store Owner")){
             holder.ratings.setVisibility(View.VISIBLE);
