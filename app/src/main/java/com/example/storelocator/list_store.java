@@ -178,7 +178,7 @@ public class list_store extends AppCompatActivity {
                         double display = 0;
                         String metric = "";
                         if(kl < 1){
-                            display = (double) (kl/1000) ;
+                            display = Double.parseDouble(String.valueOf(distance)) ;
                             metric= "meters";
                         }else{
                             display = kl;
@@ -325,6 +325,18 @@ public class list_store extends AppCompatActivity {
         }
         return true;
     }
+
+    private final double r2d = 180.0D / 3.141592653589793D;
+    private final double d2r = 3.141592653589793D / 180.0D;
+    private final double d2km = 111189.57696D * r2d;
+    public double metersGet(double lt1, double ln1, double lt2, double ln2) {
+        double x = lt1 * d2r;
+        double y = lt2 * d2r;
+        return Math.acos( Math.sin(x) * Math.sin(y) + Math.cos(x) * Math.cos(y) * Math.cos(d2r * (ln1 - ln2))) * d2km;
+    }
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item3,menu);
@@ -361,4 +373,6 @@ public class list_store extends AppCompatActivity {
 
         return true;
     }
+
+
 }

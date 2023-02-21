@@ -48,6 +48,8 @@ public class admin_list_receivable extends Fragment {
     StorageReference ref;
     FirebaseDatabase rootNode;
     DatabaseReference reference =FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,7 +57,6 @@ public class admin_list_receivable extends Fragment {
         recyclerView = view.findViewById(R.id.accountview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
 
         list = new ArrayList<>();
         myAdapter = new adapter_receivables(view.getContext(),list);
@@ -67,7 +68,7 @@ public class admin_list_receivable extends Fragment {
         optionlist.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(optionlist.getSelectedItem().toString().equals("Receivables")){
+                if(optionlist.getSelectedItem().toString().equals("Under Review")){
                     defaultview();
                 }else{
                     defaultview2();
@@ -85,22 +86,22 @@ public class admin_list_receivable extends Fragment {
     public void listoption(){
         final List<String> areas = new ArrayList<String>();
         areas.clear();
-        areas.add("Receivables");
-        areas.add("Payables");
+        areas.add("Under Review");
+        areas.add("Approved");
         Spinner areaSpinner =optionlist;
         ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, areas);
         areasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         areaSpinner.setAdapter(areasAdapter);
 
     }
-    public void defaultview(){
+    public void defaultview2(){
 
         SharedPreferences preferences = this.getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         String rider = preferences.getString("username","");
         String accountype = preferences.getString("accountype","");
         String staffstore = preferences.getString("Store","");
 
-        query1=reference.child("payables").orderByChild("status").equalTo("Under review");
+        query1=reference.child("storereceivables").orderByChild("status").equalTo("Approved");
         query1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -128,7 +129,7 @@ public class admin_list_receivable extends Fragment {
             }
         });
     }
-    public void defaultview2(){
+    public void defaultview(){
 
         SharedPreferences preferences = this.getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         String rider = preferences.getString("username","");

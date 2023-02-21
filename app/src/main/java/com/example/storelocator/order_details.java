@@ -60,7 +60,10 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -348,8 +351,19 @@ public class order_details extends AppCompatActivity {
                         Storename = order.getStore();
                         simpleProgressBar.setProgress(100);
                         userText.setText(order.getOrder_user());
+                        DateFormat obj = new SimpleDateFormat("hh:mm a dd MMM yyyy ");
+                        // we create instance of the Date and pass milliseconds to the constructor
+                        Date res = new Date(Long.parseLong(order.getOrdertime()));
+                        String deldate = "";
+                        if(order.getDeliverytime().equals("00000000000")){
+                            deldate = "";
 
-                        address.setText(order.getAddress());
+                        }else{
+                            Date res2 = new Date(Long.parseLong(order.getDeliverytime()));
+                            deldate = String.valueOf(obj.format(res2));
+                        }
+
+                        address.setText(order.getAddress()+"\n Ordertime: "+obj.format(res)+" Delivery Time: "+deldate);
                         Picasso.get().load(order.getProf_image()).into(ImageView);
                         rider = order.getRider();
 
@@ -387,8 +401,12 @@ public class order_details extends AppCompatActivity {
                                 if(accountype.equals("Rider")){
                                     confirm.setVisibility(View.VISIBLE);
                                 }
-                                if(preferences.getString("accountype","").equals("User")){
-                                    accept.setVisibility(View.VISIBLE);
+//                                if(preferences.getString("accountype","").equals("User")){
+//                                    accept.setVisibility(View.VISIBLE);
+//                                }
+
+                                if (accountype.equals("STAFF")) {
+                                    System.out.println("Fix the STAFF now!!!");
                                 }
 
                                 break;
@@ -515,6 +533,7 @@ public class order_details extends AppCompatActivity {
                     case DialogInterface.BUTTON_POSITIVE:
                         rootNode = FirebaseDatabase.getInstance();
                         reference = rootNode.getReference("orders").child(textorderid.getText().toString().replace("\n TOTAL: "+getIntent().getStringExtra("total").toString(),""));
+                        reference.child("deliverytime").setValue(String.valueOf(System.currentTimeMillis()));
                         reference.child("status").setValue("4");
 
                         break;
@@ -595,7 +614,7 @@ public class order_details extends AppCompatActivity {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 pd.hide();
-                                Snackbar.make(findViewById(android.R.id.content),"Image Uplaoded",Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(findViewById(android.R.id.content),"Image Uploaded",Snackbar.LENGTH_SHORT).show();
 
                                 mountainsRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override

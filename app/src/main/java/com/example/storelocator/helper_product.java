@@ -4,7 +4,8 @@ public class helper_product {
     String paroductName,storeOwner,productImage,address,itemID,destlong,destlat,storeUser,Description,price,pricesm,pricemd,pricelg,category;
     int productview;
 
-    public helper_product(String paroductName, String storeOwner, String productImage,String address,String itemID,String destlat,String destlong,String storeUser,int productview,String Description,String price,String pricesm,String pricemd,String pricelg,String category) {
+    public helper_product(String paroductName, String storeOwner, String productImage,String address,String itemID,String destlat,String destlong,String storeUser
+            ,int productview,String Description,String price,String pricesm,String pricemd,String pricelg,String category) {
         this.paroductName = paroductName;
         this.storeOwner = storeOwner;
         this.productImage = productImage;
@@ -147,4 +148,5 @@ public class helper_product {
     public void setCategory(String category) {
         this.category = category;
     }
+
 }

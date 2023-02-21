@@ -22,7 +22,7 @@ public class admin_frame extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_frame);
-        getSupportActionBar().setTitle("Your Friendly Milk Tea Shop");
+        getSupportActionBar().setTitle("YFMA Control Panel");
         tabLayout = findViewById(R.id.adminLayout);
         vp = findViewById(R.id.viewpager);
         viewpager_adminframe = new viewpager_adminframe(this);

@@ -29,13 +29,15 @@
                 android:id="@+id/amount"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:text="amount" />
+                android:text="amount"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/payref"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="paymentreference" />
+                android:text="paymentreference"
+                android:textStyle="italic"/>
 
             <TextView
                 android:id="@+id/rider"

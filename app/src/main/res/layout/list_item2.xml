@@ -40,24 +40,37 @@
                 android:id="@+id/itemid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/itemNameList"
+                android:layout_below="@+id/itemid2"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="9dp"
-                android:layout_marginEnd="59dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="63dp"
                 android:layout_toEndOf="@+id/imageShow"
                 android:text="item ID"
-                android:textSize="12dp"/>
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/itemid2"
+                android:layout_width="151dp"
+                android:layout_height="35dp"
+                android:layout_below="@+id/itemNameList"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="62dp"
+                android:layout_toEndOf="@+id/imageShow"
+                android:text="item ID"
+                android:textSize="12dp" />
 
             <TextView
                 android:id="@+id/addCount"
-                android:layout_width="117dp"
-                android:layout_height="36dp"
+                android:layout_width="171dp"
+                android:layout_height="33dp"
                 android:layout_below="@+id/itemid"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="11dp"
-                android:layout_marginEnd="91dp"
+                android:layout_marginStart="9dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="43dp"
                 android:layout_toEndOf="@+id/imageShow"
                 android:text="" />
 

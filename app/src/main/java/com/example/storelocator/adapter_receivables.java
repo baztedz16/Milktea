@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class adapter_receivables extends RecyclerView.Adapter<adapter_receivables.MyViewHolder> {
 
@@ -54,6 +55,11 @@ public class adapter_receivables extends RecyclerView.Adapter<adapter_receivable
         holder.amount.setText(user.getAmount());
         holder.payref.setText(user.getReference_no());
         holder.rider.setText(user.getRider());
+
+        if (user.getStatus().equals("Approved")) {
+            holder.approved.setVisibility(View.GONE);
+            holder.rject.setVisibility(View.GONE);
+        }
         //String orderid = (String) holder.orderid.getText();
 
         holder.approved.setOnClickListener(new View.OnClickListener() {
@@ -65,14 +71,14 @@ public class adapter_receivables extends RecyclerView.Adapter<adapter_receivable
                     alert.setMessage("Your About to accept the Receivables!");
                     alert.setTitle("Payment Process");
 
-                    alert.setPositiveButton("Yes Option", new DialogInterface.OnClickListener() {
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
 
                             rootNode = FirebaseDatabase.getInstance();
                             reference = rootNode.getReference("payables").child(user.getRider()+user.getDate_topay().replace("/",""));
                             //reference.setValue("sample");
                             reference.child("status").setValue("Approved");
-                            Toast.makeText(view.getContext(), "(Receivables Approved)",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(view.getContext(), "Receivable Approved",Toast.LENGTH_SHORT).show();
 //                    //OR
 //                    String YouEditTextValue = edittext.getText().toString();
                         }
@@ -89,26 +95,14 @@ public class adapter_receivables extends RecyclerView.Adapter<adapter_receivable
                     AlertDialog.Builder alert = new AlertDialog.Builder(context);
                     alert.setMessage("Your About to Approved the Payables!");
                     alert.setTitle("Payment Process");
-
-                    final EditText input = new EditText(context.getApplicationContext());
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.MATCH_PARENT);
-                    input.setLayoutParams(lp);
-                    input.setHint("Reference number");
-                    alert.setView(input);
-                    alert.setPositiveButton("Yes Option", new DialogInterface.OnClickListener() {
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            if(input.getText().equals("") || input.getText().toString().isEmpty()){
-                                Toast.makeText(context.getApplicationContext(), "Please Enter Reference Number",Toast.LENGTH_LONG).show();
-                            }else{
                                 Toast.makeText(context.getApplicationContext(), "Payables Succesfully Paid",Toast.LENGTH_LONG).show();
                                 rootNode = FirebaseDatabase.getInstance();
                                 reference = rootNode.getReference("storereceivables").child(user.getRider()+user.getDate_topay().replace("/",""));
-                                reference.child("reference_no").setValue(input.getText().toString());
+                                reference.child("reference_no").setValue(UUID.randomUUID());
                                 reference.child("status").setValue("Approved");
-                                Toast.makeText(view.getContext(), "(Payables Approved)",Toast.LENGTH_SHORT).show();
-                            }
+                                Toast.makeText(view.getContext(), "Payables Approved",Toast.LENGTH_SHORT).show();
 
 //                    //OR
 //                    String YouEditTextValue = edittext.getText().toString();

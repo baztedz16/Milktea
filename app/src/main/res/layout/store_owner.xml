@@ -88,6 +88,14 @@
             tools:ignore="DuplicateClickableBoundsCheck" />
 
         <EditText
+            android:id="@+id/descrp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="Description (Optional)"
+            tools:ignore="DuplicateClickableBoundsCheck" />
+
+        <EditText
             android:id="@+id/store"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -119,6 +127,7 @@
                     android:id="@+id/pricesm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
                     android:hint="Small" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -130,6 +139,7 @@
                     android:id="@+id/pricemd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
                     android:hint="Medium" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -141,9 +151,22 @@
                     android:id="@+id/pricelg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
                     android:hint="Large" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="119dp"
+        android:layout_height="24dp"
+        android:gravity="center"
+        android:text="Upload Image"
+        app:layout_constraintBottom_toBottomOf="@+id/catlist"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/saveitem"
+        app:layout_constraintVertical_bias="0.262" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

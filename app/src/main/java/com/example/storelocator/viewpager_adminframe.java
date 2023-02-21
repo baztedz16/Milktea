@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.storelocator.fragment.admin_list_account;
+import com.example.storelocator.fragment.admin_list_payable;
 import com.example.storelocator.fragment.admin_list_receivable;
 import com.example.storelocator.fragment.admin_list_reports;
 import com.example.storelocator.fragment.admin_list_store;
@@ -24,10 +25,10 @@ public class viewpager_adminframe extends FragmentStateAdapter {
         switch (position){
             case 0:
                 return new admin_list_account();
-            case  1:
-                return  new admin_list_store();
-            case 2:
+            case 1:
                 return  new admin_list_reports();
+            case 2:
+                return  new admin_list_payable();
             case 3:
                 return  new admin_list_receivable();
             default:

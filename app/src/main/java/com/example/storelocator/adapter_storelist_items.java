@@ -145,90 +145,6 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
             }
         });
 
-        holder.addToCart.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference("cart");
-                String id = reference.push().getKey();
-                String img = product.getProductImage();
-                String itmname= product.getParoductName();
-                String owner = product.getStoreOwner();
-                String sotreUser = product.getStoreUser(); //StoreUser
-                String price = String.valueOf(Integer.parseInt(product.getPrice())+10); //StoreUser
-                int productview = product.getProductview();
-                //reference.setValue("sample");
-                preferences=context.getSharedPreferences("user",Context.MODE_PRIVATE);
-                final String username = preferences.getString("username","");
-
-                //helper_user helper_user = new helper_user(fullname,username,password,email,storename,phone,accountype,address);
-                reference.child(id).child("cartid").setValue(id);
-                reference.child(id).child("product").setValue(product.itemID);
-                reference.child(id).child("username").setValue(username);
-                reference.child(id).child("img").setValue(img);
-                reference.child(id).child("itmname").setValue(itmname);
-                reference.child(id).child("owner").setValue(owner);
-                reference.child(id).child("delete").setValue("0");
-                reference.child(id).child("price").setValue(price);
-                reference.child(id).child("qty").setValue("1");
-                reference.child(id).child("orderstatus").setValue("0");
-                reference.child(id).child("itemrating").setValue("0");
-                Toast.makeText(context,"Item: "+ itmname+" Added",Toast.LENGTH_SHORT).show();
-                //rootNode.getReference("products").child(product.getItemID()).child("view").setValue(1);
-                DatabaseReference reference1 = FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
-                Query query1 = reference1.child("products").orderByChild("itemID").equalTo(product.getItemID());
-                query1.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            String view = dataSnapshot.child(product.getItemID()).child("productview").getValue().toString();
-                            rootNode.getReference("products").child(product.getItemID()).child("productview").setValue(Integer.parseInt(view)+1);
-
-                            Log.i("R","data:"+view);
-
-                        }else{
-                            Log.i("R","6");
-                            //Log.i("R",searchtext);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-
-                });
-
-
-                final String storename = sotreUser;
-                //final String hr = id;
-                DatabaseReference reference2 = FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
-                Query query = reference2.child("users").orderByChild("storename").equalTo(owner);
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            String view = dataSnapshot.child(storename).child("view").getValue().toString();
-                                rootNode.getReference("users").child(storename).child("view").setValue(String.valueOf(Integer.parseInt(view)+1));
-
-                            Log.i("R","data:"+view);
-
-                        }else{
-                            Log.i("R","6");
-                            //Log.i("R",searchtext);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-                //rootNode.getReference("users").child(owner).child("view").setValue();
-                //Toast.makeText(context,"Item Added",Toast.LENGTH_SHORT).show();
-            }
-        });
         holder.small.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -499,7 +415,7 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         TextView itemName,storename,address,distance,price,textpricesm,textpricemd,textpricelg;
-        Button addToCart,small,medium,large;
+        Button small,medium,large;
         ImageView itemImage;
         public MyViewHolder(@NonNull View itemView){
             super(itemView);
@@ -508,7 +424,6 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
             itemImage = itemView.findViewById(R.id.imageView3);
             address = itemView.findViewById(R.id.storeListAdd);
             distance = itemView.findViewById(R.id.distance);
-            addToCart = itemView.findViewById(R.id.addToCart);
             price = itemView.findViewById(R.id.price);
             textpricesm = itemView.findViewById(R.id.textpricesm);
             textpricemd = itemView.findViewById(R.id.textpricemd);
@@ -634,7 +549,13 @@ public class adapter_storelist_items extends RecyclerView.Adapter<adapter_storel
         return true;
     }
 
-
-
+    private final double r2d = 180.0D / 3.141592653589793D;
+    private final double d2r = 3.141592653589793D / 180.0D;
+    private final double d2km = 111189.57696D * r2d;
+    public double metersGet(double lt1, double ln1, double lt2, double ln2) {
+        double x = lt1 * d2r;
+        double y = lt2 * d2r;
+        return Math.acos( Math.sin(x) * Math.sin(y) + Math.cos(x) * Math.cos(y) * Math.cos(d2r * (ln1 - ln2))) * d2km;
+    }
 
 }

@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -71,7 +72,7 @@ public class activity_login extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), activity_signup.class);
                 startActivity(intent);
-                finish();
+                finishAffinity();
             }
         });
         buttonLogin.setOnClickListener(new View.OnClickListener() {
@@ -83,10 +84,10 @@ public class activity_login extends AppCompatActivity {
         });
 
     }
-    private void otp(Intent intent,String email,DatabaseReference reference,int verifCode){
+    private void otp(Intent intent,String email,DatabaseReference reference,int verifCode,String username){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity_login.this);
-        builder.setTitle("Enter your One Time Pin.");
-        builder.setMessage("The OTP has been sent on " + email);
+        builder.setTitle("Enter your Verification Code.");
+        builder.setMessage("The Code has been sent on " + email);
 
 //        int verifCode = codeSendFunction();
 //
@@ -134,17 +135,19 @@ public class activity_login extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+                Log.d("Username For OTP",username);
                 if(input.getText().toString().isEmpty()){
                     Toast.makeText(activity_login.this,"Please Enter your Code",Toast.LENGTH_LONG).show();
-                    otp(intent,email,reference,verifCode);
+                    otp(intent,email,reference,verifCode,username);
                 } else if (Integer.parseInt(input.getText().toString().trim()) != verifCode ) {
-                    otp(intent,email,reference,verifCode);
+                    otp(intent,email,reference,verifCode,username);
                     Toast.makeText(activity_login.this,"Wrong Code. Try Again.",Toast.LENGTH_LONG).show();
                 } else {
                     startActivity(intent);
                     reference.setValue("1");
+                    FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/").child("forOTP").child(username).removeValue();
                     dialog.cancel();
-                    finish();
+                    finishAffinity();
                 }
 
             }
@@ -161,6 +164,11 @@ public class activity_login extends AppCompatActivity {
     private void loginfunction(){
         final String enterUsername =  textInputEditTextUsername.getText().toString().trim();
         final String enterPassword =  textInputEditTextPassword.getText().toString().trim();
+
+        if (enterPassword.isEmpty() || enterUsername.isEmpty()) {
+            Toast.makeText(activity_login.this,"Please Fill the Form.",Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         DatabaseReference ref = reference.child("users").child(enterUsername).child("activation");
 
@@ -188,30 +196,69 @@ public class activity_login extends AppCompatActivity {
                                 Intent intent = new Intent(activity_login.this, activity_activation_frame.class);
                                 Intent intent_user = new Intent(activity_login.this,list_store.class);
                                 if (userType.equals("User")) {
-                                    int verifCode = codeSendFunction();
-                                    SharedPreferences preferences;
-                                    SharedPreferences.Editor editor;
-                                    preferences = getSharedPreferences("user",MODE_PRIVATE);
-                                    editor = preferences.edit();
-                                    editor.putString("username",enterUsername);
-                                    editor.putString("accountype",userType);
-                                    editor.putString("password",passwordDB);
-                                    editor.putString("address",address);
-                                    editor.putString("longti",longti);
-                                    editor.putString("lati",lati);
-                                    editor.putString("phone",phone);
-                                    editor.putString("fullname",fullname);
-                                    editor.putString("email",email);
-                                    editor.commit();
-                                    String username = "storelocator2023@gmail.com";
-                                    String password = "ceqcpxxmxadyvzod";
+                                    DatabaseReference dataRef = FirebaseDatabase.getInstance().getReference().child("forOTP");
+//                                    int verifCode = codeSendFunction();
+//                                    SharedPreferences preferences;
+//                                    SharedPreferences.Editor editor;
+//                                    preferences = getSharedPreferences("user",MODE_PRIVATE);
+//                                    editor = preferences.edit();
+//                                    editor.putString("username",enterUsername);
+//                                    editor.putString("accountype",userType);
+//                                    editor.putString("password",passwordDB);
+//                                    editor.putString("address",address);
+//                                    editor.putString("longti",longti);
+//                                    editor.putString("lati",lati);
+//                                    editor.putString("phone",phone);
+//                                    editor.putString("fullname",fullname);
+//                                    editor.putString("email",email);
+//                                    editor.commit();
+//                                    String username = "storelocator2023@gmail.com";
+//                                    String password = "ceqcpxxmxadyvzod";
+//
+//                                    sendEmail(username,
+//                                            password,
+//                                            email,
+//                                            "Email Verification From Your Friendly Milktea App",
+//                                            "Hello " + fullname + ", the Code is "+verifCode+".");
+//                                    otp(intent_user,email,ref,verifCode);
+                                    dataRef.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                           if (snapshot.child(enterUsername).exists()) {
+                                               int verifCode = codeSendFunction();
+                                               SharedPreferences preferences;
+                                               SharedPreferences.Editor editor;
+                                               preferences = getSharedPreferences("user",MODE_PRIVATE);
+                                               editor = preferences.edit();
+                                               editor.putString("username",enterUsername);
+                                               editor.putString("accountype",userType);
+                                               editor.putString("password",passwordDB);
+                                               editor.putString("address",address);
+                                               editor.putString("longti",longti);
+                                               editor.putString("lati",lati);
+                                               editor.putString("phone",phone);
+                                               editor.putString("fullname",fullname);
+                                               editor.putString("email",email);
+                                               editor.commit();
+                                               String username = "storelocator2023@gmail.com";
+                                               String password = "ceqcpxxmxadyvzod";
 
-                                    sendEmail(username,
-                                            password,
-                                            email,
-                                            "Email Verification From Milkea App",
-                                            "The Code is "+verifCode+".");
-                                    otp(intent_user,email,ref,verifCode);
+                                               sendEmail(username,
+                                                       password,
+                                                       email,
+                                                       "Email Verification From Your Friendly Milktea App",
+                                                       "Hello " + fullname + ", the Code is "+verifCode+".");
+                                               otp(intent_user,email,ref,verifCode,enterUsername);
+                                           } else {
+                                               startActivity(intent);
+                                           }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(activity_login.this,"Please Wait.",Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                                 } else {
                                     startActivity(intent);
                                 }
@@ -260,7 +307,7 @@ public class activity_login extends AppCompatActivity {
                                     editor.putString("lati",lati);
                                     editor.commit();
                                     startActivity(intent2);
-                                    finish();
+                                    finishAffinity();
 //                                    otp(intent2);
                                 }else if(userType.equals("Rider")){
                                     SharedPreferences preferences;
@@ -285,7 +332,7 @@ public class activity_login extends AppCompatActivity {
                                     intent2.putExtra("accountype",userType);
 
                                     startActivity(intent2);
-                                    finish();
+                                    finishAffinity();
 //                                    otp(intent2);
                                 }else if(userType.equals("STAFF")){
                                     SharedPreferences preferences;
@@ -313,7 +360,7 @@ public class activity_login extends AppCompatActivity {
                                     intent2.putExtra("Store",storeName);
 
                                     startActivity(intent2);
-                                    finish();
+                                    finishAffinity();
 //                                    otp(intent2);
                                 }else if(userType.equals("Admin")){
                                     SharedPreferences preferences;
@@ -339,7 +386,7 @@ public class activity_login extends AppCompatActivity {
                                     intent2.putExtra("accountype",userType);
                                     intent2.putExtra("Store",storeName);
                                     startActivity(intent2);
-                                    finish();
+                                    finishAffinity();
 //                                    otp(intent2);
                                 }
 
@@ -355,14 +402,14 @@ public class activity_login extends AppCompatActivity {
 
 
                 } else {
-                    Toast.makeText(activity_login.this,"Please Put on Fields.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity_login.this,"Invalid Credentials",Toast.LENGTH_SHORT).show();
                     Log.i("error","Password2");
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.e("Error",String.valueOf(databaseError));
             }
         });
     }

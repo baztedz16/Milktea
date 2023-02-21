@@ -94,19 +94,33 @@ public class fordelivery extends Fragment {
                     Log.i("R","4");
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_order_rider orders = snapshot.getValue(helper_order_rider.class);
-                        if((accountype.equals("STAFF") || accountype.equals("Store Owner")) && (orders.getStatus().equals("2") || orders.getStatus().equals("3"))){
-                            if(orders.getStore().equals(staffstore)){
-                                if(orders.getStore().equals(staffstore)){
-                                    list.add(orders);
-                                    Log.i("R","1");
-                                }
-                            }
-                        }else{
-                            if(orders.getRider().equals(rider)){
-                                if(orders.getStatus().equals("2") || orders.getStatus().equals("3")) {
 
-                                    Log.i("2DATA", rider + ":" + snapshot.child("rider").getValue().toString());
-                                    list.add(orders);
+                        System.out.println("accounttype:"+accountype);
+                        System.out.println("status:"+orders.getStatus());
+
+//                        if((accountype.equals("STAFF") || accountype.equals("Store Owner")) && (orders.getStatus().equals("1") || orders.getStatus().equals("2") || orders.getStatus().equals("3") || orders.getStatus().equals("4"))){
+//                            list.add(orders);
+//                            Log.i("R","1");
+//                        }else{
+//                            if(orders.getRider().equals(rider)){
+//                                if(orders.getStatus().equals("2") || orders.getStatus().equals("3") || orders.getStatus().equals("4")) {
+//
+//                                    Log.i("2DATA", rider + ":" + snapshot.child("rider").getValue().toString());
+//                                    list.add(orders);
+//                                }
+//                            }
+//                        }
+                        if (accountype!=null && orders!=null) {
+                            if((accountype.equals("STAFF") || accountype.equals("Store Owner")) && (orders.getStatus().equals("1") || orders.getStatus().equals("2") || orders.getStatus().equals("3") || orders.getStatus().equals("4"))){
+                                list.add(orders);
+                                Log.i("R","1");
+                            }else{
+                                if(orders.getRider().equals(rider)){
+                                    if(orders.getStatus().equals("2") || orders.getStatus().equals("3") || orders.getStatus().equals("4")) {
+
+                                        Log.i("2DATA", rider + ":" + snapshot.child("rider").getValue().toString());
+                                        list.add(orders);
+                                    }
                                 }
                             }
                         }

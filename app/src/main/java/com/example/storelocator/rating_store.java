@@ -1,8 +1,11 @@
 package com.example.storelocator;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 public class rating_store extends AppCompatActivity {
 
     Button accept,submit,servicebtn;
@@ -41,7 +46,7 @@ public class rating_store extends AppCompatActivity {
         setContentView(R.layout.activity_rating_store);
         orderid = findViewById(R.id.orderId);
         storename = findViewById(R.id.storename);
-        accept = findViewById(R.id.accept);
+//        accept = findViewById(R.id.accept);
         submit = findViewById(R.id.submit);
         ratingBar=findViewById(R.id.ratingBar3);
         ratingBar6=findViewById(R.id.ratingBar6);
@@ -49,38 +54,23 @@ public class rating_store extends AppCompatActivity {
         commentTv=findViewById(R.id.comment);
         servicecomment=findViewById(R.id.servicecomment);
 
+        SharedPreferences preferences = rating_store.this.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String acc = preferences.getString("accountype","");
+
+        if (acc.equals("STAFF") || acc.equals("Rider") || acc.equals("Store Owner")) {
+            ratingBar.setEnabled(false);
+            ratingBar6.setEnabled(false);
+            commentTv.setEnabled(false);
+            servicecomment.setEnabled(false);
+            submit.setVisibility(View.GONE);
+            servicebtn.setVisibility(View.GONE);
+        }
+
         orderid.setText(getIntent().getStringExtra("orderid"));
         storename.setText(getIntent().getStringExtra("store"));
         user = getIntent().getStringExtra("user");
         getReviewStore();
         getReviewService();
-accept.setVisibility(View.INVISIBLE);
-        accept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
-                            case DialogInterface.BUTTON_POSITIVE:
-                                rootNode = FirebaseDatabase.getInstance();
-                                reference = rootNode.getReference("orders").child(orderid.getText().toString());
-                                    reference.child("status").setValue("5");
-                                    Toast.makeText(getApplicationContext(),"Order: "+ orderid.getText().toString()+" Succesfully Accepted",Toast.LENGTH_SHORT).show();
-                                break;
-
-                            case DialogInterface.BUTTON_NEGATIVE:
-
-                                break;
-                        }
-                    }
-                };
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(rating_store.this);
-                builder.setMessage("Accept order without Rating?").setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No", dialogClickListener).show();
-            }
-        });
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -187,6 +177,10 @@ accept.setVisibility(View.INVISIBLE);
                         try {
                             helper_review review = snapshot.getValue(helper_review.class);
                             ratingBar.setRating((float) Double.parseDouble(review.getRating_count()));
+
+                            if(Double.parseDouble(review.getRating_count()) > 0){
+                                submit.setVisibility(View.GONE);;
+                            }
                             commentTv.setText(review.getComment());
                         }catch (Exception e)
                         {
@@ -217,6 +211,9 @@ accept.setVisibility(View.INVISIBLE);
                         try {
                             helper_review review = snapshot.getValue(helper_review.class);
                             ratingBar6.setRating((float) Double.parseDouble(review.getRating_count()));
+                            if(Double.parseDouble(review.getRating_count()) >0){
+                                servicebtn.setVisibility(View.GONE);
+                            }
                             servicecomment.setText(review.getComment());
                         }catch (Exception e)
                         {
@@ -236,5 +233,84 @@ accept.setVisibility(View.INVISIBLE);
             }
         });
     }
+//
+//    public void rateStore(String rate) {
+//
+//        SharedPreferences preferences = rating_store.this.getSharedPreferences("user", Context.MODE_PRIVATE);
+//        String acc = preferences.getString("accountype","");
+//
+//        Dialog dialog = new Dialog(rating_store.this);
+//        dialog.setContentView(R.layout.rating_dialog);
+//        EditText commentRating = findViewById(R.id.commentrating);
+//        RatingBar dialogRating = findViewById(R.id.dialogRate);
+//        Button submitRating = findViewById(R.id.submitratebtn);
+//        TextView serviceMsg = findViewById(R.id.rateMessage);
+//        serviceMsg.setText(rate);
+//
+//        if (acc.equals("STAFF") || acc.equals("Rider") || acc.equals("Store Owner")) {
+//            dialogRating.setEnabled(false);
+//            commentRating.setEnabled(false);
+//            submitRating.setVisibility(View.GONE);
+//        }
+//
+//        String id = getIntent().getStringExtra("orderid");
+//        DatabaseReference ref = rootNode.getReference("reviews");
+//
+//        Query query1 = reference.child("reviews").orderByChild("orderid").equalTo(orderid.getText().toString()+"Store");
+//        query1.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.exists()) {
+//                    Log.i("R", "OrderedItems");
+//                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                        helper_review review = snapshot.getValue(helper_review.class);
+//                        dialogRating.setRating((float) Double.parseDouble(review.getRating_count()));
+//                        commentRating.setText(review.getComment());
+//                        try {
+//
+//                        }catch (Exception e)
+//                        {
+//                            Log.i("Error:",e.toString());
+//                        }
+//
+//                    }
+//                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+////        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+//                    dialog.getWindow().getAttributes().windowAnimations = android.R.style.Animation_Dialog;
+//                    dialog.setCancelable(false);
+//                    dialog.show();
+//                    submitRating.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            if (dialogRating.getRating()!=0 && commentRating.getText().toString().trim().isEmpty()) {
+//
+//                            } else {
+//                                ref.child(id).child("orderid").setValue(id);
+//                                ref.child(id).child("user").setValue(getIntent().getStringExtra("user"));
+//                                ref.child(id).child("comment").setValue(commentRating.getText().toString().trim());
+//                                ref.child(id).child("rating_count").setValue(String.valueOf(dialogRating.getRating()));
+//                                ref.child(id).child("order_date").setValue(getIntent().getStringExtra("orderdate"));
+//                                ref.child(id).child("store").setValue(getIntent().getStringExtra("store"));
+//                                if (rate.equals("Delivery Rating")) {
+//                                    ref.child(id).child("ratingtype").setValue("Service");
+//                                } else {
+//                                    ref.child(id).child("ratingtype").setValue("Store");
+//                                }
+//                            }
+//                        }
+//                    });
+//                } else {
+//                    Log.i("error at default:", "6" + getIntent().getStringExtra("storeName"));
+//                    //Log.i("R",searchtext);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//    }
 }
 

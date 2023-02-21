@@ -40,7 +40,8 @@ public class adapter_itemlist extends RecyclerView.Adapter<adapter_itemlist.MyVi
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         helper_product product = list.get(position);
         holder.itemName.setText(product.getParoductName());
-        holder.itemID.setText(product.getItemID());
+        holder.itemid2.setText(product.getDescription());
+        holder.itemID.setText("S - " + product.getPricesm() + ", M - " + product.getPricemd() + ", L - " +product.getPricelg());
         holder.addCount.setText("AddToCart Count: "+product.getProductview()+" times");
 
         //StorageReference gsReference = storage.getReferenceFromUrl("gs://storelocator-c908a.appspot.com/1643612433037.jpg");
@@ -52,6 +53,7 @@ public class adapter_itemlist extends RecyclerView.Adapter<adapter_itemlist.MyVi
                 Intent intent = new Intent(context,updateProduct.class);
                 intent.putExtra("itemid",product.getItemID());
                 intent.putExtra("itemname",product.getParoductName());
+                intent.putExtra("description",product.getDescription());
                 intent.putExtra("productimage",product.getProductImage());
                 intent.putExtra("category",product.getCategory());
 
@@ -71,7 +73,7 @@ public class adapter_itemlist extends RecyclerView.Adapter<adapter_itemlist.MyVi
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView itemName,itemName1,itemID,addCount;
+        TextView itemName,itemName1,itemid2,itemID,addCount;
         ImageView itemImage;
         public MyViewHolder(@NonNull View itemView){
             super(itemView);
@@ -80,6 +82,7 @@ public class adapter_itemlist extends RecyclerView.Adapter<adapter_itemlist.MyVi
             itemImage = itemView.findViewById(R.id.imageShow);
             itemID = itemView.findViewById(R.id.itemid);
             addCount = itemView.findViewById(R.id.addCount);
+            itemid2 = itemView.findViewById(R.id.itemid2);
         }
     }
 }

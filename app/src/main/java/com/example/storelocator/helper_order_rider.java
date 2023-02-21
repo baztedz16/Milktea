@@ -2,10 +2,11 @@ package com.example.storelocator;
 
 
 public class helper_order_rider {
-    String store,order_id,status,order_user,order_total,address,longti,lati,rider,date_order,prof_image;
+    String store,order_id,status,order_user,order_total,address,longti,lati,rider,date_order,prof_image,ordertime,deliverytime;
     int itemcount;
 
-    public helper_order_rider(String store, String order_id, String status, String order_user, String order_total, String address, String longti, String lati, String rider, String date_order,String prof_image,int itemcount
+    public helper_order_rider(String store, String order_id, String status, String order_user, String order_total, String address,
+                              String longti, String lati, String rider, String date_order,String prof_image,int itemcount,String ordertime,String deliverytime
     ){
         this.store = store;
         this.order_id = order_id;
@@ -19,10 +20,28 @@ public class helper_order_rider {
         this.date_order = date_order;
         this.prof_image = prof_image;
         this.itemcount = itemcount;
+        this.ordertime = ordertime;
+        this.deliverytime = deliverytime;
 
     }
     public helper_order_rider(){
 
+    }
+
+    public String getDeliverytime() {
+        return deliverytime;
+    }
+
+    public void setDeliverytime(String deliverytime) {
+        this.deliverytime = deliverytime;
+    }
+
+    public String getOrdertime() {
+        return ordertime;
+    }
+
+    public void setOrdertime(String ordertime) {
+        this.ordertime = ordertime;
     }
 
     public String getStore() {

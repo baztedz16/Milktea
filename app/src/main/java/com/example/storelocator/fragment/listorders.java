@@ -81,12 +81,25 @@ public class listorders extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_order_rider orders = snapshot.getValue(helper_order_rider.class);
 
+
+
+                        System.out.println("storeGet from helper"+orders.getStore());
+                        System.out.println("storeGet from database"+staffstore);
+
+
                         if(accountype.equals("STAFF")){
-                            if(orders.getStore().equals(staffstore)){
-                                list.add(orders);
-                                Log.i("R","1");
+//                            if(orders.getStore().equals(staffstore)){
+//                                list.add(orders);
+//                                Log.i("R","1");
+//                            }
+                            if (orders.getStore() != null && staffstore!=null) {
+                                if (orders.getStore().equals(staffstore)) {
+                                    list.add(orders);
+                                    Log.i("R", "1");
+
+                                }
                             }
-                        }else if (accountype.equals("Rider")){
+                        } else if (accountype.equals("Rider")){
                             if(orders.getStatus().equals("1") || !orders.getRider().equals(username)){
                                 list.add(orders);
                                 Log.i("R","2");

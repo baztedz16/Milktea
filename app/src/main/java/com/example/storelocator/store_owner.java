@@ -48,8 +48,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class store_owner extends AppCompatActivity {
-    TextView userid;
-    EditText store,address,itemname,price1,price2,price3;
+    TextView userid,textView4;
+    EditText store,address,itemname,descrp,price1,price2,price3;
     Button saveitem,deleteitem;
     String sstore;
     ListView listview;
@@ -80,7 +80,9 @@ public class store_owner extends AppCompatActivity {
         store = findViewById(R.id.store);
         address = findViewById(R.id.address);
         itemname = findViewById(R.id.itemname);
+        descrp = findViewById(R.id.descrp);
         saveitem = findViewById(R.id.saveitem);
+        textView4 = findViewById(R.id.textView4);
         price1 = findViewById(R.id.pricesm);
         price2 = findViewById(R.id.pricemd);
         price3 = findViewById(R.id.pricelg);
@@ -90,6 +92,8 @@ public class store_owner extends AppCompatActivity {
         linearLayout6.getLayoutParams().height = 1; // LayoutParams: android.view.ViewGroup.LayoutParams
         // wv.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
         linearLayout6.requestLayout();//It is necesary to refresh the screen
+
+        store.setVisibility(View.GONE);
 
 
         recyclerView = findViewById(R.id.viewItems);
@@ -132,7 +136,8 @@ public class store_owner extends AppCompatActivity {
         list = new ArrayList<>();
         myAdapter = new adapter_itemlist(this,list);
         recyclerView.setAdapter(myAdapter);
-
+        textView4.setVisibility(View.INVISIBLE);
+        productImg.setVisibility(View.INVISIBLE);
         defaultView();
 
         reference.child("category").addValueEventListener(new ValueEventListener() {
@@ -191,6 +196,8 @@ public class store_owner extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (saveitem.getText().toString().equals("Add Item")){
+                    textView4.setVisibility(View.VISIBLE);
+                    productImg.setVisibility(View.VISIBLE);
                     saveitem.setText("SAVE");
                     linearLayout6.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT; // LayoutParams: android.view.ViewGroup.LayoutParams
                     // wv.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
@@ -201,6 +208,8 @@ public class store_owner extends AppCompatActivity {
                 }else if(saveitem.getText().toString().equals("SAVE")){
                     if(imageUri != null){
                         //Snackbar.make(findViewById(android.R.id.content),"Please add product image!!",Snackbar.LENGTH_SHORT).show();
+                        textView4.setVisibility(View.INVISIBLE);
+                        productImg.setVisibility(View.INVISIBLE);
                         uploadImage();
                         linearLayout6.getLayoutParams().height = 1; // LayoutParams: android.view.ViewGroup.LayoutParams
                         // wv.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
@@ -213,6 +222,15 @@ public class store_owner extends AppCompatActivity {
 
                     }else if(price1.getText().toString().equals("") || price2.getText().toString().equals("") || price3.getText().toString().equals("")){
                         Toast.makeText(getApplicationContext(),"Please Fill all Fields",Toast.LENGTH_SHORT).show();
+                    }else if(Long.parseLong(price3.getText().toString().trim()) <= Long.parseLong(price2.getText().toString().trim()) ||
+                            Long.parseLong(price3.getText().toString().trim()) <= Long.parseLong(price1.getText().toString().trim()) ){
+                        Toast.makeText(getApplicationContext(),"Please check large size. ",Toast.LENGTH_SHORT).show();
+                    }else if(Long.parseLong(price2.getText().toString().trim()) >= Long.parseLong(price3.getText().toString().trim()) ||
+                            Long.parseLong(price2.getText().toString().trim()) <= Long.parseLong(price1.getText().toString().trim()) ){
+                        Toast.makeText(getApplicationContext(),"Please check medium size",Toast.LENGTH_SHORT).show();
+                    }else if(Long.parseLong(price1.getText().toString().trim()) >= Long.parseLong(price3.getText().toString().trim()) ||
+                            Long.parseLong(price1.getText().toString().trim()) >= Long.parseLong(price2.getText().toString().trim()) ){
+                        Toast.makeText(getApplicationContext(),"Please check small size",Toast.LENGTH_SHORT).show();
                     }else{
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                             if(!list.stream().map(helper_product ::getParoductName).anyMatch(itemname.getText().toString()::equals)){
@@ -231,6 +249,7 @@ public class store_owner extends AppCompatActivity {
 
             }
         });
+
         productImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -336,7 +355,6 @@ public class store_owner extends AppCompatActivity {
                 }
                 myAdapter.notifyDataSetChanged();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -357,8 +375,6 @@ public class store_owner extends AppCompatActivity {
         if(requestCode == 1 && resultCode == RESULT_OK && data.getData()!=null){
             imageUri=data.getData();
             productImg.setImageURI(imageUri);
-
-
         }
     }
     private String getFileExt(Uri uri){
@@ -389,12 +405,13 @@ public class store_owner extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                Snackbar.make(findViewById(android.R.id.content),"Image Uplaoded",Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(android.R.id.content),"Image Uploaded",Snackbar.LENGTH_SHORT).show();
 
                 mountainsRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
                         String productname = itemname.getText().toString();
+                        String description = descrp.getText().toString();
                         String storeowner = store.getText().toString();
                         String img = reference.push().getKey();
                         String add = address.getText().toString();
@@ -409,10 +426,19 @@ public class store_owner extends AppCompatActivity {
                         String deslat =  strParts[1].toString();
                         String link=String.valueOf(randomkey)+"."+getFileExt(imageUri);
 
-                        helper_product helper_product = new helper_product(productname,storeowner,uri.toString(),add,img,deslong,deslat,getIntent().getStringExtra("user"),0,"",pricesm,pricesm,pricemd,pricelg,category);
+                        helper_product helper_product = new helper_product(productname,storeowner,uri.toString(),add,img,deslong,deslat,getIntent().getStringExtra("user"),0,description,pricesm,pricesm,pricemd,pricelg,category);
                         reference.child(img).setValue(helper_product);
                         productImg.setImageURI(null);
                         Toast.makeText(store_owner.this,"Product Successfully Added",Toast.LENGTH_SHORT).show();
+
+                        itemname.setText("");
+                        price1.setText("");
+                        price2.setText("");
+                        price3.setText("");
+                        descrp.setText("");
+
+                        productImg.setImageDrawable(null);
+                        imageUri = null;
 
                     }
                 });

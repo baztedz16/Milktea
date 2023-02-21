@@ -54,6 +54,8 @@ import com.sucho.placepicker.PlacePicker;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -182,9 +184,18 @@ public class mainframe_viewcart extends AppCompatActivity {
 
     }
     private  void alertCharges(){
+
+        double surcharge = Double.parseDouble(getIntent().getStringExtra("surcharge"));
+        double value = 0.0;
+
+        if(surcharge >0){
+            value = (surcharge*2)+60;
+        }else{
+            value = 60;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(mainframe_viewcart.this);
         builder.setTitle("Order Details");
-        builder.setMessage("Your Orders Amount is: PHP"+ cartValue +"\n and Delivery Charge of: PHP60\n"+"TOTAL:"+(cartValue+60));
+        builder.setMessage("Your Orders Amount is: PHP"+ cartValue +"\n and Delivery Charge of: PHP"+String.valueOf(value)+"\n"+"TOTAL:"+(cartValue+value));
 
 //        final EditText input = new EditText(mainframe_viewcart.this);
 //        input.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -234,7 +245,12 @@ public class mainframe_viewcart extends AppCompatActivity {
         reference.child(id).child("lati").setValue(longti);
         reference.child(id).child("store").setValue(store);
         reference.child(id).child("rider").setValue(store);
+        String currentTime = String.valueOf(System.currentTimeMillis());
+        reference.child(id).child("ordertime").setValue(currentTime);
+        reference.child(id).child("deliverytime").setValue("00000000000");
         reference.child(id).child("itemcount").setValue(totalitems);
+
+
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         LocalDateTime now = LocalDateTime.now();
@@ -285,7 +301,7 @@ public class mainframe_viewcart extends AppCompatActivity {
                 .setLatLong(lt, lh)
                 .showLatLong(true)
                 .setMapRawResourceStyle(R.raw.map_style)
-                .setMapType(MapType.NORMAL)
+                .setMapType(MapType.HYBRID)
                 .build(mainframe_viewcart.this);
 
         startActivityForResult(intent, Constants.PLACE_PICKER_REQUEST);

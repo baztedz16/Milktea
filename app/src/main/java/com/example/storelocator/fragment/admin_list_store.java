@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -22,12 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.storelocator.R;
-import com.example.storelocator.activity_storeratings;
-import com.example.storelocator.adapter_rider_delivery;
 import com.example.storelocator.adapter_userlist;
-import com.example.storelocator.helper_order_rider;
 import com.example.storelocator.helper_user;
-import com.example.storelocator.signupstaff;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,6 +33,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class admin_list_store extends Fragment {
@@ -119,11 +115,8 @@ public class admin_list_store extends Fragment {
                     Log.i("R","4");
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_user user = snapshot.getValue(helper_user.class);
-                        if(user.getAccountype().equals("Store Owner") && !user.getAccountype().equals("Admin") && user.getStorename().contains(val)){
+                        if(user.getAccountype().equals("Store Owner") && user.getStorename().toLowerCase(Locale.ROOT).contains(val.toLowerCase(Locale.ROOT))){
                             list.add(user);
-                        }else{
-
-
                         }
 
 //                        if(accountype.equals("STAFF") && (user.getStatus().equals("5") )){

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Delivery App</string>
+    <string name="app_name">YFMA</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
@@ -25,14 +25,19 @@
     </string-array>
 
     <string-array name="account_type">
-        <item>User</item>
-        <item>Store Owner</item>
-        <item>Rider</item>
+        <!--        <item>User</item>-->
+        <!--        <item>Store Owner</item>-->
+        <!--        <item>Rider</item>-->
+        <item>Customer</item>
+        <item>Shop Owner</item>
+        <item>Delivery Guy</item>
     </string-array>
     <string-array name="sorting">
-        <item>User</item>
-        <item>Rider</item>
-        <item>STAFF</item>
+        <!--        <item>User</item>-->
+        <!--        <item>Rider</item>-->
+        <!--        <item>STAFF</item>-->
+        <item>Shop Owner</item>
+        <item>Delivery Guy</item>
     </string-array>
     <string name="title_activity_riders_frame">riders_frame</string>
     <string name="tab_text_1">Tab 1</string>

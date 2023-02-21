@@ -30,7 +30,22 @@ public class rider_frame extends AppCompatActivity {
         vp.setAdapter(viewpager_ridersframe);
         SharedPreferences preferences = rider_frame.this.getSharedPreferences("user", Context.MODE_PRIVATE);
         String user = preferences.getString("username","");
-        getSupportActionBar().setTitle(user);
+        String acc = preferences.getString("accountype","");
+        String shop = preferences.getString("Store","");
+        String name = preferences.getString("fullname","");
+
+        if (acc.equals("Rider")) {
+            getSupportActionBar().setTitle(name);
+            tabLayout.getTabAt(3).setText("Payables");
+        } else if (acc.equals("STAFF")) {
+            getSupportActionBar().setTitle(shop+" | "+name);
+            tabLayout.removeTab(tabLayout.getTabAt(3));
+        } else {
+            getSupportActionBar().setTitle(shop+" | "+name);
+            tabLayout.getTabAt(3).setText("Reports");
+        }
+
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

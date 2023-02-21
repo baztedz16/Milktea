@@ -68,7 +68,7 @@ public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.s
 
         holder.Distance.setText(store.getCurrLocation()+" "+store.getMetric());
                 //StorageReference gsReference = storage.getReferenceFromUrl("gs://storelocator-c908a.appspot.com/1643612433037.jpg");
-        Picasso.get().load(store.getImage()).into(holder.itemImage);
+        Picasso.get().load(R.drawable.shop).into(holder.itemImage);
 
 
         holder.itemImage.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +86,13 @@ public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.s
                 intent.putExtra("address",store.getAddress());
                 intent.putExtra("lati",store.getDestlat());
                 intent.putExtra("long",store.getDestlong());
+                intent.putExtra("long",store.getDestlong());
+
+                if(store.getMetric() == "Km" && Double.parseDouble(store.getCurrLocation()) > 5){
+                    intent.putExtra("surcharge",holder.Distance.getText().toString().replace(" Km",""));
+                }else{
+                    intent.putExtra("surcharge","0");
+                }
                 context.startActivity(intent);
             }
         });
@@ -104,6 +111,11 @@ public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.s
                 intent.putExtra("address",store.getAddress());
                 intent.putExtra("lati",store.getDestlat());
                 intent.putExtra("long",store.getDestlong());
+                if(store.getMetric() == "Km" && Double.parseDouble(store.getCurrLocation()) > 5){
+                    intent.putExtra("surcharge",holder.Distance.getText().toString().replace(" Km",""));
+                }else{
+                    intent.putExtra("surcharge","0");
+                }
                 context.startActivity(intent);
             }
         });

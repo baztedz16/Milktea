@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,18 +51,24 @@ public class adapter_user_order extends RecyclerView.Adapter<adapter_user_order.
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         helper_order_rider order = list.get(position);
+        holder.dateTxt.setText(list.get(position).date_order);
         //holder.getOrder.setVisibility(View.INVISIBLE);
         holder.storeName.setText(order.getOrder_total());
         holder.orderid.setText(order.getOrder_id());
         holder.address.setText(order.getAddress());
         holder.store.setText(order.getStore());
         holder.getOrder.setText("View Order");
+
+        Log.d("Orderdate in helper"+ position,(String) order.date_order);
+        holder.dateTxt.setText(order.getDate_order());
+        Log.d("OrderDate in Holder "+position,(String) holder.orderid.getText());
+
         String orderid = (String) holder.orderid.getText();
-        String orderdate = order.getDate_order();
+        String orderdate = (String) order.getDate_order();
+
 
         SharedPreferences preferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         String accountype = preferences.getString("accountype","");
-        holder.dateTxt.setText(order.getDate_order());
         if(order.getStatus().equals("10")){
             holder.getOrder.setText("Cancel");
             holder.getOrder.setEnabled(false);

@@ -64,6 +64,8 @@ public class activity_signup extends AppCompatActivity {
     ProgressBar progressBar;
     static Double lh,lt;
 
+    private static int shopfound;
+
     DatabaseReference verifydb = FirebaseDatabase.getInstance().getReference();
 
     FirebaseDatabase rootNode;
@@ -103,6 +105,9 @@ public class activity_signup extends AppCompatActivity {
     }
 
 
+    String accountype;
+
+
     //@RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstancesState) {
@@ -124,6 +129,9 @@ public class activity_signup extends AppCompatActivity {
         longt =  findViewById(R.id.longt);
         lati =  findViewById(R.id.lat);
         address =  findViewById(R.id.address);
+
+        longt.setVisibility(View.GONE);
+        lati.setVisibility(View.GONE);
 
         wifiManager= (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         buttonSignup = findViewById(R.id.signupBtn);
@@ -160,9 +168,16 @@ public class activity_signup extends AppCompatActivity {
                 String password = regpassword.getText().toString();
                 String email = regemail.getText().toString();
 //                String storename = regstorename.getText().toString();
-                String storename = "__NULL__";
+                String storename = "";
                 String phone = regphone.getText().toString();
-                String accountype = regacc.getSelectedItem().toString();
+//                String accountype = regacc.getSelectedItem().toString();
+//                if (regacc.getSelectedItem().toString() == "Customer") {
+//                    accountype = "User";
+//                } else if (regacc.getSelectedItem().toString() == "Shop Owner") {
+//                    accountype = "Store Owner";
+//                } else if (regacc.getSelectedItem().toString() == "Delivery Guy") {
+//                    accountype = "Rider";
+//                }
                 String Destlongt = longt.getText().toString();
                 String Deslati = lati.getText().toString();
                 String Address = address.getText().toString();
@@ -174,7 +189,7 @@ public class activity_signup extends AppCompatActivity {
                     regfullname.setError("Name should be valid.");
                 } else if (!isValidEmail(email)) {
                     regemail.setError("Please use a Valid Email.");
-                } else if (password.length() > 6) {
+                } else if (password.length() < 6) {
                     regpassword.setError("The password is too short.");
                 } else if (phone.length() < 10) {
                     regphone.setError("Please Input Right Phone Number.");
@@ -190,8 +205,8 @@ public class activity_signup extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()) {
                                 String usernameDB = snapshot.child(username).child("username").getValue(String.class);
-                                if(usernameDB != null ){
-                                    Log.i("Error:", "User:"+username+" Already Exist");
+                                if (usernameDB != null) {
+                                    Log.i("Error:", "User:" + username + " Already Exist");
 //                                    AlertDialog.Builder builder = new AlertDialog.Builder(activity_signup.this);
 //                                    builder.setMessage("User Exist, Kindly enter different Username")
 //                                            .setCancelable(false)
@@ -204,28 +219,67 @@ public class activity_signup extends AppCompatActivity {
 //                                    alert.show();
                                     regusername.setError("This username has already taken.");
                                     return;
-                                }else{
+                                } else {
 //                                    helper_user helper_user = new helper_user(fullname,username,password,email,storename,phone,accountype,Destlongt,Deslati,image,"0","0",Address);
 //                                    reference.child(username).setValue(helper_user);
 //                                    Toast.makeText(activity_signup.this,"Successfully Register",Toast.LENGTH_SHORT).show();
 
 
-                                    Intent intent_login = new Intent(activity_signup.this,activity_login.class);
+                                    Intent intent_login = new Intent(activity_signup.this, activity_login.class);
 
-                                    if (accountype.equals("Store Owner")) {
-                                        storeNameCreate(fullname,username,password,email,storename,phone,accountype,Destlongt,Deslati,image,"0","0",Address,intent_login,reference);
-                                    } else {
-                                        if (accountype.equals("User")) {
+//                                    if (regacc.getSelectedItem().toString() == "Shop Owner") {
+//                                        accountype = "Store Owner";
+//                                        storeNameCreate(fullname, username, password, email, storename, phone, accountype, Destlongt, Deslati, image, "0", "0", Address, intent_login, reference);
+//                                    } else if (regacc.getSelectedItem().toString() == "Delivery Guy") {
+//                                        accountype = "Rider";
+//                                        helper_user helper_user = new helper_user(fullname, username, password, email, storename, phone, accountype, Destlongt, Deslati, image, "0", "0", Address);
+//                                        reference.child(username).setValue(helper_user);
+//                                        Toast.makeText(activity_signup.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
+//                                        startActivity(intent_login);
+//                                        finish();
+//                                    } else {
+//                                        verifydb.child("forOTP").child(username).setValue(1);
+//                                        accountype = "User";
+//                                        helper_user helper_user = new helper_user(fullname, username, password, email, storename, phone, accountype, Destlongt, Deslati, image, "0", "0", Address);
+//                                        reference.child(username).setValue(helper_user);
+//                                        Toast.makeText(activity_signup.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
+//                                        startActivity(intent_login);
+//                                        finish();
+//                                    }
+
+                                    helper_user helper_user;
+
+                                    switch(regacc.getSelectedItemPosition()) {
+                                        case 1:
+                                            accountype = "Store Owner";
+                                            storeNameCreate(fullname, username, password, email, storename, phone, accountype, Destlongt, Deslati, image, "0", "0", Address, intent_login, reference);
+                                            break;
+                                        case 2:
+                                            accountype = "Rider";
+                                            helper_user = new helper_user(fullname, username, password, email, storename, phone, accountype, Destlongt, Deslati, image, "0", "0", Address);
+                                            reference.child(username).setValue(helper_user);
+                                            Toast.makeText(activity_signup.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
+                                            startActivity(intent_login);
+                                            finish();
+                                            break;
+                                        case 0:
                                             verifydb.child("forOTP").child(username).setValue(1);
-                                        }
-                                        helper_user helper_user = new helper_user(fullname,username,password,email,storename,phone,accountype,Destlongt,Deslati,image,"0","0",Address);
-                                        reference.child(username).setValue(helper_user);
-                                        Toast.makeText(activity_signup.this,"Registered Successfully",Toast.LENGTH_SHORT).show();
-                                        startActivity(intent_login);
-                                        finish();
+                                            accountype = "User";
+                                            helper_user = new helper_user(fullname, username, password, email, storename, phone, accountype, Destlongt, Deslati, image, "0", "0", Address);
+                                            reference.child(username).setValue(helper_user);
+                                            Toast.makeText(activity_signup.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
+                                            startActivity(intent_login);
+                                            finish();
+                                            break;
+                                        default:
+                                            break;
                                     }
 
+
+
                                 }
+
+
                             }else{
                                 Log.i("Error:", "User:"+username+" DidntCheck");
 
@@ -312,24 +366,17 @@ public class activity_signup extends AppCompatActivity {
         input.setGravity(Gravity.CENTER);
         builder.setView(input);
         builder.setCancelable(true);
-
         // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 if(input.getText().toString().isEmpty()){
                     Toast.makeText(activity_signup.this,"Please Input Shop Name.",Toast.LENGTH_SHORT).show();
                     storeNameCreate(fullname,username,password,email,storename,phone,accountype,destlong,destlat,image,"0","0",Address,intent,reference);
-                    Toast.makeText(activity_signup.this,"Please Enter your Code",Toast.LENGTH_LONG).show();
-                    builder.show();
-                }
-//                else if () {
-//                    Toast.makeText(activity_signup.this,"Please Type.",Toast.LENGTH_SHORT).show();
-//                    storeNameCreate(fullname,username,password,email,storename,phone,accountype,destlong,destlat,image,"0","0",Address,intent,reference);
-//                    dialog.cancel();
-//                }
-                else {
+                } else if (shopFound(input.getText().toString().trim(),username) == 0) {
+                    Toast.makeText(activity_signup.this,"Shop name existed. Input another.",Toast.LENGTH_SHORT).show();
+                    storeNameCreate(fullname,username,password,email,storename,phone,accountype,destlong,destlat,image,"0","0",Address,intent,reference);
+                } else {
                     String storeName = input.getText().toString().trim();
                     helper_user helper_user = new helper_user(fullname,username,password,email,storeName,phone,accountype,destlong,destlat,image,"0","0",Address);
                     reference.child(username).setValue(helper_user);
@@ -348,6 +395,30 @@ public class activity_signup extends AppCompatActivity {
         });
         builder.show();
     }
+
+
+
+    private int shopFound(String shopname,String username) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child(username).child("storename").child(shopname).exists()) {
+                    shopfound = 0;
+                } else {
+                    shopfound = 1;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return shopfound;
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

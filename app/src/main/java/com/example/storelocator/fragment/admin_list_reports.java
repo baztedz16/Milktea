@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.storelocator.R;
 import com.example.storelocator.adapter_rider_delivery;
 import com.example.storelocator.helper_order_rider;
+import com.example.storelocator.helper_review;
 import com.example.storelocator.helper_user;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -71,7 +72,8 @@ public class admin_list_reports extends Fragment {
     EditText date1,date2;
     DatePickerDialog.OnDateSetListener startdate,enddate;
     BarChart barchartReport;
-    PieChart pichartreport;
+    PieChart pichartreport,pichartreport2;
+
     Button salesbtn,genreport;
     Spinner storelist;
     Query query1;
@@ -87,6 +89,7 @@ public class admin_list_reports extends Fragment {
         date2 = view.findViewById(R.id.date2);
         barchartReport= view.findViewById(R.id.barchartReport);
         pichartreport = view.findViewById(R.id.pichartreport);
+        pichartreport2 = view.findViewById(R.id.pichartreport2);
         salesbtn = view.findViewById(R.id.salesbtn);
         rdate = view.findViewById(R.id.rdate);
         genreport =view.findViewById(R.id.genreport);
@@ -97,6 +100,7 @@ public class admin_list_reports extends Fragment {
 
         //defaultview();
         pieview();
+        pieview2();
         liststore();
         genreport.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -314,9 +318,14 @@ public class admin_list_reports extends Fragment {
                 }
 
                 Spinner areaSpinner =storelist;
-                ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, areas);
-                areasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                areaSpinner.setAdapter(areasAdapter);
+//                ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, areas);
+//                areasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                areaSpinner.setAdapter(areasAdapter);
+                if (getContext()!=null) {
+                    ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, areas);
+                    areasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    areaSpinner.setAdapter(areasAdapter);
+                }
             }
 
             @Override
@@ -338,11 +347,31 @@ public class admin_list_reports extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_user user = snapshot.getValue(helper_user.class);
 
-                        if(map.containsKey(user.getAccountype())){
-                            Double valueNew = map.get(user.getAccountype())+ 1;
-                            map.put(user.getAccountype(),valueNew);
-                        }else{
-                            map.put(user.getAccountype(),1.0);
+//                        if(map.containsKey(user.getAccountype())){
+//                            Double valueNew = map.get(user.getAccountype())+ 1;
+//                            map.put(user.getAccountype(),valueNew);
+//                        }else{
+//                            map.put(user.getAccountype(),1.0);
+//                        }
+                        String accounttype;
+
+                        if (user.getAccountype().equals("User")) {
+                            accounttype = "Customers";
+                        } else if (user.getAccountype().equals("Store Owner")) {
+                            accounttype = "Shop Owners";
+                        } else if (user.getAccountype().equals("Rider")) {
+                            accounttype = "Delivery Guys";
+                        }  else {
+                            accounttype = "Admins";
+                        }
+
+                        if(user.getAccountype().equals("STAFF")){
+                            if(map.containsKey(accounttype)){
+                                Double valueNew = map.get(accounttype) + 1;
+                                map.put(accounttype,valueNew);
+                            }else{
+                                map.put(accounttype,1.0);
+                            }
                         }
                         Log.i("Get",map.toString());
 
@@ -368,6 +397,76 @@ public class admin_list_reports extends Fragment {
                     pichartreport.animate();
 
                     myAdapter.notifyDataSetChanged();
+                }else{
+                    Log.i("R","6");
+                    //Log.i("R",searchtext);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void pieview2(){
+        query1=reference.child("reviews");
+
+        query1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Log.i("R",editTextname.getText().toString());
+                if (dataSnapshot.exists()) {
+                    Log.i("R","4");
+                    Map<String, Double> map = new TreeMap<>();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        helper_review review = snapshot.getValue(helper_review.class);
+
+//                        if(map.containsKey(user.getAccountype())){
+//                            Double valueNew = map.get(user.getAccountype())+ 1;
+//                            map.put(user.getAccountype(),valueNew);
+//                        }else{
+//                            map.put(user.getAccountype(),1.0);
+//                        }
+                        String accounttype;
+
+                        accounttype = review.getStore();
+
+                        if(review.getRatingtype().equals("Store")){
+                            try {
+                                if(map.containsKey(accounttype)){
+                                    Double valueNew = map.get(accounttype) + Double.parseDouble(review.getRating_count());
+                                    map.put(accounttype,valueNew);
+                                }else{
+                                    map.put(accounttype,1.0);
+                                }
+                            }catch (Exception e){
+                                Log.i("Get",e.toString());
+                            }
+                            Log.i("Get",map.toString() + review.getStore());
+                        }
+
+                    }
+
+
+                    ArrayList<PieEntry> AccountCnt = new ArrayList<>();
+
+                    for (Map.Entry<String,Double> entry : map.entrySet()) {
+
+                        AccountCnt.add(new PieEntry(entry.getValue().floatValue(),entry.getKey()));
+                    }
+                    PieDataSet pieDataSet = new PieDataSet(AccountCnt, "Reviews");
+                    pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+                    pieDataSet.setValueTextColor(Color.BLACK);
+                    pieDataSet.setValueTextSize(16f);
+
+                    PieData pieData = new PieData(pieDataSet);
+
+                    pichartreport2.setData(pieData);
+                    pichartreport2.getDescription().setEnabled(false);
+                    pichartreport2.setCenterText("Reviews");
+                    pichartreport2.animate();
+
                 }else{
                     Log.i("R","6");
                     //Log.i("R",searchtext);

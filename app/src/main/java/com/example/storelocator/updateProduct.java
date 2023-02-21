@@ -48,7 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class updateProduct extends AppCompatActivity {
-    EditText productid,productname,pricesm,pricemd,pricelg;
+    EditText productid,productname,pricesm,pricemd,pricelg,updatedescription;
     Button updateitem,deleteitem;
     String sstore;
     ListView listview;
@@ -76,7 +76,7 @@ public class updateProduct extends AppCompatActivity {
         itemrating.setVisibility(View.INVISIBLE);
         updateitem = findViewById(R.id.updatebtn);
         deleteitem = findViewById(R.id.deletebtn);
-
+        updatedescription= findViewById(R.id.updatedescription);
         pricesm = findViewById(R.id.pricesm);
         pricemd = findViewById(R.id.pricemd);
         pricelg = findViewById(R.id.pricelg);
@@ -86,8 +86,9 @@ public class updateProduct extends AppCompatActivity {
 
         //string here is the value when you load the page
         productid.setText(getIntent().getStringExtra("itemid"));
+        productid.setVisibility(View.GONE);
         productname.setText(getIntent().getStringExtra("itemname"));
-
+        updatedescription.setText(getIntent().getStringExtra("description"));
         pricesm.setText(getIntent().getStringExtra("pricesm"));
         pricemd.setText(getIntent().getStringExtra("pricemd"));
         pricelg.setText(getIntent().getStringExtra("pricelg"));
@@ -100,12 +101,22 @@ public class updateProduct extends AppCompatActivity {
             public void onClick(View view) {
                 if(pricesm.getText().toString().equals("") || pricemd.getText().toString().equals("") || pricelg.getText().toString().equals("")){
                     Toast.makeText(getApplicationContext(),"Please Fill all Fields",Toast.LENGTH_SHORT).show();
-                }else{
+                }else if(Long.parseLong(pricelg.getText().toString().trim()) <= Long.parseLong(pricemd.getText().toString().trim()) ||
+                    Long.parseLong(pricelg.getText().toString().trim()) <= Long.parseLong(pricesm.getText().toString().trim()) ){
+                Toast.makeText(getApplicationContext(),"Please check large size. ",Toast.LENGTH_SHORT).show();
+            }else if(Long.parseLong(pricemd.getText().toString().trim()) >= Long.parseLong(pricelg.getText().toString().trim()) ||
+                    Long.parseLong(pricemd.getText().toString().trim()) <= Long.parseLong(pricesm.getText().toString().trim()) ){
+                Toast.makeText(getApplicationContext(),"Please check medium size",Toast.LENGTH_SHORT).show();
+            }else if(Long.parseLong(pricesm.getText().toString().trim()) >= Long.parseLong(pricelg.getText().toString().trim()) ||
+                    Long.parseLong(pricesm.getText().toString().trim()) >= Long.parseLong(pricemd.getText().toString().trim()) ){
+                Toast.makeText(getApplicationContext(),"Please check small size",Toast.LENGTH_SHORT).show();
+            }else{
                     String itemID = productid.getText().toString();
                     rootNode = FirebaseDatabase.getInstance();
                     reference = rootNode.getReference("products").child(itemID);
                     //reference.setValue("sample");
                     reference.child("paroductName").setValue(productname.getText().toString());
+                    reference.child("description").setValue(updatedescription.getText().toString());
                     reference.child("category").setValue(categoryspin.getSelectedItem().toString());
 
                     reference.child("price").setValue(pricesm.getText().toString());

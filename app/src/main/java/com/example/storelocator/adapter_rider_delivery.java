@@ -49,12 +49,14 @@ public class adapter_rider_delivery extends RecyclerView.Adapter<adapter_rider_d
         holder.address.setText(order.getAddress());
         holder.store.setText(order.getStore());
         holder.getOrder.setText("Order Details");
+        holder.dateTxt.setText(order.getDate_order());
+
 
         String orderid = (String) holder.orderid.getText();
         Intent intent = ((rider_frame) context).getIntent();
         String rider = intent.getStringExtra("user");
 
-        if(order.getStatus().equals("5") || order.getStatus().equals("4") || order.getStatus().equals("3") || order.getStatus().equals("2") || order.getStatus().equals("10")){
+        if(order.getStatus().equals("5") || order.getStatus().equals("4") || order.getStatus().equals("3") || order.getStatus().equals("2") || order.getStatus().equals("1")){
             holder.cancel.setVisibility(View.INVISIBLE);
 
         }
@@ -77,7 +79,7 @@ public class adapter_rider_delivery extends RecyclerView.Adapter<adapter_rider_d
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView storeName,orderid,address,store;
+        TextView storeName,orderid,address,store,dateTxt;
         Button getOrder,cancel;
         ImageView itemImage;
         public MyViewHolder(@NonNull View itemView){
@@ -89,6 +91,7 @@ public class adapter_rider_delivery extends RecyclerView.Adapter<adapter_rider_d
             address = itemView.findViewById(R.id.Addressds);
             store = itemView.findViewById(R.id.Storeds);
             cancel = itemView.findViewById(R.id.cancel);
+            dateTxt = itemView.findViewById(R.id.dateTxt);
 
 
         }
