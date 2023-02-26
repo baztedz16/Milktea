@@ -124,7 +124,7 @@ public class adapter_cart extends RecyclerView.Adapter<adapter_cart.MyViewHolder
                             String itemID = holder.itemID.getText().toString();
                             rootNode = FirebaseDatabase.getInstance();
                             reference = rootNode.getReference("cart").child(itemID);
-                            //reference.setValue("sample");
+                            //reference.setValue("sample");et
 
 
                             reference.child("qty").setValue(holder.qty.getText().toString());

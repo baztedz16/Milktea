@@ -13,6 +13,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
@@ -77,6 +78,7 @@ public class mainframe_viewcart extends AppCompatActivity {
     FirebaseDatabase rootNode;
     DatabaseReference reference =FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
     static Double lh,lt;
+    static String addressPick;
 
 
 
@@ -118,9 +120,11 @@ public class mainframe_viewcart extends AppCompatActivity {
         String lati = sh1.getString("lati", "");
         String longti = sh1.getString("longti", "");
 
-        address.setText(addressdata);
-        logtitxt.setText(longti);
-        latitxt.setText(lati);
+//        address.setText(addressdata);
+//        logtitxt.setText(longti);
+//        latitxt.setText(lati);
+
+
 
 
         //view product listed to the mainframe
@@ -172,6 +176,10 @@ public class mainframe_viewcart extends AppCompatActivity {
                             List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                             lh = addressList.get(0).getLongitude();
                             lt = addressList.get(0).getLatitude();
+                            addressPick = addressList.get(0).getAddressLine(0);
+                            logtitxt.setText(String.valueOf(lh));
+                            latitxt.setText(String.valueOf(lt));
+                            address.setText(addressPick);
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
@@ -180,7 +188,22 @@ public class mainframe_viewcart extends AppCompatActivity {
                     }
                 }
             });
+
         }
+        logtitxt.setVisibility(View.INVISIBLE);
+        latitxt.setVisibility(View.INVISIBLE);
+        address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Uri mapUri = Uri.parse("geo:"+ lt +"," + lh);
+                Intent intent_map = new Intent(Intent.ACTION_VIEW,mapUri);
+                intent_map.setPackage("com.google.android.apps.maps");
+                if (intent_map!=null) {
+                    startActivity(intent_map);
+                }
+            }
+        });
 
     }
     private  void alertCharges(){
@@ -362,9 +385,14 @@ public class mainframe_viewcart extends AppCompatActivity {
         if (requestCode == Constants.PLACE_PICKER_REQUEST) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 AddressData addressData = data.getParcelableExtra(Constants.ADDRESS_INTENT);
-                logtitxt.setText(String.valueOf(addressData.getLongitude()));
-                latitxt.setText(String.valueOf(addressData.getLatitude()));
-                address.setText(String.valueOf(addressData.getAddressList().get(0).getAddressLine(0)));
+//                logtitxt.setText(String.valueOf(addressData.getLongitude()));
+//                latitxt.setText(String.valueOf(addressData.getLatitude()));
+//                address.setText(String.valueOf(addressData.getAddressList().get(0).getAddressLine(0)));
+
+                logtitxt.setText(String.valueOf(lh));
+                latitxt.setText(String.valueOf(lt));
+                address.setText(addressPick);
+
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
