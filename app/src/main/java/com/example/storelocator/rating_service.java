@@ -23,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class rating_store extends AppCompatActivity {
+public class rating_service extends AppCompatActivity {
 
     Button accept,submit,servicebtn;
     TextView orderid,storename;
@@ -38,7 +38,7 @@ public class rating_store extends AppCompatActivity {
     DatabaseReference reference =FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rating_store);
+        setContentView(R.layout.activity_rating_service);
         orderid = findViewById(R.id.orderId);
         storename = findViewById(R.id.storename);
 //        accept = findViewById(R.id.accept);
@@ -49,7 +49,7 @@ public class rating_store extends AppCompatActivity {
         commentTv=findViewById(R.id.comment);
         servicecomment=findViewById(R.id.servicecomment);
 
-        SharedPreferences preferences = rating_store.this.getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences preferences = rating_service.this.getSharedPreferences("user", Context.MODE_PRIVATE);
         String acc = preferences.getString("accountype","");
 
         if (acc.equals("STAFF") || acc.equals("Rider") || acc.equals("Store Owner")) {
@@ -108,7 +108,7 @@ public class rating_store extends AppCompatActivity {
                     }
                 };
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(rating_store.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(rating_service.this);
                 builder.setMessage("Submit rating and Aceept Order?").setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
             }
@@ -152,7 +152,7 @@ public class rating_store extends AppCompatActivity {
                     }
                 };
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(rating_store.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(rating_service.this);
                 builder.setMessage("Submit rating For Service Revice").setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
             }
@@ -168,18 +168,11 @@ public class rating_store extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     Log.i("R", "OrderedItems");
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        commentTv.setEnabled(false);
-                        submit.setVisibility(View.INVISIBLE);
+
                         try {
                             helper_review review = snapshot.getValue(helper_review.class);
                             ratingBar.setRating((float) Double.parseDouble(review.getRating_count()));
-
-                            if(Double.parseDouble(review.getRating_count()) > 0){
-                                submit.setVisibility(View.GONE);;
-                            }
                             commentTv.setText(review.getComment());
-
-
                         }catch (Exception e)
                         {
                             Log.i("Error:",e.toString());
@@ -205,14 +198,12 @@ public class rating_store extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     Log.i("R", "OrderedItems");
-
+                    servicecomment.setEnabled(false);
+                    servicebtn.setVisibility(View.INVISIBLE);
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         try {
                             helper_review review = snapshot.getValue(helper_review.class);
                             ratingBar6.setRating((float) Double.parseDouble(review.getRating_count()));
-                            if(Double.parseDouble(review.getRating_count()) >0){
-                                servicebtn.setVisibility(View.GONE);
-                            }
                             servicecomment.setText(review.getComment());
                         }catch (Exception e)
                         {

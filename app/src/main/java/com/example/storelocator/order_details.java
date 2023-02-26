@@ -1,11 +1,29 @@
 package com.example.storelocator;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.webkit.MimeTypeMap;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -14,35 +32,6 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.media.Image;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowInsets;
-import android.webkit.MimeTypeMap;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.storelocator.databinding.ActivityOrderDetailsBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
@@ -56,8 +45,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -234,12 +221,22 @@ public class order_details extends AppCompatActivity {
          confirm.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
-                 if(stringUri != null){
-                     //Snackbar.make(findViewById(android.R.id.content),"Please add product image!!",Snackbar.LENGTH_SHORT).show();
-                     ConfirmDelivery();
+                 if(accountype.equals("User")){
+                     Intent intent2 = new Intent(order_details.this,rating_service.class);
+                     intent2.putExtra("user",preferences.getString("username",""));
+                     intent2.putExtra("store",Storename);
+                     intent2.putExtra("orderdate",getIntent().getStringExtra("orderdate"));
+                     intent2.putExtra("orderid",textorderid.getText().toString().replace("\n TOTAL: "+getIntent().getStringExtra("total").toString(),""));
+                     startActivity(intent2);
                  }else{
-                     chooseImage();
+                     if(stringUri != null){
+                         //Snackbar.make(findViewById(android.R.id.content),"Please add product image!!",Snackbar.LENGTH_SHORT).show();
+                         ConfirmDelivery();
+                     }else{
+                         chooseImage();
+                     }
                  }
+
              }
          });
          pickupRider.setOnClickListener(new View.OnClickListener() {
@@ -263,7 +260,7 @@ public class order_details extends AppCompatActivity {
              @Override
              public void onClick(View view) {
                  String strUri = "http://maps.google.com/maps?q=loc:" +latStore+ "," +LongStore+ " (" + "Store Lcoation" + ")";
-                 Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(strUri));
+                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(strUri));
 
                  intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
 
@@ -274,7 +271,7 @@ public class order_details extends AppCompatActivity {
              @Override
              public void onClick(View view) {
                  String strUri = "http://maps.google.com/maps?q=loc:" +longuser+ "," +latUser+ " (" + "Client Location" + ")";
-                 Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(strUri));
+                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(strUri));
 
                  intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
 
@@ -414,17 +411,17 @@ public class order_details extends AppCompatActivity {
                                 accept.setVisibility(View.VISIBLE);
                                 simpleProgressBar.setProgress(100);
                                 status.setText("Delivery Completed");
-                                accept.setText("Ratings");
-                                confirm.setText("Delivered");
+                                accept.setText("Rate Shop");
+
                                 if(preferences.getString("accountype","").equals("User")){
                                     accept.setVisibility(View.VISIBLE);
                                 }
                                 button4.setVisibility(View.INVISIBLE);
                                 button5.setVisibility(View.INVISIBLE);
 
-                                if(!accountype.equals("User")){
-                                    confirm.setVisibility(View.INVISIBLE);
-
+                                if(accountype.equals("User")){
+                                    confirm.setVisibility(View.VISIBLE);
+                                    confirm.setText("Rate Service");
                                 }
                                 if(accountype.equals("rider") || accountype.equals("User")){
                                     calltxt.setVisibility(View.INVISIBLE);

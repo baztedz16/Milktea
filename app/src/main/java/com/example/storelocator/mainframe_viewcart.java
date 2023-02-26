@@ -13,17 +13,17 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,8 +55,6 @@ import com.sucho.placepicker.PlacePicker;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -78,7 +76,7 @@ public class mainframe_viewcart extends AppCompatActivity {
     FirebaseDatabase rootNode;
     DatabaseReference reference =FirebaseDatabase.getInstance().getReferenceFromUrl("https://storelocator-c908a-default-rtdb.firebaseio.com/");
     static Double lh,lt;
-    static String addressPick;
+    List<String> s  = new ArrayList<String>();
 
 
 
@@ -109,7 +107,7 @@ public class mainframe_viewcart extends AppCompatActivity {
         preferences=this.getSharedPreferences("user", Context.MODE_PRIVATE);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        s.clear();
         list = new ArrayList<>();
         myAdapter = new adapter_cart(this,list);
         recyclerView.setAdapter(myAdapter);
@@ -120,16 +118,79 @@ public class mainframe_viewcart extends AppCompatActivity {
         String lati = sh1.getString("lati", "");
         String longti = sh1.getString("longti", "");
 
-//        address.setText(addressdata);
-//        logtitxt.setText(longti);
-//        latitxt.setText(lati);
 
 
+        s.add(sh1.getString("address", ""));
 
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (!(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)) {
+            Toast.makeText(getBaseContext(), "Please Connect to the Internet", Toast.LENGTH_SHORT).show();
+        } else {
+            if (ActivityCompat.checkSelfPermission(mainframe_viewcart.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mainframe_viewcart.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            FusedLocationProviderClient fusedLocationProviderClient = new FusedLocationProviderClient(mainframe_viewcart.this);
+            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                @Override
+                public void onComplete(@NonNull Task<Location> task) {
+                    Location location = task.getResult();
+                    if (location != null) {
+                        Geocoder geocoder = new Geocoder(mainframe_viewcart.this, Locale.getDefault());
+                        try {
+                            List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                            address.setText(addressList.get(0).getAddressLine(0));
+                            lh = addressList.get(0).getLongitude();
+                            lt = addressList.get(0).getLatitude();
+                            logtitxt.setText(String.valueOf(addressList.get(0).getLongitude()));
+                            latitxt.setText(String.valueOf(addressList.get(0).getLatitude()));
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
 
+                    }
+                }
+            });
+        }
         //view product listed to the mainframe
 
         defaultview();
+        showprevaddress();
+        address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(mainframe_viewcart.this);
+                builder.setTitle("Address");
+                final ArrayAdapter<String> adp = new ArrayAdapter<String>(mainframe_viewcart.this,
+                        android.R.layout.simple_spinner_item, s);
+
+                final Spinner sp = new Spinner(mainframe_viewcart.this);
+                sp.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                sp.setAdapter(adp);
+                builder.setView(sp);
+                // Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        address.setText(sp.getSelectedItem().toString());
+                        getPreciseLocation();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.show();
+            }
+        });
         buttonStoreList.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -157,53 +218,32 @@ public class mainframe_viewcart extends AppCompatActivity {
             }
         });
 
-        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (!(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)) {
-            Toast.makeText(getBaseContext(), "Please Connect to the Internet", Toast.LENGTH_SHORT).show();
-        } else {
-            if (ActivityCompat.checkSelfPermission(mainframe_viewcart.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mainframe_viewcart.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            FusedLocationProviderClient fusedLocationProviderClient = new FusedLocationProviderClient(mainframe_viewcart.this);
-            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                @Override
-                public void onComplete(@NonNull Task<Location> task) {
-                    Location location = task.getResult();
-                    if (location != null) {
-                        Geocoder geocoder = new Geocoder(mainframe_viewcart.this, Locale.getDefault());
-                        try {
-                            List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                            lh = addressList.get(0).getLongitude();
-                            lt = addressList.get(0).getLatitude();
-                            addressPick = addressList.get(0).getAddressLine(0);
-                            logtitxt.setText(String.valueOf(lh));
-                            latitxt.setText(String.valueOf(lt));
-                            address.setText(addressPick);
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    } else {
-
-                    }
-                }
-            });
-
-        }
-        logtitxt.setVisibility(View.INVISIBLE);
-        latitxt.setVisibility(View.INVISIBLE);
-        address.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Uri mapUri = Uri.parse("geo:"+ lt +"," + lh);
-                Intent intent_map = new Intent(Intent.ACTION_VIEW,mapUri);
-                intent_map.setPackage("com.google.android.apps.maps");
-                if (intent_map!=null) {
-                    startActivity(intent_map);
-                }
-            }
-        });
+//        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+//        if (!(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+//                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED)) {
+//            Toast.makeText(getBaseContext(), "Please Connect to the Internet", Toast.LENGTH_SHORT).show();
+//        } else {
+//            if (ActivityCompat.checkSelfPermission(mainframe_viewcart.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mainframe_viewcart.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                return;
+//            }
+//            FusedLocationProviderClient fusedLocationProviderClient = new FusedLocationProviderClient(mainframe_viewcart.this);
+//            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+//                @Override
+//                public void onComplete(@NonNull Task<Location> task) {
+//                    Location location = task.getResult();
+//                    if (location != null) {
+//                        Geocoder geocoder = new Geocoder(mainframe_viewcart.this, Locale.getDefault());
+//                        try {
+//
+//                        } catch (Exception e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    } else {
+//
+//                    }
+//                }
+//            });
+//        }
 
     }
     private  void alertCharges(){
@@ -219,15 +259,6 @@ public class mainframe_viewcart extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(mainframe_viewcart.this);
         builder.setTitle("Order Details");
         builder.setMessage("Your Orders Amount is: PHP"+ cartValue +"\n and Delivery Charge of: PHP"+String.valueOf(value)+"\n"+"TOTAL:"+(cartValue+value));
-
-//        final EditText input = new EditText(mainframe_viewcart.this);
-//        input.setInputType(InputType.TYPE_CLASS_NUMBER);
-//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.MATCH_PARENT,
-//                LinearLayout.LayoutParams.MATCH_PARENT);
-//        input.setLayoutParams(lp);
-//        input.setGravity(Gravity.CENTER);
-//        builder.setView(input);
 
         // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -329,6 +360,63 @@ public class mainframe_viewcart extends AppCompatActivity {
 
         startActivityForResult(intent, Constants.PLACE_PICKER_REQUEST);
     }
+    public void showprevaddress(){
+        final String username = preferences.getString("username","");
+        Query query1=reference.child("orders").orderByChild("order_user").equalTo(username);
+        query1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                cartValue=0;
+                totalitems=0;
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        try{
+                            if(snapshot.child("status").getValue().toString().equals("5")){
+                                helper_order_rider order = snapshot.getValue(helper_order_rider.class);
+                                Log.i("Address","Try Toget"+username+" "+order.getAddress());
+                                    if(!s.contains(order.getAddress())){
+                                        s.add(order.getAddress());
+                                        Log.i("Address",s.toString());
+                                    }
+                            }
+                        }catch(Exception e){
+                            Log.i("Error",e.toString());
+                        }
+                    }
+                }else{
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+    public void getPreciseLocation(){
+        final String username = preferences.getString("username","");
+        Query query1=reference.child("orders").orderByChild("address").equalTo(address.getText().toString());
+        query1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                cartValue=0;
+                totalitems=0;
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        try{
+                                helper_order_rider order = snapshot.getValue(helper_order_rider.class);
+                                logtitxt.setText(order.getLongti());
+                                logtitxt.setText(order.getLati());
+                        }catch(Exception e){
+                            Log.i("Error",e.toString());
+                        }
+                    }
+                }else{
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
     public void defaultview(){
         SharedPreferences sh = getSharedPreferences("user", MODE_PRIVATE);
         String store = sh.getString("store", "");
@@ -385,14 +473,9 @@ public class mainframe_viewcart extends AppCompatActivity {
         if (requestCode == Constants.PLACE_PICKER_REQUEST) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 AddressData addressData = data.getParcelableExtra(Constants.ADDRESS_INTENT);
-//                logtitxt.setText(String.valueOf(addressData.getLongitude()));
-//                latitxt.setText(String.valueOf(addressData.getLatitude()));
-//                address.setText(String.valueOf(addressData.getAddressList().get(0).getAddressLine(0)));
-
-                logtitxt.setText(String.valueOf(lh));
-                latitxt.setText(String.valueOf(lt));
-                address.setText(addressPick);
-
+                logtitxt.setText(String.valueOf(addressData.getLongitude()));
+                latitxt.setText(String.valueOf(addressData.getLatitude()));
+                address.setText(String.valueOf(addressData.getAddressList().get(0).getAddressLine(0)));
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

@@ -98,6 +98,9 @@
             android:name=".rating_store"
             android:exported="true" />
         <activity
+            android:name=".rating_service"
+            android:exported="true" />
+        <activity
             android:name=".admin_frame"
             android:exported="true" />
         <activity

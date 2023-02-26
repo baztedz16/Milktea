@@ -347,32 +347,29 @@ public class admin_list_reports extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_user user = snapshot.getValue(helper_user.class);
 
-//                        if(map.containsKey(user.getAccountype())){
-//                            Double valueNew = map.get(user.getAccountype())+ 1;
-//                            map.put(user.getAccountype(),valueNew);
-//                        }else{
-//                            map.put(user.getAccountype(),1.0);
-//                        }
-                        String accounttype;
+                        String accounttype = user.getAccountype();
 
-                        if (user.getAccountype().equals("User")) {
-                            accounttype = "Customers";
-                        } else if (user.getAccountype().equals("Store Owner")) {
-                            accounttype = "Shop Owners";
-                        } else if (user.getAccountype().equals("Rider")) {
-                            accounttype = "Delivery Guys";
-                        }  else {
-                            accounttype = "Admins";
-                        }
-
-                        if(user.getAccountype().equals("STAFF")){
-                            if(map.containsKey(accounttype)){
+                        if(!user.getAccountype().equals("STAFF")){
+                            if (user.getAccountype().equals("User")) {
+                                accounttype = "Customers";
+                            } else if (user.getAccountype().equals("Store Owner")) {
+                                accounttype = "Shop Owners";
+                            } else if (user.getAccountype().equals("Rider")) {
+                                accounttype = "Delivery Guys";
+                            }else{
+                                Log.i("UserTPS:",accounttype.toString());
+                                accounttype="Admin";
+                            }
+                            if(map.containsKey(accounttype) && !accounttype.equals("Admin")){
                                 Double valueNew = map.get(accounttype) + 1;
                                 map.put(accounttype,valueNew);
-                            }else{
+                            }else if (!map.containsKey(accounttype) && !accounttype.equals("Admin")){
                                 map.put(accounttype,1.0);
                             }
                         }
+//                        if(user.getAccountype().equals("STAFF")){
+//
+//                        }
                         Log.i("Get",map.toString());
 
                     }
@@ -422,12 +419,6 @@ public class admin_list_reports extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_review review = snapshot.getValue(helper_review.class);
 
-//                        if(map.containsKey(user.getAccountype())){
-//                            Double valueNew = map.get(user.getAccountype())+ 1;
-//                            map.put(user.getAccountype(),valueNew);
-//                        }else{
-//                            map.put(user.getAccountype(),1.0);
-//                        }
                         String accounttype;
 
                         accounttype = review.getStore();
