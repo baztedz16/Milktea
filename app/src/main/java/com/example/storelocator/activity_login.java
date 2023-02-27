@@ -2,6 +2,7 @@ package com.example.storelocator;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -46,10 +47,13 @@ public class activity_login extends AppCompatActivity {
     TextView textViewSignup;
     ProgressBar progressBar;
 
+    public static Context context;
+
     protected void onCreate(Bundle savedInstancesState) {
 
         super.onCreate(savedInstancesState);
         setContentView(R.layout.activity_login);
+
 
         textInputEditTextUsername = findViewById(R.id.LoginUser);
         textInputEditTextPassword = findViewById(R.id.LoginPass);
@@ -463,5 +467,6 @@ public class activity_login extends AppCompatActivity {
     public int codeSendFunction() {
         return ThreadLocalRandom.current().nextInt(1000, 9999);
     }
+
 
 }

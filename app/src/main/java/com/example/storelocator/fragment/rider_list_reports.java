@@ -664,8 +664,10 @@ public class rider_list_reports extends Fragment {
                     if (dataSnapshot.exists()) {
                         Log.i("R","4");
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            helper_receivables payables = snapshot.getValue(helper_receivables.class);
+//                            helper_receivables payables = snapshot.getValue(helper_receivables.class);
+
                             try {
+                                helper_receivables payables = snapshot.getValue(helper_receivables.class);
                                 if(payables.getRider().equals(staffstore) && payables.getDate_topay().equals(refdate)){
                                     status.setText(payables.getStatus());
                                     if(payables.getStatus().equals("Approved")){

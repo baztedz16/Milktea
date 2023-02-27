@@ -194,7 +194,7 @@ public class admin_list_reports extends Fragment {
         SharedPreferences preferences = this.getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         String accountype = preferences.getString("accountype","");
         if(accountype.equals("Rider")){
-            pichartreport.setVisibility(View.VISIBLE);
+            pichartreport.setVisibility(View.INVISIBLE);
         }else{
             pichartreport.setVisibility(View.VISIBLE);
         }

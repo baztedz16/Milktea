@@ -119,7 +119,8 @@ public class mainframe_viewcart extends AppCompatActivity {
         String longti = sh1.getString("longti", "");
 
 
-
+        defaultview();
+        showprevaddress();
         s.add(sh1.getString("address", ""));
 
         ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -155,8 +156,7 @@ public class mainframe_viewcart extends AppCompatActivity {
         }
         //view product listed to the mainframe
 
-        defaultview();
-        showprevaddress();
+
         address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,12 +196,12 @@ public class mainframe_viewcart extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 alertCharges();
-               }
+            }
 
 
-                //Intent intent = new Intent(getApplicationContext(),list_store.class);
-                // startActivity(intent);
-                //finish();
+            //Intent intent = new Intent(getApplicationContext(),list_store.class);
+            // startActivity(intent);
+            //finish();
 
         });
         total.setOnClickListener(new View.OnClickListener() {
@@ -247,7 +247,7 @@ public class mainframe_viewcart extends AppCompatActivity {
 
     }
     private  void alertCharges(){
-
+        defaultview();
         double surcharge = Double.parseDouble(getIntent().getStringExtra("surcharge"));
         double value = 0.0;
 
@@ -366,18 +366,16 @@ public class mainframe_viewcart extends AppCompatActivity {
         query1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                cartValue=0;
-                totalitems=0;
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         try{
                             if(snapshot.child("status").getValue().toString().equals("5")){
                                 helper_order_rider order = snapshot.getValue(helper_order_rider.class);
                                 Log.i("Address","Try Toget"+username+" "+order.getAddress());
-                                    if(!s.contains(order.getAddress())){
-                                        s.add(order.getAddress());
-                                        Log.i("Address",s.toString());
-                                    }
+                                if(!s.contains(order.getAddress())){
+                                    s.add(order.getAddress());
+                                    Log.i("Address",s.toString());
+                                }
                             }
                         }catch(Exception e){
                             Log.i("Error",e.toString());
@@ -397,14 +395,12 @@ public class mainframe_viewcart extends AppCompatActivity {
         query1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                cartValue=0;
-                totalitems=0;
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         try{
-                                helper_order_rider order = snapshot.getValue(helper_order_rider.class);
-                                logtitxt.setText(order.getLongti());
-                                logtitxt.setText(order.getLati());
+                            helper_order_rider order = snapshot.getValue(helper_order_rider.class);
+                            logtitxt.setText(order.getLongti());
+                            logtitxt.setText(order.getLati());
                         }catch(Exception e){
                             Log.i("Error",e.toString());
                         }
@@ -427,14 +423,15 @@ public class mainframe_viewcart extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Log.i("R",editTextname.getText().toString());
-                cartValue=0;
-                totalitems=0;
+
                 if (dataSnapshot.exists()) {
                     list.clear();
-
+                    cartValue=0;
+                    totalitems=0;
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                         try{
+
                             if(!snapshot.child("orderstatus").getValue().toString().equals("1") && snapshot.child("owner").getValue().equals(store)){
                                 helper_cart product = snapshot.getValue(helper_cart.class);
                                 Log.i("OS:",snapshot.child("orderstatus").getValue().toString());

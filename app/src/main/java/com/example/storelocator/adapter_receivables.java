@@ -23,6 +23,7 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class adapter_receivables extends RecyclerView.Adapter<adapter_receivables.MyViewHolder> {
 
@@ -56,9 +57,12 @@ public class adapter_receivables extends RecyclerView.Adapter<adapter_receivable
         holder.payref.setText(user.getReference_no());
         holder.rider.setText(user.getRider());
 
-        if (user.getStatus().equals("Approved")) {
+        if (!user.getStatus().equals("Under review")) {
             holder.approved.setVisibility(View.GONE);
             holder.rject.setVisibility(View.GONE);
+        } else {
+            holder.approved.setVisibility(View.VISIBLE);
+            holder.rject.setVisibility(View.VISIBLE);
         }
         //String orderid = (String) holder.orderid.getText();
 
@@ -100,7 +104,7 @@ public class adapter_receivables extends RecyclerView.Adapter<adapter_receivable
                                 Toast.makeText(context.getApplicationContext(), "Payables Succesfully Paid",Toast.LENGTH_LONG).show();
                                 rootNode = FirebaseDatabase.getInstance();
                                 reference = rootNode.getReference("storereceivables").child(user.getRider()+user.getDate_topay().replace("/",""));
-                                reference.child("reference_no").setValue(UUID.randomUUID());
+                                reference.child("reference_no").setValue(String.valueOf(ThreadLocalRandom.current().nextInt(10000, 99999)));
                                 reference.child("status").setValue("Approved");
                                 Toast.makeText(view.getContext(), "Payables Approved",Toast.LENGTH_SHORT).show();
 

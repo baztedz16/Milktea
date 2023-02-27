@@ -454,7 +454,8 @@ public class signupstaff extends AppCompatActivity {
                     String image = "https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png";
 
                     if(fullname.isEmpty() || username.isEmpty() || email.isEmpty() || phone.isEmpty() || password.isEmpty()
-                            || Destlongt.isEmpty() || Deslati.isEmpty() || Address.isEmpty()){
+//                            || Destlongt.isEmpty() || Deslati.isEmpty() || Address.isEmpty()
+                            ) {
                         Toast.makeText(signupstaff.this,"Kindly fillup all fields",Toast.LENGTH_SHORT).show();
                         return;
                     } else if (!isValidName(fullname) && fullname.length() < 2) {
@@ -514,7 +515,8 @@ public class signupstaff extends AppCompatActivity {
                     String image = "https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Download-Image.png";
 
                     if(fullname.isEmpty() || username.isEmpty() || email.isEmpty() || phone.isEmpty() || password.isEmpty()
-                            || Destlongt.isEmpty() || Deslati.isEmpty() || Address.isEmpty()){ // one or more fields are empty
+//                            || Destlongt.isEmpty() || Deslati.isEmpty() || Address.isEmpty()
+                    ){ // one or more fields are empty
                         Toast.makeText(signupstaff.this,"Kindly fillup all fields",Toast.LENGTH_SHORT).show();
                         return;
                     } else if (!isValidName(fullname) && fullname.length() < 2) {

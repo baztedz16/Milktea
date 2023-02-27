@@ -17,7 +17,8 @@
         android:roundIcon="@drawable/favicon"
         android:supportsRtl="true"
         android:theme="@style/Theme.StoreLocator"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:testOnly="false">
 <!--        <activity-->
 <!--            android:name=".RatingShopActivity"-->
 <!--            android:exported="false">-->

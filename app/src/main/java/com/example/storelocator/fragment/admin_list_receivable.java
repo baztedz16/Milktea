@@ -31,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -111,8 +112,14 @@ public class admin_list_receivable extends Fragment {
 
                     Log.i("R","4");
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        helper_payables user = snapshot.getValue(helper_payables.class);
-                        list.add(user);
+//                        helper_payables user = snapshot.getValue(helper_payables.class);
+//                        list.add(user);
+                        try {
+                            helper_payables user = snapshot.getValue(helper_payables.class);
+                            list.add(user);
+                        } catch (Exception e) {
+                            Log.i("Error",""+e);
+                        }
                     }
 
                 }else{
@@ -146,8 +153,14 @@ public class admin_list_receivable extends Fragment {
 
                     Log.i("R","4");
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        helper_payables user = snapshot.getValue(helper_payables.class);
-                        list.add(user);
+//                        helper_payables user = snapshot.getValue(helper_payables.class);
+//                        list.add(user);
+                        try {
+                            helper_payables user = snapshot.getValue(helper_payables.class);
+                            list.add(user);
+                        } catch (Exception e) {
+                            Log.i("Error",""+e);
+                        }
                     }
 
                 }else{
