@@ -16,16 +16,23 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/favicon"
         android:supportsRtl="true"
+        android:testOnly="false"
         android:theme="@style/Theme.StoreLocator"
-        android:usesCleartextTraffic="true"
-        android:testOnly="false">
-<!--        <activity-->
-<!--            android:name=".RatingShopActivity"-->
-<!--            android:exported="false">-->
-<!--            <meta-data-->
-<!--                android:name="android.app.lib_name"-->
-<!--                android:value="" />-->
-<!--        </activity>-->
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".PromoActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <!-- <activity -->
+        <!-- android:name=".RatingShopActivity" -->
+        <!-- android:exported="false"> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.app.lib_name" -->
+        <!-- android:value="" /> -->
+        <!-- </activity> -->
         <activity
             android:name=".order_details"
             android:exported="true" />

@@ -85,6 +85,8 @@ public class fordelivery extends Fragment {
             query1=reference.child("orders");
         }
 
+
+
         query1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

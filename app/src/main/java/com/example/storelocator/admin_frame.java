@@ -47,7 +47,8 @@ public class admin_frame extends AppCompatActivity {
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_item2,menu);
+//        getMenuInflater().inflate(R.menu.menu_item4,menu);
+        getMenuInflater().inflate(R.menu.menu_item3,menu);
         return true;
     }
     @Override
@@ -62,7 +63,9 @@ public class admin_frame extends AppCompatActivity {
             startActivity(intent);
             finishAffinity();
 
-        }else if(item_id == R.id.Account){
+        }
+//        else if(item_id == R.id.account){
+        else if(item_id == R.id.Account){
 
             SharedPreferences preferences1 = this.getSharedPreferences("user", Context.MODE_PRIVATE);
             Intent intent = new Intent(admin_frame.this,signupstaff.class);
@@ -80,6 +83,8 @@ public class admin_frame extends AppCompatActivity {
             startActivity(intent);
 
         }
+//        else if(item_id == R.id.promos){
+//        }
         return true;
     }
 }

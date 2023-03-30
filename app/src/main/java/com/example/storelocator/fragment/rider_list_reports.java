@@ -109,6 +109,7 @@ public class rider_list_reports extends Fragment {
         DelFee=view.findViewById(R.id.DelFee);
         payablesTxt=view.findViewById(R.id.payablesTxt);
 
+
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, 1);
         SimpleDateFormat format1 = new SimpleDateFormat("MM/dd/yyyy");
@@ -125,7 +126,7 @@ public class rider_list_reports extends Fragment {
         totalTxt.setVisibility(View.GONE);
 
         listpayables.setHasFixedSize(true);
-        listpayables.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        listpayables.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
 
@@ -610,13 +611,11 @@ public class rider_list_reports extends Fragment {
                     Log.i("payables","4"+date);
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         helper_order_rider orders = snapshot.getValue(helper_order_rider.class);
-
                         if(accountype.equals("STAFF") || accountype.equals("Store Owner") && orders.getDate_order().equals(date)){
                                 if(orders.getStore().equals(staffstore) ){
                                     list.add(orders);
                                     Log.i("R","1");
-                                    totalpayablesdata = totalpayablesdata+Double.parseDouble(orders.getOrder_total().toString());
-
+                                    totalpayablesdata = totalpayablesdata+Double.parseDouble(orders.getOrder_total().trim());
                                 }
                         }else{
                             if(orders.getRider().equals(rider) && orders.getDate_order().equals(date)){
@@ -624,7 +623,7 @@ public class rider_list_reports extends Fragment {
                                 Log.i("2DATA",rider+":"+snapshot.child("rider").getValue().toString());
                                 Log.i("2DATA",rider+":"+snapshot.child("order_id").getValue().toString());
                                 list.add(orders);
-                                totalpayablesdata = totalpayablesdata+Double.parseDouble(orders.getOrder_total().toString());
+                                totalpayablesdata = totalpayablesdata+Double.parseDouble(orders.getOrder_total().trim());
                                 totalfeeRider = totalfeeRider+60;
                             }
                         }
@@ -634,6 +633,7 @@ public class rider_list_reports extends Fragment {
                     tpayables.setText(String.valueOf(totalpayablesdata - totalfeeRider));
                     getpayablesdetails(date,rider);
                     Collections.reverse(list);
+
                     myAdapter.notifyDataSetChanged();
                 }else{
                     Log.i("payables","6");

@@ -51,14 +51,14 @@
                 android:layout_height="38dp"
                 android:layout_marginBottom="10dp"
                 android:background="@color/teal_200"
-                android:text="Approved" />
+                android:text="Recieve" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/rject"
-                android:background="@color/red"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Reject" />
+                android:background="@color/red"
+                android:text="Pending" />
 
             <LinearLayout
                 android:layout_width="match_parent"

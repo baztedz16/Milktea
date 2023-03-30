@@ -138,7 +138,14 @@ public class mainframe extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),mainframe_viewcart.class);
+
+                String distance = getIntent().getStringExtra("surcharge");
                 intent.putExtra("surcharge",getIntent().getStringExtra("surcharge"));
+                Log.d("String Extra Distance",getIntent().getStringExtra("surcharge"));
+
+                intent.putExtra("latStore",getIntent().getStringExtra("latStore"));
+                intent.putExtra("longStore",getIntent().getStringExtra("longStore"));
+
                 startActivity(intent);
             }
         });

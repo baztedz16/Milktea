@@ -43,6 +43,7 @@ public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.s
     RecyclerView recyclerView;
 
 
+    public static String distanceOfStore;
 
     public adapter_storelist(Context context, ArrayList<helper_liststore> list) {
         this.context = context;
@@ -91,9 +92,13 @@ public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.s
                 if(store.getMetric() == "Km" && Double.parseDouble(store.getCurrLocation()) > 5){
                     intent.putExtra("surcharge",holder.Distance.getText().toString().replace(" Km",""));
                 }else{
-                    intent.putExtra("surcharge","0");
+                    intent.putExtra("surcharge",holder.Distance.getText().toString().replace(" Km",""));
                 }
-                context.startActivity(intent);
+                System.out.println("The Distance: " + holder.Distance.getText().toString().replace(" Km",""));
+
+                intent.putExtra("latStore",store.getDestlat());
+                intent.putExtra("longStore",store.getDestlong());
+            context.startActivity(intent);
             }
         });
         holder.itemName.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +120,9 @@ public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.s
                     intent.putExtra("surcharge",holder.Distance.getText().toString().replace(" Km",""));
                 }else{
                     intent.putExtra("surcharge","0");
+//                    intent.putExtra("surcharge",store.getMetric());
                 }
+                distanceOfStore = holder.Distance.getText().toString().replace(" Km","");
                 context.startActivity(intent);
             }
         });
@@ -169,6 +176,7 @@ public class adapter_storelist extends  RecyclerView.Adapter<adapter_storelist.s
             itemImage = itemView.findViewById(R.id.imageView3);
             Rating = itemView.findViewById(R.id.Rating);
             Distance = itemView.findViewById(R.id.Distance);
+            distanceOfStore = "";
         }
     }
 

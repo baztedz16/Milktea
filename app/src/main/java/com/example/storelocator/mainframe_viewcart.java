@@ -11,6 +11,8 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -57,6 +59,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 public class mainframe_viewcart extends AppCompatActivity {
     TextView total,logtitxt,latitxt,address;
@@ -78,7 +81,13 @@ public class mainframe_viewcart extends AppCompatActivity {
     static Double lh,lt;
     List<String> s  = new ArrayList<String>();
 
+    public float[] result;
 
+    // config for discount promos
+    private static double discountPriceGap = 300 ;
+    private static double percentDiscount = 0.1 ;
+
+    double value;
 
 
     /*public LocationManager locationManager;
@@ -249,16 +258,31 @@ public class mainframe_viewcart extends AppCompatActivity {
     private  void alertCharges(){
         defaultview();
         double surcharge = Double.parseDouble(getIntent().getStringExtra("surcharge"));
-        double value = 0.0;
+        value = 0.0;
+
+        Log.d("Distance of Cart",String.valueOf(surcharge));
 
         if(surcharge >0){
             value = (surcharge*2)+60;
         }else{
             value = 60;
         }
+
+
+//        value = 72;
+
+        Log.d("Result: ",String.valueOf(result));
+
         AlertDialog.Builder builder = new AlertDialog.Builder(mainframe_viewcart.this);
         builder.setTitle("Order Details");
-        builder.setMessage("Your Orders Amount is: PHP"+ cartValue +"\n and Delivery Charge of: PHP"+String.valueOf(value)+"\n"+"TOTAL:"+(cartValue+value));
+//        builder.setMessage("Your Orders Amount is: PHP"+ cartValue +"\n and Delivery Charge of: PHP"+String.valueOf(value)+"\n"+"TOTAL:"+(cartValue+value));
+
+        if (cartValue > discountPriceGap) {
+            builder.setMessage("Orders Amount: PHP"+ cartValue +"\n Delivery Charge: PHP "+String.valueOf(value)+
+                    "\n Discount: PHP"+String.valueOf(cartValue*percentDiscount)+"\n"+"TOTAL:"+((cartValue-cartValue*percentDiscount)+value));
+        } else {
+            builder.setMessage("Your Orders Amount is: PHP"+ cartValue +"\n and Delivery Charge of: PHP"+String.valueOf(value)+"\n"+"TOTAL:"+(cartValue+value));
+        }
 
         // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -293,7 +317,14 @@ public class mainframe_viewcart extends AppCompatActivity {
         reference.child(id).child("order_id").setValue(id);
         reference.child(id).child("status").setValue("0");
         reference.child(id).child("order_user").setValue(username);
-        reference.child(id).child("order_total").setValue(String.valueOf(cartValue+60));
+//        reference.child(id).child("order_total").setValue(String.valueOf(cartValue+60));
+
+        if (cartValue>discountPriceGap) {
+            reference.child(id).child("order_total").setValue(String.valueOf((cartValue-cartValue*percentDiscount)+value));
+        } else {
+            reference.child(id).child("order_total").setValue(String.valueOf(cartValue+value));
+        }
+
         reference.child(id).child("address").setValue(address2);
         reference.child(id).child("longti").setValue(lati);
         reference.child(id).child("lati").setValue(longti);
@@ -478,5 +509,4 @@ public class mainframe_viewcart extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-
 }

@@ -57,10 +57,14 @@ public class adapter_receivables extends RecyclerView.Adapter<adapter_receivable
         holder.payref.setText(user.getReference_no());
         holder.rider.setText(user.getRider());
 
+
+
         if (!user.getStatus().equals("Under review")) {
             holder.approved.setVisibility(View.GONE);
             holder.rject.setVisibility(View.GONE);
+            holder.payref.setVisibility(View.INVISIBLE);
         } else {
+            holder.payref.setVisibility(View.VISIBLE);
             holder.approved.setVisibility(View.VISIBLE);
             holder.rject.setVisibility(View.VISIBLE);
         }

@@ -13,6 +13,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -573,7 +574,7 @@ public class signupstaff extends AppCompatActivity {
                             lh = addressList.get(0).getLongitude();
                             lt = addressList.get(0).getLatitude();
                         } catch (Exception e) {
-                            throw new RuntimeException(e);
+                            Log.i("Error: ",""+e);
                         }
                     } else {
 

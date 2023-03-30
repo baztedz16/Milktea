@@ -15,26 +15,8 @@
                 >
             </item>
             <item
-                android:id="@+id/store"
-                android:title="Shop"
-                app:showAsAction="never"
-                >
-            </item>
-            <item
-                android:id="@+id/staff"
-                android:title="Staff List"
-                app:showAsAction="never"
-                >
-            </item>
-            <item
-                android:id="@+id/category"
-                android:title="Add Category"
-                app:showAsAction="never"
-                >
-            </item>
-            <item
-                android:id="@+id/reviews"
-                android:title="Store Review"
+                android:id="@+id/promos"
+                android:title="Promos"
                 app:showAsAction="never"
                 >
             </item>
